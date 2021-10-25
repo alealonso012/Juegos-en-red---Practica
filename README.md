@@ -33,4 +33,16 @@ Tres personajes, uno de cada reino, cada uno con dos armas (Ampliable)
 Las armas ligeras se especializan en los ataques rápidos y pasos rápidos, tratando de sorprender al rival con cambios de postura y contraataques tras defenderse. A cambio tendrán ataques fuertes menos potentes y paradas menos duraderas.
 Las armas medias no destacan en ninguna clase de ataque, pero se benefician de una parada más fuerte respecto al resto de clases. Es la clase de arma más equilibrada. 
 Las armas pesadas tendrán mejores ataques fuertes y más duración en sus paradas, pero sus pasos rápidos y estocadas serán más lentos. Su estilo de combate se relacionará en hostigar la defensa del rival.
+### Interfaz de usuario y controles del juego
+Respecto a la interfaz de usuario in-game, como barras de vida o minimapa, el juego carecería de estas al tratar de tener un estilo en pantalla lo más limpio posible. Toda la información necesaria para el jugador durante la partida se incluirá de manera directa en el juego en sí, sin ventanas ni interfaces externas. 
+En cuanto a los controles, el juego se jugaría con mando o con teclado y cada acción del juego estaría asociado a una tecla/botón diferente, esto se podría modificar en el menú de opciones
+### Arte
+El estilo visual del videojuego sería minimalista con una ambientación de fantasía medieval.
+Los escenarios serán poco detallados y con colores apagados para resaltar la acción y los personajes. Habrá un total de 7 pantallas en las cuales se verá reflejado el jugador que lleva la ventaja mediante el entorno y los colores. 
+En cuanto a los avatares, serían todos bastante similares en cuanto a simplicidad y diseño, basándose en guerreros reales de distintas partes del mundo y de la historia. Se diferenciarán en un color característico que identifica a cada jugador y algunos detalles como por ejemplo accesorios, sombreros, etc. Las posturas de dichos personajes serán diferentes debido a que proceden de distintos reinos. 
+Por último cada arma tendrá un aspecto único para poder identificarla fácilmente. Estas estarán inspiradas en armas reales que concuerden con la ambientación, como espadas, mandobles o alabardas. 
+Además cada reino estará basado en una facción histórica diferenciable, los tres primeros estarán basados en caballeros medievales, bárbaros y samuráis. Las armas que usará el personaje, así como su diferenciación respecto al resto de personajes serán correspondientes con su símil histórico.
+### Sonido y música
+El estilo de música utilizado será medieval melódico, es decir, sin letra en las que destacan instrumentos de estilo de la época medieval. Inspirada en bandas sonoras de juegos como los de la saga “The Witcher”.
+La intensidad de la música cambiaría dependiendo de si el jugador está en los menús siendo esta más calmada, en la selección de personaje en la que sería un poco más animada o en la batalla in-game en la que tendría bastante intensidad.
 
