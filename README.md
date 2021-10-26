@@ -54,8 +54,23 @@
 
 
 ### Interfaz de usuario y controles del juego
+
 ###### Respecto a la interfaz de usuario in-game, como barras de vida o minimapa, el juego carecería de estas al tratar de tener un estilo en pantalla lo más limpio posible. Toda la información necesaria para el jugador durante la partida se incluirá de manera directa en el juego en sí, sin ventanas ni interfaces externas. 
-###### En cuanto a los controles, el juego se jugaría con mando o con teclado y cada acción del juego estaría asociado a una tecla/botón diferente, esto se podría modificar en el menú de opciones
+###### En cuanto a los controles, el juego se jugaría con mando o con teclado y cada acción del juego estaría asociado a una tecla/botón diferente, esto se podría modificar en el menú de opciones.
+
+Acción | Teclado | Mando (DS4)
+------------ | ------------- | -------------
+Movimiento lateral | AD | Joystick izq. horizontal 
+Agacharse | S | Joystick izq. abajo
+Saltar | W | Cruz
+Bajar de plataforma | S (Doble) | Joystick izq. abajo (doble)
+Paso rápido | Espacio | Círculo
+Cambiar postura | M/N | Joystick derecho
+Estocada | K | R1
+Cuchillada | J | R2
+Lanzar arma | L | Triángulo
+Parada | V | L1
+Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 
 
 ### Arte
