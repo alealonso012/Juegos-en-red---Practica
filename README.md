@@ -1,7 +1,10 @@
 # Camlann
 
 ## Integrantes del equipo:
-
+#### Alejandro Alonso Pérez; Correo: a.alonsop.2019@alumnos.urjc.es; Cuenta: alealonso012.
+#### Félix Álvarez Diez; Correo: f.alvarezd.2019@alumnos.urjc.es; Cuenta: alealonso012.
+#### Jordan Alejandro Amaya Carmona; Correo: ja.amayac.2019@alumnos.urjc.es; Cuenta: JAAmaya.
+#### Javier Sanchez Muñoz; Correo: j.sanchezm.2019@alumnos.urjc.es; Cuenta: alealonso012.
 
 ### Concepto general del videojuego. 
 ###### El juego tiene como base duelos entre dos jugadores con diferentes armas blancas en distintas arenas de combate. Con cada duelo ganado, se avanzará una arena hacia el lado rival y el jugador que se quede sin terreno perderá la partida.
