@@ -3,7 +3,7 @@
 ## Integrantes del equipo:
 #### Alejandro Alonso Pérez; Correo: a.alonsop.2019@alumnos.urjc.es; Cuenta: alealonso012.
 #### Félix Álvarez Diez; Correo: f.alvarezd.2019@alumnos.urjc.es; Cuenta: FelinexA10.
-#### Jordan Alejandro Amaya Carmona; Correo: ja.amayac.2019@alumnos.urjc.es; Cuenta: JAAmaya.
+#### Jordan Alejandro Amaya Carmona; Correo: ja.amaya.2019@alumnos.urjc.es; Cuenta: JAAmaya.
 #### Javier Sanchez Muñoz; Correo: j.sanchezm.2019@alumnos.urjc.es; Cuenta: Whikkot.
 
 ### Concepto general del videojuego. 
