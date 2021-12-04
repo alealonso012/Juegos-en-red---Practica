@@ -18,7 +18,8 @@
         },
         scene: {
             preload: preload,
-            create: create
+            create: create,
+            update: update
         }
     };
 
@@ -26,37 +27,38 @@
 
     function preload ()
     {
-        this.load.setBaseURL('http://labs.phaser.io');
-
-        this.load.image('sky', 'assets/skies/space3.png');
-        this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-        this.load.image('red', 'assets/particles/red.png');
+        this.load.image('titulo_fondo', "/resources/img/title_bg.jpg");
+        this.load.image('opciones', "/resources/img/options_button.png");
+        this.load.image('jugar', "/resources/img/play_button.png");
+        this.load.image('logo', "/resources/img/logo.png");
     }
 
     function create ()
     {
-        this.add.image(400, 300, 'sky');
+        this.add.image(0,0, "titulo_fondo").setOrigin(0);
+        this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "logo");
+        var playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "jugar");
+        var optionButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "opciones");
 
-        var particles = this.add.particles('red');
+        playButton.setInteractive();
 
-        var emitter = particles.createEmitter({
-            speed: 100,
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD'
-        });
+        playButton.on("pointerover", ()=>{
+            console.log("hover");
+        })
 
-        var logo = this.physics.add.image(400, 100, 'logo');
+        playButton.on("pointerdown", ()=>{
+            console.log("Jugando");
+        })
 
-        logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
-        logo.setCollideWorldBounds(true);
+    }
 
-        emitter.startFollow(logo);
+    function update()
+    {
 
     }
     </script>
 
-    
+
 
 </body>
 </html>
