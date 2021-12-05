@@ -7,59 +7,130 @@
 <body>
 
     <script>
+
+    var Escena1 = new Phaser.Class({
+        Extends: Phaser.Scene,
+        initialize:
+            function Escena1(){
+                Phaser.Scene.call(this, { key: "Escena1"})
+            },
+        preload(){
+            this.load.image('titulo_fondo', "/resources/img/title_bg.jpg");
+            this.load.image('opciones', "/resources/img/options_button.png");
+            this.load.image('jugar', "/resources/img/play_button.png");
+            this.load.image('logo', "/resources/img/logo.png");
+        },
+        create(){
+            this.add.image(0,0, "titulo_fondo").setOrigin(0);
+            this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "logo");
+            var playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "jugar");
+            var optionButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "opciones");
+
+            playButton.setInteractive();
+            optionButton.setInteractive();
+
+            playButton.on("pointerover", ()=>{
+                console.log("hover");
+            })
+
+            playButton.on("pointerdown", ()=>{
+                console.log("Jugando");
+                this.scene.start("Escena2");
+            })
+
+            optionButton.on("pointerdown", ()=>{
+                console.log("Opcioneando");
+                this.scene.start("Escena4");
+            })
+        }
+    })
+
+    var Escena2 = new Phaser.Class({
+        Extends: Phaser.Scene,
+        initialize:
+            function Escena1(){
+                Phaser.Scene.call(this, { key: "Escena2"})
+            },
+        create(){
+            texto = this.add.text(game.renderer.width / 2, game.renderer.height * 0.20, "Selección de modo", {
+                fontSize: "40px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+
+            texto2 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2, "Online", {
+                fontSize: "30px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+            texto3 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "Local", {
+                fontSize: "30px",
+                fill: "#ffffff"
+            }).setOrigin(0.5).setInteractive();
+
+            texto3.on("pointerdown", ()=>{
+                this.scene.start("Escena3");
+            })
+        }
+    })
+
+    var Escena3 = new Phaser.Class({
+        Extends: Phaser.Scene,
+        initialize:
+            function Escena1(){
+                Phaser.Scene.call(this, { key: "Escena3"})
+            },
+        create(){
+            texto = this.add.text(game.renderer.width / 2, game.renderer.height / 2, "Selección de personaje y arma", {
+                fontSize: "40px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+
+        }
+    })
+
+    var Escena4 = new Phaser.Class({
+        Extends: Phaser.Scene,
+        initialize:
+            function Escena1(){
+                Phaser.Scene.call(this, { key: "Escena4"})
+            },
+        create(){
+            texto = this.add.text(game.renderer.width / 2, game.renderer.height * 0.20, "Opciones", {
+                fontSize: "40px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+
+            texto2 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2, "Volumen", {
+                fontSize: "30px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+            texto3 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "Controles", {
+                fontSize: "30px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+
+            texto3 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 200, "Pantalla completa", {
+                fontSize: "30px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+        }
+    })
+
     var config = {
         type: Phaser.AUTO,
         width: 800,
-        height: 600, //cosas
+        height: 600, 
         physics: {
             default: 'arcade',
             arcade: {
                 gravity: { y: 200 }
             }
         },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
+        scene: [Escena1, Escena2, Escena3, Escena4]
     };
 
     var game = new Phaser.Game(config);
 
-    function preload ()
-    {
-        this.load.image('titulo_fondo', "/resources/img/title_bg.jpg");
-        this.load.image('opciones', "/resources/img/options_button.png");
-        this.load.image('jugar', "/resources/img/play_button.png");
-        this.load.image('logo', "/resources/img/logo.png");
-    }
-
-    function create ()
-    {
-        this.add.image(0,0, "titulo_fondo").setOrigin(0);
-        this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "logo");
-        var playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "jugar");
-        var optionButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "opciones");
-
-        playButton.setInteractive();
-
-        playButton.on("pointerover", ()=>{
-            console.log("hover");
-        })
-
-        playButton.on("pointerdown", ()=>{
-            console.log("Jugando");
-        })
-
-    }
-
-    function update()
-    {
-
-    }
     </script>
-
-
 
 </body>
 </html>
