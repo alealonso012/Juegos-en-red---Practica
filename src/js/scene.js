@@ -67,7 +67,7 @@ class Escena2 extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         texto3.on("pointerdown", ()=>{
-            this.scene.start("Escena3");
+            this.scene.start("Escena_inGame");
         })
     }
 
@@ -126,5 +126,24 @@ class Escena4 extends Phaser.Scene {
             fontSize: "30px",
             fill: "#ffffff"
         }).setOrigin(0.5);
+    }
+}
+
+class Escena_inGame extends Phaser.Scene {
+
+    constructor ()
+    {
+        super(); Phaser.Scene.call(this, { key: "Escena_inGame"})
+    }
+
+    preload(){
+        this.load.image("tiles", "/resources/img/terrain_atlas.png");
+        this.load.tilemapTiledJSON("mapa", "/resources/img/Suelo.json" );
+    }
+
+    create(){
+        const map = this.make.tilemap({ key: "mapa", tileWidth: 64, tileHeight: 64 });
+        const tileset = map.addTilesetImage("tiles1", "tiles");
+        const layer = map.createLayer("toplayer", tileset, 0, 0);
     }
 }
