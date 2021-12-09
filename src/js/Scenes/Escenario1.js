@@ -31,23 +31,21 @@ export class Escenario1 extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         texto.on("pointerdown", () => {
-            console.log(this.telonAbierto);
-            this.cerrarTelonIzq();
+            this.cerrarTelonDcha();
             console.log(this.telon.body.x);
         })
 
-        this.telon = this.add.rectangle(0, 0, 800, 600, 0xff0000).setOrigin(0);
+        this.telon = this.add.rectangle(0, 0, 800, 600, 0x000000).setOrigin(0);
         this.physics.add.existing(this.telon);
         this.telon.body.setAllowGravity(false);
 
-        this.telon.setData('abierto', 'false');
-        this.telon.setData('derecha', 'false');
+        this.telon.setData('abierto', false);
+        this.telon.setData('derecha', true);
         
 
     }
 
     update() {
-
         console.log(this.telon.body.x);
         //console.log("En update");
         this.gestionarTelon();
@@ -56,7 +54,7 @@ export class Escenario1 extends Phaser.Scene {
     }
 
     gestionarTelon() {
-        if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x == 0) {
+        if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x === 0) {
             console.log("Entra1");
             this.telonAbrir(this.telon.getData('derecha'));
         } else if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
@@ -81,41 +79,43 @@ export class Escenario1 extends Phaser.Scene {
         if (Derecha) {
             if (this.telon.body.x > 800) {
                 this.telon.body.setVelocityX(0);
-                this.telon.toogleData('abierto');
+                this.telon.toggleData('abierto');
                 console.log("EA");
             }
         }
         else {
             if (this.telon.body.x < -800) {
                 this.telon.body.setVelocityX(0);
-                this.telon.toogleData('abierto');
+                this.telon.toggleData('abierto');
                 console.log("EAI");
             }
         }
     }
 
     cerrarTelonDcha() {
-        this.telon.setPosition(-800);
+        this.telon.setX(-800);
         this.telon.body.setVelocityX(4000);
-        this.telonDerecha = true;
+        this.telon.setData('derecha', true);
     }
 
     cerrarTelonIzq() {
-        this.telon.setPosition(800);
+        this.telon.setX(800);
         this.telon.body.setVelocityX(-4000);
-        this.telonDerecha = false;
+        this.telon.setData('derecha', false);
     }
 
     telonComprobarCerrado(Derecha)
     {
-        if (!Derecha) {
-            if (this.telon.getTopRight().x > 800) {
+        if (Derecha) {
+            if (this.telon.body.x > 800) {
                 this.telon.body.setVelocityX(0);
                 this.scene.start("Escenario2");
             }
         }
         else {
-            if (this.telon.getTopLeft().x < 0) {
+            console.log("LLEGO AQUI");
+            if (this.telon.body.x < 0) {
+            console.log("AQUI TB");
                 this.telon.body.setVelocityX(0);
                 this.scene.start("Escenario2");
             }
