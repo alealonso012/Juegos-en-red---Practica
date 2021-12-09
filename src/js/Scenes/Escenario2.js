@@ -4,7 +4,6 @@ export class Escenario2 extends Phaser.Scene {
     telonAbierto;
     telonDerecha;
 
-
     constructor() {
         super("Escenario2");
 
@@ -14,7 +13,6 @@ export class Escenario2 extends Phaser.Scene {
         console.log("En preload");
         this.load.image("tiles", "/resources/img/terrain_atlas.png");
         this.load.tilemapTiledJSON("mapa", "/resources/img/Suelo.json");
-
     }
 
     create() {

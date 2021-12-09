@@ -4,6 +4,7 @@ export class Escenario1 extends Phaser.Scene {
     telon;
     telonAbierto;
     telonDerecha;
+    //music;
 
 
     constructor() {
@@ -15,12 +16,13 @@ export class Escenario1 extends Phaser.Scene {
         console.log("En preload");
         this.load.image("tiles", "/resources/img/terrain_atlas.png");
         this.load.tilemapTiledJSON("mapa", "/resources/img/Suelo.json");
+        
 
     }
 
     create() {
         console.log("En create");
-
+        
         const map = this.make.tilemap({ key: "mapa", tileWidth: 64, tileHeight: 64 });
         const tileset = map.addTilesetImage("tiles1", "tiles");
         const layer = map.createLayer("toplayer", tileset, 0, 0);
