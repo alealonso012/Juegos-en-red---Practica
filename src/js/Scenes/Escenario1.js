@@ -13,17 +13,17 @@ export class Escenario1 extends Phaser.Scene {
 
     preload() {
         console.log("En preload");
-        this.load.image("tiles", "/resources/img/terrain_atlas.png");
-        this.load.tilemapTiledJSON("mapa", "/resources/img/Suelo.json");
+        this.load.image("tiles", "/resources/img/Plataformas.png");
+        this.load.tilemapTiledJSON("mapa", "/resources/img/Escenario1.json");
 
     }
 
     create() {
         console.log("En create");
 
-        const map = this.make.tilemap({ key: "mapa", tileWidth: 64, tileHeight: 64 });
-        const tileset = map.addTilesetImage("tiles1", "tiles");
-        const layer = map.createLayer("toplayer", tileset, 0, 0);
+        const map = this.make.tilemap({ key: "mapa", tileWidth: 16, tileHeight: 16 });
+        const tileset = map.addTilesetImage("Plataformas", "tiles");
+        const layer = map.createLayer("toplayout", tileset, 0, 0);
 
         var texto = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "Cambiar de escena", {
             fontSize: "30px",
