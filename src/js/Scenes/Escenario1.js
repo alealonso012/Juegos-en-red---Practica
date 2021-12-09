@@ -54,7 +54,7 @@ export class Escenario1 extends Phaser.Scene {
     }
 
     gestionarTelon() {
-        if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x === 0) {
+        if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x == 0) {
             console.log("Entra1");
             this.telonAbrir(this.telon.getData('derecha'));
         } else if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
@@ -107,7 +107,7 @@ export class Escenario1 extends Phaser.Scene {
     telonComprobarCerrado(Derecha)
     {
         if (Derecha) {
-            if (this.telon.body.x > 800) {
+            if (this.telon.body.x > 0) {
                 this.telon.body.setVelocityX(0);
                 this.scene.start("Escenario2");
             }
@@ -121,17 +121,5 @@ export class Escenario1 extends Phaser.Scene {
             }
         }
     }
-
-    cerrarTelon() {
-        if (this.telon.body.x < 0) {
-            this.telon.body.velocity.x = 4000;
-            this.telonMoviendoseDcha = true;
-        }
-        else if (this.telon.body.x > 0) {
-            this.telon.body.velocity.x = -4000;
-            this.telonMoviendoseIzq = true;
-        }
-    }
-
 }
 
