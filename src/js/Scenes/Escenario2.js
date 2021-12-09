@@ -4,7 +4,6 @@ export class Escenario2 extends Phaser.Scene {
     telonAbierto;
     telonDerecha;
 
-
     constructor() {
         super("Escenario2");
 

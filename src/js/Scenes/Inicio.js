@@ -9,9 +9,13 @@ export class Inicio extends Phaser.Scene {
         this.load.image('opciones', "/resources/img/options_button.png");
         this.load.image('jugar', "/resources/img/play_button.png");
         this.load.image('logo', "/resources/img/logo.png");
+        this.load.audio('maincra', '/resources/music/mainkra.mp3');
     }
 
     create() {
+        this.music = this.sound.add('maincra');
+        this.music.play();
+
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
         this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "logo");
         var playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "jugar");

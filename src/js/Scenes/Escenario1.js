@@ -4,6 +4,7 @@ export class Escenario1 extends Phaser.Scene {
     telon;
     telonAbierto;
     telonDerecha;
+    //music;
 
 
     constructor() {
