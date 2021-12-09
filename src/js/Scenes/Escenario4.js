@@ -1,12 +1,12 @@
 export class Escenario2 extends Phaser.Scene {
 
     constructor() {
-        super({ key: 'Escenario3' });
+        super({ key: 'Escenario4' });
     }
 
     preload() {
         this.load.image("tiles", "/resources/img/Plataformas.png");
-        this.load.tilemapTiledJSON("mapa", "/resources/img/Escenario3.json");
+        this.load.tilemapTiledJSON("mapa", "/resources/img/Escenario4.json");
     }
 
     create() {
