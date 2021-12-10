@@ -15,6 +15,9 @@ var config = {
             gravity: { y: 200 }
         }
     },
-    scene: [Inicio, Menu, Opciones, Escenario1, Escenario2]
+    scene: [Inicio, Menu, Opciones, Escenario1, Escenario2],
+    render:{
+        pixelArt: true
+    }
 };
 var game = new Phaser.Game(config);
