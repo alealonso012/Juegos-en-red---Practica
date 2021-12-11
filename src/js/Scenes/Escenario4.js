@@ -1,4 +1,4 @@
-export class Escenario2 extends Phaser.Scene {
+export class Escenario4 extends Phaser.Scene {
 
     constructor() {
         super({ key: 'Escenario4' });

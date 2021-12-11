@@ -20,8 +20,8 @@ export class Seleccion extends Phaser.Scene {
         this.add.image(610, 85, "player2").setScale(0.15);
         var rect1 = this.add.rectangle(3, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
         var rect2 = this.add.rectangle(97.5, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
-        var rect3 = this.add.rectangle(422, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
-        var rect4 = this.add.rectangle(512.5, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
+        var rect3 = this.add.rectangle(417, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
+        var rect4 = this.add.rectangle(511, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
 
         var listo = this.add.rectangle(125.1, 458, 300, 110, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
         var listo2 = this.add.rectangle(539.1, 458, 300, 110, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
