@@ -4,7 +4,6 @@ export class Escenario1 extends Phaser.Scene {
     telon;
     telonAbierto;
     telonDerecha;
-    //music;
 
 
     constructor() {
@@ -16,7 +15,6 @@ export class Escenario1 extends Phaser.Scene {
         console.log("En preload");
         this.load.image("tiles", "/resources/img/Plataformas.png");
         this.load.tilemapTiledJSON("mapa", "/resources/img/Escenario1.json");
-
     }
 
     create() {
@@ -33,7 +31,6 @@ export class Escenario1 extends Phaser.Scene {
 
         texto.on("pointerdown", () => {
             this.cerrarTelonDcha();
-            console.log(this.telon.body.x);
         })
 
         this.telon = this.add.rectangle(0, 0, 800, 600, 0x000000).setOrigin(0);
@@ -42,27 +39,19 @@ export class Escenario1 extends Phaser.Scene {
 
         this.telon.setData('abierto', false);
         this.telon.setData('derecha', true);
-        
-
     }
 
     update() {
         console.log(this.telon.body.x);
-        //console.log("En update");
         this.gestionarTelon();
-        //if(this.telonCerrado) 
-
     }
 
     gestionarTelon() {
         if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x == 0) {
-            console.log("Entra1");
             this.telonAbrir(this.telon.getData('derecha'));
         } else if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
-            console.log("Entra2");
            this.telonComprobarAbierto(this.telon.getData('derecha'));
         } else if ((this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
-            console.log("Entra3");
             this.telonComprobarCerrado(this.telon.getData('derecha'));
         }
     }
@@ -81,14 +70,12 @@ export class Escenario1 extends Phaser.Scene {
             if (this.telon.body.x > 800) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
-                console.log("EA");
             }
         }
         else {
             if (this.telon.body.x < -800) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
-                console.log("EAI");
             }
         }
     }
@@ -114,9 +101,7 @@ export class Escenario1 extends Phaser.Scene {
             }
         }
         else {
-            console.log("LLEGO AQUI");
             if (this.telon.body.x < 0) {
-            console.log("AQUI TB");
                 this.telon.body.setVelocityX(0);
                 this.scene.start("Escenario2");
             }

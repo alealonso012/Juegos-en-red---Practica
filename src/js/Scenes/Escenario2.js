@@ -39,8 +39,6 @@ export class Escenario2 extends Phaser.Scene {
 
         this.telon.setData('abierto', false);
         this.telon.setData('derecha', false);
-        
-
     }
 
     update() {

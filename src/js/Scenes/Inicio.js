@@ -11,8 +11,8 @@ export class Inicio extends Phaser.Scene {
         this.load.image('logo', "/resources/img/logo.png");
         this.load.audio('maincra', '/resources/music/mainkra.mp3');
         this.load.spritesheet("flecha", "/resources/img/Flecha.png", {
-            frameHeight: 16,
-            frameWidth: 16
+            frameHeight: 150,
+            frameWidth: 150
         });
     }
 
@@ -20,13 +20,13 @@ export class Inicio extends Phaser.Scene {
         this.music = this.sound.add('maincra');
         this.music.play();
 
-        this.add.image(0, 0, "titulo_fondo").setOrigin(0);
+        this.add.image(-110, 0, "titulo_fondo").setOrigin(0).setScale(0.6);
         this.add.image(this.game.renderer.width / 2 + 150, this.game.renderer.height * 0.20, "logo");
-        var playButton = this.add.image(260, 250, "jugar");
-        var optionButton = this.add.image(260, 330, "opciones");
+        var playButton = this.add.image(260, 270, "jugar").setScale(0.17);
+        var optionButton = this.add.image(260, 340, "opciones").setScale(0.12);
 
         var hoverSprite = this.add.sprite(100,100,"flecha");
-        hoverSprite.setScale(3);
+        hoverSprite.setScale(0.5);
         hoverSprite.setVisible(false);
 
         this.anims.create({
@@ -44,15 +44,15 @@ export class Inicio extends Phaser.Scene {
         playButton.on("pointerover", () => {
             hoverSprite.setVisible(true);
             hoverSprite.play("mover");
-            hoverSprite.x = 150;
-            hoverSprite.y = 240;
+            hoverSprite.x = 140;
+            hoverSprite.y = 270;
         })
 
         optionButton.on("pointerover", () => {
             hoverSprite.setVisible(true);
             hoverSprite.play("mover");
-            hoverSprite.x = 150;
-            hoverSprite.y = 320;
+            hoverSprite.x = 140;
+            hoverSprite.y = 340;
         })
 
         playButton.on("pointerout", () => {

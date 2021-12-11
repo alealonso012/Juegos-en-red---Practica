@@ -15,20 +15,17 @@ export class Menu extends Phaser.Scene {
     }
 
     create(){
-        
-
-        this.add.image(0, 0, "titulo_fondo").setOrigin(0);
-
+        this.add.image(-110, 0, "titulo_fondo").setOrigin(0).setScale(0.6);
         this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "Selección de modo", {
             fontSize: "40px",
             fill: "#ffffff"
         }).setOrigin(0.5);
 
-        var localButton = this.add.image(260, 250, "local");
-        var onlineButton = this.add.image(260, 330, "online");
+        var localButton = this.add.image(260, 270, "local").setScale(0.14);
+        var onlineButton = this.add.image(260, 350, "online").setScale(0.13);
 
         var hoverSprite = this.add.sprite(100,100,"flecha");
-        hoverSprite.setScale(3);
+        hoverSprite.setScale(0.5);
         hoverSprite.setVisible(false);
 
         this.anims.create({
@@ -47,14 +44,14 @@ export class Menu extends Phaser.Scene {
             hoverSprite.setVisible(true);
             hoverSprite.play("mover");
             hoverSprite.x = 150;
-            hoverSprite.y = 240;
+            hoverSprite.y = 270;
         })
 
         onlineButton.on("pointerover", () => {
             hoverSprite.setVisible(true);
             hoverSprite.play("mover");
             hoverSprite.x = 150;
-            hoverSprite.y = 320;
+            hoverSprite.y = 350;
         })
 
         localButton.on("pointerout", () => {
