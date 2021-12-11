@@ -15,6 +15,7 @@ export class Seleccion extends Phaser.Scene {
     }
 
     create() {
+
         this.add.image(400, 300, "selectscreen").setScale(0.45);
         this.add.image(200, 85, "player1").setScale(0.15);
         this.add.image(610, 85, "player2").setScale(0.15);
@@ -54,8 +55,8 @@ export class Seleccion extends Phaser.Scene {
         rect3.on("pointerover", () => {
             hoverImg.setVisible(true);
             hoverImg.setX(rect3.x);
-
         })
+
         rect3.on("pointerout", () => {
             hoverImg.setVisible(false);
         })
@@ -63,29 +64,31 @@ export class Seleccion extends Phaser.Scene {
         rect4.on("pointerover", () => {
             hoverImg.setVisible(true);
             hoverImg.setX(rect4.x);
-
         })
+
         rect4.on("pointerout", () => {
             hoverImg.setVisible(false);
         })
 
-        listo.on("pointerover", () => {
+        listo.on("pointerdown", () => {
             hover2Img.setVisible(true);
             ListoImg.setVisible(true);
         })
-        listo.on("pointerout", () => {
+
+        /*listo.on("pointerout", () => {
             hover2Img.setVisible(false);
             ListoImg.setVisible(false);
-        })
+        })*/
 
-        listo2.on("pointerover", () => {
+        listo2.on("pointerdown", () => {
             hover3Img.setVisible(true);
             Listo2Img.setVisible(true);
         })
-        listo2.on("pointerout", () => {
+
+        /*listo2.on("pointerout", () => {
             hover3Img.setVisible(false);
             Listo2Img.setVisible(false);
-        })
+        })*/
 
         // localButton.setInteractive();
         // onlineButton.setInteractive();
