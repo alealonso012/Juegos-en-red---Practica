@@ -94,7 +94,7 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 # Fase 2
 ## Flujo de pantallas
 ##### Como se puede ver en la imagen, tenemos una pantalla inicial y de esta se puede navegar hasta la pestaña de opciones y a la pestaña de jugar. Desde la pantalla de opciones se podrá volver a la pantalla inicial mediante el botón de salir. Si le hemos dado al botón de jugar iremos a la pantalla de selección de modo en la cual podemos elegir entre jugar local u online. El botón de jugar online no funciona porque en esta fase no se pedia jugar online y el botón de local te lleva a la selección de personaje donde ambos jugadores elegirán con quien querrán jugar. Una vez ambos jugadores esten listos se pasara a las escenas in-game las cuales son varias y se irán saltando de unas otras dependiendo del jugador que gane cada ronda. Una vez un jugador gane la partida se ira a la pantalla de revancha la cual te dará la opción de volver a jugar o no. Si se selecciona la opción de volver a jugar te llevará a la pantalla de selección de personajes y si se le da a no te llevará a la pantalla de inicio del juego.
-![Flujo de pantallas](.\resources\img\FlujoDePantallas.png)
+<img src=".\resources\img\FlujoDePantallas.png">
 
 ### Escena de menu principal:
 ##### Esta escena esta compuesta de un fondo y dos botones(jugar y opciones), que sirven unicamente para llevarte a las pantallas siguientes: selección de modo y opciones. Todos los diseños de esta escena son propios.
