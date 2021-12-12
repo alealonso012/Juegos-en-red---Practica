@@ -11,6 +11,7 @@ export class Escenario4 extends Phaser.Scene {
 
     preload() {
         console.log("En preload");
+        this.load.image('FondoIG', "/resources/img/FondoIngame.png");
         this.load.image("tiles", "/resources/img/Plataformas.png");
         this.load.tilemapTiledJSON("mapa4", "/resources/img/Escenario2.json");
 
@@ -18,6 +19,7 @@ export class Escenario4 extends Phaser.Scene {
 
     create() {
         console.log("En create");
+        this.add.image(0, 0, "FondoIG").setOrigin(0).setScale(3.2);
 
         const map = this.make.tilemap({ key: "mapa4", tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("Plataformas", "tiles");
