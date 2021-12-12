@@ -15,6 +15,10 @@ export class Seleccion extends Phaser.Scene {
         this.load.image('player1', "/resources/img/Player1.png");
         this.load.image('player2', "/resources/img/Player2.png");
         this.load.audio('battlemusic', '/resources/music/EpicBattle.mp3');
+        this.load.spritesheet("character", "/resources/img/CharacterSelect.png", {
+            frameHeight: 600,
+            frameWidth: 500
+        });
     }
 
     create() {
@@ -22,6 +26,8 @@ export class Seleccion extends Phaser.Scene {
         this.music1 = this.sound.add('battlemusic', {volume: this.scene.get('Inicio').music1.volume });
         this.sound.stopAll();
         this.music1.play();
+
+        
 
         this.add.image(400, 300, "selectscreen").setScale(0.45);
         this.add.image(200, 85, "player1").setScale(0.15);
@@ -48,6 +54,24 @@ export class Seleccion extends Phaser.Scene {
         var ListoImg = this.add.image(8, 430, "listo2").setVisible(false).setScale(0.15).setOrigin(0);
         var Listo2Img = this.add.image(422, 430, "listo2").setVisible(false).setScale(0.15).setOrigin(0);
 
+        var CharacterDown = this.add.sprite(100,100,"character");
+        CharacterDown.setScale(0.6);
+        CharacterDown.setVisible(false);
+        CharacterDown.setTint("0xff0080");
+
+        var CharacterDown2 = this.add.sprite(100,100,"character");
+        CharacterDown2.setScale(0.6);
+        CharacterDown2.setVisible(false);
+        CharacterDown2.setTint("0x20c0ff");
+
+        this.anims.create({
+            key: "idle",
+            frameRate: 4,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("character", {
+                frames: [0, 1]
+            })
+        })
 
         rect1.on("pointerover", () => {
             if (!this.select1) {
@@ -59,6 +83,10 @@ export class Seleccion extends Phaser.Scene {
             if (!this.select1) hover1Img.setVisible(false);
         })
         rect1.on("pointerdown", () => {
+            CharacterDown.setVisible(true);
+            CharacterDown.x = 210;
+            CharacterDown.y = 222;
+            CharacterDown.play("idle");
             hover1Img.setX(rect1.x);
             this.select1 = true;
         })
@@ -87,6 +115,10 @@ export class Seleccion extends Phaser.Scene {
             if (!this.select2) hover2Img.setVisible(false);
         })
         rect3.on("pointerdown", () => {
+            CharacterDown2.setVisible(true);
+            CharacterDown2.x = 620;
+            CharacterDown2.y = 222;
+            CharacterDown2.play("idle");
             hover2Img.setX(rect3.x);
             this.select2 = true;
         })
