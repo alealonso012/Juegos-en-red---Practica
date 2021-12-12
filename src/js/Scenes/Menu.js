@@ -1,3 +1,5 @@
+var volumen;
+
 export class Menu extends Phaser.Scene {
 
     constructor() {
@@ -63,8 +65,8 @@ export class Menu extends Phaser.Scene {
         })
 
         localButton.on("pointerdown", () => {
-            console.log("Jugando");
-            this.scene.start("Seleccion");
+            console.log("Seleccionando");
+            this.scene.start("Seleccion", {volumen: volumen});
         })
     }   
 
