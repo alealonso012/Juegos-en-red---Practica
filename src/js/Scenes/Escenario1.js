@@ -21,7 +21,7 @@ export class Escenario1 extends Phaser.Scene {
         console.log("En preload");
         this.load.image('FondoIG', "/resources/img/FondoIngame.png");
         this.load.image("tiles", "/resources/img/Plataformas.png");
-        this.load.tilemapTiledJSON("mapa", "/resources/img/Escenario1.json");
+        this.load.tilemapTiledJSON("mapa1", "/resources/img/Escenario5.json");
     }
 
     
@@ -102,13 +102,13 @@ export class Escenario1 extends Phaser.Scene {
     cerrarTelonDcha() {
         this.telon.setX(-800);
         this.telon.body.setVelocityX(4000);
-        this.telon.setData('derecha', false);
+        this.telon.setData('derecha', true);
     }
 
     cerrarTelonIzq() {
         this.telon.setX(800);
         this.telon.body.setVelocityX(-4000);
-        this.telon.setData('derecha', true);
+        this.telon.setData('derecha', false);
     }
 
     telonComprobarCerrado(Derecha) {
@@ -125,72 +125,4 @@ export class Escenario1 extends Phaser.Scene {
             }
         }
     }
-
-    update() {
-        console.log(this.telon.body.x);
-        this.gestionarTelon();
-    }
-
-    gestionarTelon() {
-        if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x == 0) {
-            this.telonAbrir(this.telon.getData('derecha'));
-        } else if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
-           this.telonComprobarAbierto(this.telon.getData('derecha'));
-        } else if ((this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
-            this.telonComprobarCerrado(this.telon.getData('derecha'));
-        }
-    }
-
-    telonAbrir(Derecha) {
-        if (Derecha) {
-            this.telon.body.setVelocityX(4000);
-        }
-        else {
-            this.telon.body.setVelocityX(-4000);
-        }
-    }
-
-    telonComprobarAbierto(Derecha) {
-        if (Derecha) {
-            if (this.telon.body.x > 800) {
-                this.telon.body.setVelocityX(0);
-                this.telon.toggleData('abierto');
-            }
-        }
-        else {
-            if (this.telon.body.x < -800) {
-                this.telon.body.setVelocityX(0);
-                this.telon.toggleData('abierto');
-            }
-        }
-    }
-
-    cerrarTelonDcha() {
-        this.telon.setX(-800);
-        this.telon.body.setVelocityX(4000);
-        this.telon.setData('derecha', true);
-    }
-
-    cerrarTelonIzq() {
-        this.telon.setX(800);
-        this.telon.body.setVelocityX(-4000);
-        this.telon.setData('derecha', false);
-    }
-
-    telonComprobarCerrado(Derecha)
-    {
-        if (Derecha) {
-            if (this.telon.body.x > 0) {
-                this.telon.body.setVelocityX(0);
-                this.scene.start("Escenario2");
-            }
-        }
-        else {
-            if (this.telon.body.x < 0) {
-                this.telon.body.setVelocityX(0);
-                this.scene.start("Escenario2");
-            }
-        }
-    }
 }
-

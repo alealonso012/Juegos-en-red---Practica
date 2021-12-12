@@ -91,13 +91,13 @@ export class Escenario2 extends Phaser.Scene {
     cerrarTelonDcha() {
         this.telon.setX(-800);
         this.telon.body.setVelocityX(4000);
-        this.telon.setData('derecha', false);
+        this.telon.setData('derecha', true);
     }
 
     cerrarTelonIzq() {
         this.telon.setX(800);
         this.telon.body.setVelocityX(-4000);
-        this.telon.setData('derecha', true);
+        this.telon.setData('derecha', false);
     }
 
     telonComprobarCerrado(Derecha)
