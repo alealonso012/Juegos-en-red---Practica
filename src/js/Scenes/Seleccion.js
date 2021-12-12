@@ -1,3 +1,5 @@
+var volumen;
+
 export class Seleccion extends Phaser.Scene {
 
     constructor() {
@@ -12,9 +14,14 @@ export class Seleccion extends Phaser.Scene {
         this.load.image('listo2', "/resources/img/Listo2.png");
         this.load.image('player1', "/resources/img/Player1.png");
         this.load.image('player2', "/resources/img/Player2.png");
+        this.load.audio('battlemusic', '/resources/music/EpicBattle.mp3');
     }
 
     create() {
+        
+        this.music1 = this.sound.add('battlemusic', {volume: this.scene.get('Inicio').music1.volume });
+        this.sound.stopAll();
+        this.music1.play();
 
         this.add.image(400, 300, "selectscreen").setScale(0.45);
         this.add.image(200, 85, "player1").setScale(0.15);

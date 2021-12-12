@@ -1,5 +1,6 @@
 import { Inicio } from './js/Scenes/Inicio.js';
 import { Opciones } from './js/Scenes/Opciones.js';
+import { Controles } from './js/Scenes/Controles.js';
 import { Menu } from './js/Scenes/Menu.js';
 import { Revancha } from './js/Scenes/Revancha.js';
 import { Seleccion } from './js/Scenes/Seleccion.js';
@@ -22,7 +23,7 @@ var config = {
             debugShowBody : true
         }
     },
-    scene: [Inicio, Opciones, Menu, Revancha, Seleccion, Escenario1, Escenario2, Escenario3, Escenario4, Escenario5],
+    scene: [Inicio, Opciones, Controles, Menu, Revancha, Seleccion, Escenario1, Escenario2, Escenario3, Escenario4, Escenario5],
     render:{
         pixelArt: true
     }

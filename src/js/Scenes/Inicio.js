@@ -1,7 +1,9 @@
 export class Inicio extends Phaser.Scene {
 
+    //music1;
+
     constructor() {
-        super({ key: 'Inicio' });
+        super("Inicio");
     }
 
     preload() {
@@ -17,15 +19,23 @@ export class Inicio extends Phaser.Scene {
     }
 
     create() {
-        this.music1 = this.sound.add('musica');
-        this.music1.play();
+        if (this.music1 == undefined) {
+            this.music1 = this.sound.add('musica', { volume: 0.2 });
+            this.sound.stopAll();
+            this.music1.play();
+        }
+
+        if (this.scene.get("Seleccion").music1 != undefined){
+            this.sound.stopAll();
+            this.music1.play();
+        }
 
         this.add.image(-110, 0, "titulo_fondo").setOrigin(0).setScale(0.6);
         this.add.image(this.game.renderer.width / 2 + 150, this.game.renderer.height * 0.20, "logo");
         var playButton = this.add.image(260, 250, "jugar").setScale(0.17);
         var optionButton = this.add.image(260, 330, "opciones").setScale(0.13);
 
-        var hoverSprite = this.add.sprite(100,100,"flecha");
+        var hoverSprite = this.add.sprite(100, 100, "flecha");
         hoverSprite.setScale(3);
         hoverSprite.setVisible(false);
 
@@ -33,8 +43,8 @@ export class Inicio extends Phaser.Scene {
             key: "mover",
             frameRate: 8,
             repeat: -1,
-            frames: this.anims.generateFrameNumbers("flecha",{
-                frames: [0,1,2,3,4,5,6,7]
+            frames: this.anims.generateFrameNumbers("flecha", {
+                frames: [0, 1, 2, 3, 4, 5, 6, 7]
             })
         })
 
@@ -72,5 +82,9 @@ export class Inicio extends Phaser.Scene {
             console.log("Opcioneando");
             this.scene.start("Opciones");
         })
+    }
+
+    update() {
+
     }
 }
