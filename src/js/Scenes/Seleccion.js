@@ -118,7 +118,7 @@ export class Seleccion extends Phaser.Scene {
 
     update()
     {
-        if(this.ready1&&this.ready2)this.scene.start("Escenario3");
+        if(this.ready1&&this.ready2)this.scene.start("Escenario3", {derecha: true});
     }
 
 }

@@ -64,7 +64,7 @@ export class Menu extends Phaser.Scene {
 
         localButton.on("pointerdown", () => {
             console.log("Jugando");
-            this.scene.start("Revancha");
+            this.scene.start("Seleccion");
         })
     }   
 
