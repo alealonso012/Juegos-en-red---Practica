@@ -1,6 +1,12 @@
 export class Escenario1 extends Phaser.Scene {
     telon;
 
+
+    telon;
+    telonAbierto;
+    telonDerecha;
+
+
     constructor() {
         super("Escenario1");
         
@@ -12,13 +18,17 @@ export class Escenario1 extends Phaser.Scene {
     }
 
     preload() {
+        console.log("En preload");
+        this.load.image('FondoIG', "/resources/img/FondoIngame.png");
         this.load.image("tiles", "/resources/img/Plataformas.png");
-        this.load.tilemapTiledJSON("mapa1", "/resources/img/Escenario5.json");
+        this.load.tilemapTiledJSON("mapa", "/resources/img/Escenario1.json");
     }
 
+    
     create() {
         console.log("En create");
 
+        this.add.image(0, 0, "FondoIG").setOrigin(0).setScale(3.2);
         const map = this.make.tilemap({ key: "mapa1", tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("Plataformas", "tiles");
         const layer = map.createLayer("Capa de patrones 1", tileset, 0, 0);
@@ -115,4 +125,72 @@ export class Escenario1 extends Phaser.Scene {
             }
         }
     }
+
+    update() {
+        console.log(this.telon.body.x);
+        this.gestionarTelon();
+    }
+
+    gestionarTelon() {
+        if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x == 0) {
+            this.telonAbrir(this.telon.getData('derecha'));
+        } else if (!(this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
+           this.telonComprobarAbierto(this.telon.getData('derecha'));
+        } else if ((this.telon.getData('abierto')) && this.telon.body.velocity.x != 0) {
+            this.telonComprobarCerrado(this.telon.getData('derecha'));
+        }
+    }
+
+    telonAbrir(Derecha) {
+        if (Derecha) {
+            this.telon.body.setVelocityX(4000);
+        }
+        else {
+            this.telon.body.setVelocityX(-4000);
+        }
+    }
+
+    telonComprobarAbierto(Derecha) {
+        if (Derecha) {
+            if (this.telon.body.x > 800) {
+                this.telon.body.setVelocityX(0);
+                this.telon.toggleData('abierto');
+            }
+        }
+        else {
+            if (this.telon.body.x < -800) {
+                this.telon.body.setVelocityX(0);
+                this.telon.toggleData('abierto');
+            }
+        }
+    }
+
+    cerrarTelonDcha() {
+        this.telon.setX(-800);
+        this.telon.body.setVelocityX(4000);
+        this.telon.setData('derecha', true);
+    }
+
+    cerrarTelonIzq() {
+        this.telon.setX(800);
+        this.telon.body.setVelocityX(-4000);
+        this.telon.setData('derecha', false);
+    }
+
+    telonComprobarCerrado(Derecha)
+    {
+        if (Derecha) {
+            if (this.telon.body.x > 0) {
+                this.telon.body.setVelocityX(0);
+                this.scene.start("Escenario2");
+            }
+        }
+        else {
+            if (this.telon.body.x < 0) {
+                this.telon.body.setVelocityX(0);
+                this.scene.start("Escenario2");
+            }
+        }
+    }
 }
+
