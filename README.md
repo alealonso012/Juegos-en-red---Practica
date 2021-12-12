@@ -94,23 +94,27 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 # Fase 2
 ## Flujo de pantallas
 ##### Como se puede ver en la imagen, tenemos una pantalla inicial y de esta se puede navegar hasta la pestaña de opciones y a la pestaña de jugar. Desde la pantalla de opciones se podrá volver a la pantalla inicial mediante el botón de salir. Si le hemos dado al botón de jugar iremos a la pantalla de selección de modo en la cual podemos elegir entre jugar local u online. El botón de jugar online no funciona porque en esta fase no se pedia jugar online y el botón de local te lleva a la selección de personaje donde ambos jugadores elegirán con quien querrán jugar. Una vez ambos jugadores esten listos se pasara a las escenas in-game las cuales son varias y se irán saltando de unas otras dependiendo del jugador que gane cada ronda. Una vez un jugador gane la partida se ira a la pantalla de revancha la cual te dará la opción de volver a jugar o no. Si se selecciona la opción de volver a jugar te llevará a la pantalla de selección de personajes y si se le da a no te llevará a la pantalla de inicio del juego.
-<img src=".\resources\img\FlujoDePantallas.png">
+<img src=".\ImagenesReadme\FlujoDePantallas.png">
 
 ### Escena de menu principal:
 ##### Esta escena esta compuesta de un fondo y dos botones(jugar y opciones), que sirven unicamente para llevarte a las pantallas siguientes: selección de modo y opciones. Todos los diseños de esta escena son propios.
-(FOTO)
+<img src=".\ImagenesReadme\MenuPrincipal.png">
 
 ### Escena de opciones:
 ##### En este escena los jugadores tendrán las posibilidades de modificar el volumen de la musica de fondo si asi lo desean y de volver al menu principal por el botón de salir. Todos los diseños de esta escena son propios.
-(FOTO)
+<img src=".\ImagenesReadme\Opciones.png">
+
+### Escena de controles
+##### En esta escena se muestra una imagen de los controles de ambos personajes y un botón de atrás que te lleva a la pantalla anterior, en este caso, la pantalla de opciones.
+<img src=".\ImagenesReadme\controlesFoto.png">
 
 ### Escena de selección de modo
 ##### En esta escena el jugador podrá elegir entre jugar local u online. La opción de jugar online no funciona porque para esta entrega no había que implementarlo. Pero el botón de jugar en local si que funciona y te llevaria  a la pantalla de selección de personaje.
-(FOTO)
+<img src=".\ImagenesReadme\selectorModo.png">
 
 ### Escena de selección de personaje
 ##### En esta escena ambos jugadores podrán elegir sus respectivos personajes pulsando las banderitas que representan a cada uno. Una vez ambos jugadores hayan elegido sus personajes deberán darle los dos al botón de listo para que empiece la partida. Todos los diseños de esta escena son propios.
-(FOTO)
+<img src=".\ImagenesReadme\SelectorPersonaje.png">
 
 ### Escenas In-game
 ##### Estas son un conjunto de 5 escenas entre las que los jugadores iran cambiando según vayan gananado rondas hasta que uno de los jugadores acumule 3 victorias seguidas. Los diseño de estas escenas no son propios debido a que el fondo del escenario y los tiles utilizados son sacados de internet de páginas de assets de uso gratutito. Las cuales son:
@@ -120,6 +124,7 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 
 ### Pantalla de revancha
 ##### Una vez uno de los dos jugadores haya ganado te llevará a esta pantalla en la cual se anunciará el jugador ganador y le dará la opción de una revancha a la cual si se le da a que si llevará a la pantalla de selección de personaje y si se le da a que no, llevará a la pantalla de menú principal.
+<img src=".\ImagenesReadme\Revancha.png">
 
 ##### La música que se escuchará a lo largo del juego serán canciones sacados de internet de libre uso.
 ##### Menus: {Stopping by the Inn} by Twin Musicom (twinmusicom.org)
