@@ -19,8 +19,8 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 3500 },
-            debug : true,
-            debugShowBody : true
+            debug : false,
+            debugShowBody : false
         }
     },
     scene: [Inicio, Opciones, Controles, Menu, Revancha, Seleccion, Escenario1, Escenario2, Escenario3, Escenario4, Escenario5],
