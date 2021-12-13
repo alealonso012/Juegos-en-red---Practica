@@ -65,7 +65,7 @@ export class Seleccion extends Phaser.Scene {
         CharacterDown2.setTint("0x20c0ff");
 
         this.anims.create({
-            key: "idle",
+            key: "idleSelec",
             frameRate: 4,
             repeat: -1,
             frames: this.anims.generateFrameNumbers("character", {
@@ -86,7 +86,7 @@ export class Seleccion extends Phaser.Scene {
             CharacterDown.setVisible(true);
             CharacterDown.x = 210;
             CharacterDown.y = 222;
-            CharacterDown.play("idle");
+            CharacterDown.play("idleSelec");
             hover1Img.setX(rect1.x);
             this.select1 = true;
         })
@@ -118,7 +118,7 @@ export class Seleccion extends Phaser.Scene {
             CharacterDown2.setVisible(true);
             CharacterDown2.x = 620;
             CharacterDown2.y = 222;
-            CharacterDown2.play("idle");
+            CharacterDown2.play("idleSelec");
             hover2Img.setX(rect3.x);
             this.select2 = true;
         })
