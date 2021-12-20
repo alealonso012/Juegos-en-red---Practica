@@ -66,7 +66,17 @@ export class Menu extends Phaser.Scene {
 
         localButton.on("pointerdown", () => {
             console.log("Seleccionando");
-            this.scene.start("Seleccion", {volumen: volumen});
+            this.scene.start("Seleccion");
+        })
+
+        var texto5 = this.add.text(this.game.renderer.width * 0.07, this.game.renderer.height * 0.05, "Atrás", {
+            fontStyle: 'bold',
+            fontSize: "55px",
+            fill: "#e8d59e"
+        }).setOrigin(0.5).setInteractive();
+
+        texto5.on("pointerdown", () => {
+            this.scene.start("Inicio", {volumen: this.volumen});
         })
     }   
 

@@ -21,7 +21,7 @@ export class Opciones extends Phaser.Scene {
         //     fill: "#332e2e"
         // }).setOrigin(0.5);
 
-        var texto2 = this.add.text(this.game.renderer.width * 0.31, this.game.renderer.height * 0.51, "Volumen", {
+        var texto2 = this.add.text(this.game.renderer.width * 0.33, this.game.renderer.height * 0.51, "Volumen", {
             fontStyle: 'bold',
             fontSize: "63px",
             fill: "#332e2e"
@@ -41,7 +41,7 @@ export class Opciones extends Phaser.Scene {
             }
         })
 
-        var texto3 = this.add.text(this.game.renderer.width * 0.36, this.game.renderer.height * 0.37, "Controles", {
+        var texto3 = this.add.text(this.game.renderer.width * 0.35, this.game.renderer.height * 0.37, "Controles", {
             fontStyle: 'bold',
             fontSize: "63px",
             fill: "#332e2e"
@@ -55,14 +55,14 @@ export class Opciones extends Phaser.Scene {
         //     fill: "#ffffff"
         // }).setOrigin(0.5);
 
-        var texto5 = this.add.text(this.game.renderer.width * 0.35, this.game.renderer.height * 0.69, "Atrás", {
+        var texto5 = this.add.text(this.game.renderer.width * 0.07, this.game.renderer.height * 0.05, "Atrás", {
             fontStyle: 'bold',
-            fontSize: "63px",
-            fill: "#332e2e"
+            fontSize: "55px",
+            fill: "#e8d59e"
         }).setOrigin(0.5).setInteractive();
 
         texto5.on("pointerdown", () => {
-            this.scene.start("Inicio", {volumen: this.volumen});
+            this.scene.start("Inicio");
         })
     }
 }

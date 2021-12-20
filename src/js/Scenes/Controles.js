@@ -18,7 +18,7 @@ export class Controles extends Phaser.Scene {
         //     fill: "#ffffff"
         // }).setOrigin(0.5);
 
-        var texto5 = this.add.text(this.game.renderer.width * 0.5, this.game.renderer.height* 0.9, "Atrás", {
+        var texto5 = this.add.text(this.game.renderer.width * 0.07, this.game.renderer.height* 0.05, "Atrás", {
             fontStyle: 'bold',
             fontSize: "55px",
             fill: "#e8d59e"

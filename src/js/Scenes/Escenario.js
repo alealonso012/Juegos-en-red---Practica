@@ -121,9 +121,11 @@ export class Escenario extends Phaser.Scene {
 
         this.telon.setData('derecha', this.Derecha);
         this.telon.setData('abierto', false);
+        this.telon.depth = 10;
 
 
-        this.events.on('shutdown', this.shutdown, this);
+
+        //this.events.on('shutdown', this.shutdown, this);
 
         //INICIO COSAS PERSONAJE
         //LHITBOX1
@@ -336,38 +338,6 @@ export class Escenario extends Phaser.Scene {
 
         this.physics.add.overlap(this.lHitbox2, this.player, p1LHit, undefined, this);
         this.physics.add.overlap(this.hHitbox2, this.player, p1HHit, undefined, this);
-
-
-        this.suelo1 = this.add.rectangle(0, 512, 800, 100, 0xffffff, 0.0).setOrigin(0)
-        this.physics.add.existing(this.suelo1);
-        this.suelo1.body.setImmovable(true);
-        this.suelo1.body.allowGravity = false;
-
-        this.suelo2 = this.add.rectangle(112, 352, 112, 16, 0xffffff, 0.0).setOrigin(0)
-        this.physics.add.existing(this.suelo2);
-        this.suelo2.body.setImmovable(true);
-        this.suelo2.body.allowGravity = false;
-
-        this.suelo3 = this.add.rectangle((800 - 224), 352, 112, 16, 0xffffff, 0.0).setOrigin(0)
-        this.physics.add.existing(this.suelo3);
-        this.suelo3.body.setImmovable(true);
-        this.suelo3.body.allowGravity = false;
-
-        this.suelo4 = this.add.rectangle(400, 424, 160, 16, 0xffffff, 0.0)
-        this.physics.add.existing(this.suelo4);
-        this.suelo4.body.setImmovable(true);
-        this.suelo4.body.allowGravity = false;
-
-        this.physics.add.collider(this.player, this.suelo1);
-        this.physics.add.collider(this.player2, this.suelo1);
-        this.physics.add.collider(this.player, this.suelo2);
-        this.physics.add.collider(this.player2, this.suelo2);
-        this.physics.add.collider(this.player, this.suelo3);
-        this.physics.add.collider(this.player2, this.suelo3);
-        this.physics.add.collider(this.player, this.suelo4);
-        this.physics.add.collider(this.player2, this.suelo4);
-        this.physics.add.collider(this.player, this.suelo5);
-        this.physics.add.collider(this.player2, this.suelo5);
         //COLLIDERS
 
 
@@ -402,11 +372,25 @@ export class Escenario extends Phaser.Scene {
 
         }, [this, this.player2])
         //FIN COSAS PERSONAJE
-    }
+        this.physics.add.collider(this.player2, layer);
+        this.physics.add.collider(this.player, layer);
 
-    shutdown() {
-        //  We need to clear keyboard events, or they'll stack up when the Menu is re-run
-        this.input.keyboard.shutdown();
+        this.player.body.setMaxVelocityY(1100);
+        this.player2.body.setMaxVelocityY(1100);
+
+        layer.setCollisionBetween(340, 664);
+
+        this.textP1 = this.add.text(this.player.x, this.player.y, "P1", {
+            fontStyle: 'bold',
+            fontSize: "35px",
+            fill: "#ffffff"
+        }).setOrigin(0.5);
+
+        this.textP2 = this.add.text(this.player2.x, this.player2.y, "P2", {
+            fontStyle: 'bold',
+            fontSize: "35px",
+            fill: "#ffffff"
+        }).setOrigin(0.5);
     }
 
     update() {
@@ -418,16 +402,28 @@ export class Escenario extends Phaser.Scene {
             this.player2.flipX = true
             position = 1
             this.player.setOffset(175, 175);
-
             this.player2.setOffset(225, 175);
+            this.textP1.setPosition(this.player.x-9, this.player.y - 70);
+            this.textP2.setPosition(this.player2.x+9, this.player2.y - 70);
+
         } else {
             this.player.flipX = true
             this.player2.flipX = false
             position = 2
             this.player.setOffset(225, 175);
-
             this.player2.setOffset(175, 175);
+            this.textP1.setPosition(this.player.x+9, this.player.y - 70);
+            this.textP2.setPosition(this.player2.x-9, this.player2.y - 70);
         }
+
+            //Muerte por caida
+        if (this.player.y > this.game.renderer.height*0.95) {
+            this.stateMachine.transition('dead')
+        }
+        if (this.player2.y > this.game.renderer.height*0.95) {
+            this.stateMachine2.transition('dead')
+        }
+
         this.stateMachine.step();
         this.stateMachine2.step();
         //fin cosas personaje
@@ -553,7 +549,7 @@ class IdleState extends State {
                 return;
             }
         }
-        if (player.body.touching.down) {
+        if (player.body.blocked.down) {
             player.setVelocityX(0);
             jumping1 = false;
             if (scene.sKey.isDown) {
@@ -647,7 +643,7 @@ class MoveState extends State {
                 return;
             }
         }
-        if (scene.wKey.isDown && player.body.touching.down) {
+        if (scene.wKey.isDown && player.body.blocked.down) {
             this.stateMachine.transition('jump');
             return;
         }
@@ -686,7 +682,7 @@ class LightState extends State {
             }
             scene.lHitbox.y = player.y - (player.height * 0.04)
             scene.lHitbox.body.enable = true
-            if (player.body.touching.down) {
+            if (player.body.blocked.down) {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
@@ -723,7 +719,7 @@ class HeavyState extends State {
             }
             scene.hHitbox.y = player.y - (player.height * 0.08)
             scene.hHitbox.body.enable = true
-            if (player.body.touching.down) {
+            if (player.body.blocked.down) {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
@@ -810,7 +806,7 @@ class ParryState extends State {
             parry1 = false
             def1 = false;
         }
-        if (player.body.touching.down) {
+        if (player.body.blocked.down) {
             player.setVelocityX(0);
         }
         player.once('animationcomplete', () => {
@@ -863,7 +859,7 @@ class JumpState extends State {
                 return;
             }
         }
-        if (scene.wKey.isDown && player.body.touching.down) {
+        if (scene.wKey.isDown && player.body.blocked.down) {
             player.setVelocityY(-1200);
         }
         player.anims.play(`jump`, true);
@@ -1043,7 +1039,7 @@ class IdleState2 extends State {
                 return;
             }
         }
-        if (player.body.touching.down) {
+        if (player.body.blocked.down) {
             player.setVelocityX(0);
             jumping2 = false;
             if (scene.downKey.isDown) {
@@ -1193,7 +1189,7 @@ class LightState2 extends State {
             }
             scene.lHitbox2.y = player.y - (player.height * 0.04)
             scene.lHitbox2.body.enable = true
-            if (player.body.touching.down) {
+            if (player.body.blocked.down) {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
@@ -1230,7 +1226,7 @@ class HeavyState2 extends State {
             }
             scene.hHitbox2.y = player.y - (player.height * 0.08)
             scene.hHitbox2.body.enable = true
-            if (player.body.touching.down) {
+            if (player.body.blocked.down) {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
@@ -1316,7 +1312,7 @@ class ParryState2 extends State {
             parry2 = false
             def2 = false;
         }
-        if (player.body.touching.down) {
+        if (player.body.blocked.down) {
             player.setVelocityX(0);
         }
         player.once('animationcomplete', () => {
@@ -1369,7 +1365,7 @@ class JumpState2 extends State {
                 return;
             }
         }
-        if (scene.upKey.isDown && player.body.touching.down) {
+        if (scene.upKey.isDown && player.body.blocked.down) {
             player.setVelocityY(-1200);
         }
         player.anims.play(`jump`, true);
