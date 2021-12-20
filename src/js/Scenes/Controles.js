@@ -9,18 +9,18 @@ export class Controles extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(-110, 0, "titulo_fondo").setOrigin(0).setScale(0.6);
-        this.add.rectangle(0,0,800,600,0x000000,0.23).setOrigin(0);
-        this.add.image(this.game.renderer.width / 2, this.game.renderer.height* 0.5, "controles");
+        this.add.image(0, 0, "titulo_fondo").setOrigin(0);
+        this.add.rectangle(0,0,this.game.renderer.width, this.game.renderer.height,0x000000,0.23).setOrigin(0);
+        this.add.image(this.game.renderer.width / 2, this.game.renderer.height* 0.5, "controles").setScale(1.7);
 
         // var texto4 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "Pantalla completa", {
         //     fontSize: "30px",
         //     fill: "#ffffff"
         // }).setOrigin(0.5);
 
-        var texto5 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height* 0.9, "Atrás", {
+        var texto5 = this.add.text(this.game.renderer.width * 0.5, this.game.renderer.height* 0.9, "Atrás", {
             fontStyle: 'bold',
-            fontSize: "37px",
+            fontSize: "55px",
             fill: "#e8d59e"
         }).setOrigin(0.5).setInteractive();
 

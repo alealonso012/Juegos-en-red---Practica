@@ -22,45 +22,42 @@ export class Seleccion extends Phaser.Scene {
     }
 
     create() {
-        
         this.music1 = this.sound.add('battlemusic', {volume: this.scene.get('Inicio').music1.volume });
         this.sound.stopAll();
-        this.music1.play();
+        this.music1.play({loop: true});
 
-        
-
-        this.add.image(400, 300, "selectscreen").setScale(0.45);
-        this.add.image(200, 85, "player1").setScale(0.15);
-        this.add.image(610, 85, "player2").setScale(0.15);
-        var rect1 = this.add.rectangle(3, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
-        var rect2 = this.add.rectangle(97.5, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
-        var rect3 = this.add.rectangle(417, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
-        var rect4 = this.add.rectangle(511, 267, 210, 330, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
+        this.add.image(0, 0, "selectscreen").setScale(1).setOrigin(0);
+        this.add.image(this.game.renderer.width * 0.265, this.game.renderer.height*0.059, "player1").setScale(0.3);
+        this.add.image(this.game.renderer.width * 0.745, this.game.renderer.height*0.059, "player2").setScale(0.3);
+        var rect1 = this.add.rectangle(this.game.renderer.width * 0.095, this.game.renderer.height*0.588, 210, 330, 0xffffff, 0).setInteractive();
+        var rect2 = this.add.rectangle(this.game.renderer.width * 0.204945, this.game.renderer.height*0.588, 210, 330, 0xffffff, 0).setInteractive();
+        var rect3 = this.add.rectangle(this.game.renderer.width * 0.575, this.game.renderer.height*0.588, 210, 330, 0xffffff, 0).setInteractive();
+        var rect4 = this.add.rectangle(this.game.renderer.width * 0.6845, this.game.renderer.height*0.588, 210, 330, 0xffffff, 0).setInteractive();
         this.select1 = false;
         this.select2 = false;
         this.ready1 = false;
         this.ready2 = false;
 
-        var listo = this.add.rectangle(125.1, 458, 300, 110, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
-        var listo2 = this.add.rectangle(539.1, 458, 300, 110, 0xffffff, 0).setOrigin(0).setScale(0.45).setInteractive();
+        var listo = this.add.rectangle(this.game.renderer.width * 0.26, this.game.renderer.height*0.875, 300, 110, 0xffffff, 0).setInteractive();
+        var listo2 = this.add.rectangle(this.game.renderer.width * 0.74, this.game.renderer.height*0.875, 300, 110, 0xffffff, 0).setInteractive();
 
-        var hover1Img = this.add.image(3, 267, "borde").setVisible(false).setScale(0.45).setOrigin(0);
-        var hover2Img = this.add.image(3, 267, "borde").setVisible(false).setScale(0.45).setOrigin(0);
+        var hover1Img = this.add.image(0, rect1.y, "borde").setVisible(false);
+        var hover2Img = this.add.image(0, rect1.y, "borde").setVisible(false);
 
-        var RecuadroIzq = this.add.image(125, 455, "borde2").setVisible(false).setScale(0.43).setOrigin(0);
-        var RecuadroDcha = this.add.image(540, 455, "borde2").setVisible(false).setScale(0.43).setOrigin(0);
-        this.add.image(8, 430, "listo1").setScale(0.15).setOrigin(0);
-        this.add.image(422, 430, "listo1").setScale(0.15).setOrigin(0);
-        var ListoImg = this.add.image(8, 430, "listo2").setVisible(false).setScale(0.15).setOrigin(0);
-        var Listo2Img = this.add.image(422, 430, "listo2").setVisible(false).setScale(0.15).setOrigin(0);
+        var RecuadroIzq = this.add.image(listo.x, listo.y, "borde2").setVisible(false);
+        var RecuadroDcha = this.add.image(listo2.x, listo2.y, "borde2").setVisible(false);
+        this.add.image(this.game.renderer.width * 0.261, this.game.renderer.height*0.875, "listo1").setScale(0.3);
+        this.add.image(this.game.renderer.width * 0.741, this.game.renderer.height*0.875, "listo1").setScale(0.3);
+        var ListoImg = this.add.image(this.game.renderer.width * 0.261, this.game.renderer.height*0.875, "listo2").setScale(0.3).setVisible(false);
+        var Listo2Img = this.add.image(this.game.renderer.width * 0.741, this.game.renderer.height*0.875, "listo2").setScale(0.3).setVisible(false);
 
         var CharacterDown = this.add.sprite(100,100,"character");
-        CharacterDown.setScale(0.6);
+        CharacterDown.setScale(1.2);
         CharacterDown.setVisible(false);
         CharacterDown.setTint("0xff0080");
 
         var CharacterDown2 = this.add.sprite(100,100,"character");
-        CharacterDown2.setScale(0.6);
+        CharacterDown2.setScale(1.2);
         CharacterDown2.setVisible(false);
         CharacterDown2.setTint("0x20c0ff");
 
@@ -84,8 +81,8 @@ export class Seleccion extends Phaser.Scene {
         })
         rect1.on("pointerdown", () => {
             CharacterDown.setVisible(true);
-            CharacterDown.x = 210;
-            CharacterDown.y = 222;
+            CharacterDown.x = this.game.renderer.width * 0.28;
+            CharacterDown.y = this.game.renderer.height * 0.33;
             CharacterDown.play("idleSelec");
             hover1Img.setX(rect1.x);
             this.select1 = true;
@@ -104,7 +101,6 @@ export class Seleccion extends Phaser.Scene {
             hover1Img.setX(rect2.x);
             this.select1 = true;
         })
-
         rect3.on("pointerover", () => {
             if (!this.select2) {
                 hover2Img.setVisible(true);
@@ -116,8 +112,8 @@ export class Seleccion extends Phaser.Scene {
         })
         rect3.on("pointerdown", () => {
             CharacterDown2.setVisible(true);
-            CharacterDown2.x = 620;
-            CharacterDown2.y = 222;
+            CharacterDown2.x = this.game.renderer.width * 0.76;
+            CharacterDown2.y = this.game.renderer.height * 0.33;
             CharacterDown2.play("idleSelec");
             hover2Img.setX(rect3.x);
             this.select2 = true;
@@ -157,7 +153,7 @@ export class Seleccion extends Phaser.Scene {
 
     update()
     {
-        if(this.ready1&&this.ready2)this.scene.start("Escenario3", {derecha: true});
+        if(this.ready1&&this.ready2)this.scene.start("Esc3", {derecha: true});
     }
 
 }

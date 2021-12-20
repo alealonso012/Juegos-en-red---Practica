@@ -1,127 +1,129 @@
-        //Las estancias son 0-Baja , 1-Media, 2-Alto
-        var def1 = true // Defensa pasiva del jugador 1
-        var def2 = true // Defensa pasiva del jugador 2
-        var stance1 = 1; // Estancia del jugador 1.
-        var stance2 = 1; // Estancia del jugador 2.
-        var position = 0; //Determina hacia donde debería mirar cada jugador. 0 es lo normal, 1 al revés
-        var parry1 = false; //Está jugador 1 haciendo parry
-        var parry2 = false; //Está jugador 2 haciendo parry
-        var jumping1 = false; //Jugador 1 saltando 
-        var jumping2 = false; //Jugador 2 saltando
-        var crouch1 = false; //Jugador 1 agachado 
-        var crouch2 = false; //Jugador 2 agachado 
+//Las estancias son 0-Baja , 1-Media, 2-Alto
+var def1 = true // Defensa pasiva del jugador 1
+var def2 = true // Defensa pasiva del jugador 2
+var stance1 = 1; // Estancia del jugador 1.
+var stance2 = 1; // Estancia del jugador 2.
+var position = 0; //Determina hacia donde debería mirar cada jugador. 0 es lo normal, 1 al revés
+var parry1 = false; //Está jugador 1 haciendo parry
+var parry2 = false; //Está jugador 2 haciendo parry
+var jumping1 = false; //Jugador 1 saltando 
+var jumping2 = false; //Jugador 2 saltando
+var crouch1 = false; //Jugador 1 agachado 
+var crouch2 = false; //Jugador 2 agachado 
+var p1Stop = false; //No permite al jugador1 atacar.
+var p2Stop = false; //No permite al jugador2 atacar.
+var wait = 0;
 
-        var p1Stop = false; //No permite al jugador1 atacar.
-        var p2Stop = false; //No permite al jugador2 atacar.
-        var wait = 0;
-        import{StateMachine} from './statemachine/StateMachine.js'
-        
-        import{State} from './statemachine/StateMachine.js'
+import { StateMachine } from './statemachine/StateMachine.js'
 
-        //FIN GLOBALES PJ
+import { State } from './statemachine/StateMachine.js'
 
-export class Escenario1 extends Phaser.Scene {
-    telon;
-    telon;
-    telonAbierto;
-    telonDerecha;
+//FIN GLOBALES PJ
+export class Escenario extends Phaser.Scene {
+    Derecha;
+    leftScene;
+    rightScene;
+    platJson;
 
-
-    constructor() {
-        super("Escenario1");
-        
+    constructor(key, lScene, rScene, pJson) {
+        super(key);
+        this.leftScene = lScene;
+        this.rightScene = rScene;
+        this.platJson = pJson;
+        this.scene = this.scene;
     }
 
     init(data) {
-        console.log("Paso por aqui");
-        this.aux = data.derecha;
+        this.Derecha = data.derecha;
+        console.log(this.Derecha);
     }
 
     preload() {
+
+        this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
-        this.load.image('FondoIG', "/resources/img/FondoIngame.png");
+        this.load.image('Fondo', "/resources/img/FondoIngame.png");
         this.load.image("tiles", "/resources/img/Plataformas.png");
-        this.load.tilemapTiledJSON("mapa1", "/resources/img/Escenario5.json");
+        this.load.tilemapTiledJSON(this.platJson, this.platJson);
         //INICIO COSAS PERSONAJE
-        
-this.load.audio('ping', '/resources/audio/metalping.ogg');
-    this.load.spritesheet('run',
-    'js/Scenes/pj/RunMid.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('idle',
-    'js/Scenes/pj/IdleMid.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('heavy',
-    'js/Scenes/pj/HeavyHigh.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('jump',
-    'js/Scenes/pj/Jump1.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('light',
-    'js/Scenes/pj/LightMid.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('bDash',
-    'js/Scenes/pj/BackDash1.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('fDash',
-    'js/Scenes/pj/ForwardDash1.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('crouch',
-    'js/Scenes/pj/Agachado1.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('parry',
-    'js/Scenes/pj/Parry.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('dead',
-    'js/Scenes/pj/Dead.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('heavyL',
-    'js/Scenes/pj/HeavyLow.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('heavyM',
-    'js/Scenes/pj/HeavyMid.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('idleH',
-    'js/Scenes/pj/IdleHigh.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('idleL',
-    'js/Scenes/pj/IdleLow.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('lightH',
-    'js/Scenes/pj/LightHigh.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('lightL',
-    'js/Scenes/pj/LightLow.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('runL',
-    'js/Scenes/pj/RunLow.png',
-    { frameWidth: 500, frameHeight: 600 })
-this.load.spritesheet('runH',
-    'js/Scenes/pj/RunHigh.png',
-    { frameWidth: 500, frameHeight: 600 })
-//FIN COSAS PERSONAJE
+        this.load.spritesheet('run',
+            'js/Scenes/pj/RunMid.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('idle',
+            'js/Scenes/pj/IdleMid.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('heavy',
+            'js/Scenes/pj/HeavyHigh.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('jump',
+            'js/Scenes/pj/Jump1.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('light',
+            'js/Scenes/pj/LightMid.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('bDash',
+            'js/Scenes/pj/BackDash1.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('fDash',
+            'js/Scenes/pj/ForwardDash1.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('crouch',
+            'js/Scenes/pj/Agachado1.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('parry',
+            'js/Scenes/pj/Parry.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('dead',
+            'js/Scenes/pj/Dead.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('heavyL',
+            'js/Scenes/pj/HeavyLow.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('heavyM',
+            'js/Scenes/pj/HeavyMid.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('idleH',
+            'js/Scenes/pj/IdleHigh.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('idleL',
+            'js/Scenes/pj/IdleLow.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('lightH',
+            'js/Scenes/pj/LightHigh.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('lightL',
+            'js/Scenes/pj/LightLow.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('runL',
+            'js/Scenes/pj/RunLow.png',
+            { frameWidth: 500, frameHeight: 600 })
+        this.load.spritesheet('runH',
+            'js/Scenes/pj/RunHigh.png',
+            { frameWidth: 500, frameHeight: 600 })
+        //FIN COSAS PERSONAJE
     }
 
-    
     create() {
         this.ping = this.sound.add('ping', { volume: 1 });
-        console.log("En create");
+        console.log(this.scene.key);
 
-        this.add.image(0, 0, "FondoIG").setOrigin(0).setScale(3.2);
-        const map = this.make.tilemap({ key: "mapa1", tileWidth: 16, tileHeight: 16 });
+        this.add.image(0, 0, "Fondo").setOrigin(0).setScale(8);
+        const map = this.make.tilemap({ key: this.platJson, tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("Plataformas", "tiles");
-        const layer = map.createLayer("Capa de patrones 1", tileset, 0, 0);
-
+        const layer = map.createLayer("toplayout", tileset, 0, 0).setScale(1);
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-        this.telon = this.add.rectangle(0, 0, 800, 600, 0x000000).setOrigin(0);
-        
+        this.telon = this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000).setOrigin(0);
+
         this.physics.add.existing(this.telon);
         this.telon.body.setAllowGravity(false);
 
-        this.telon.setData('derecha', this.aux);
+        this.telon.setData('derecha', this.Derecha);
         this.telon.setData('abierto', false);
+
+
+        this.events.on('shutdown', this.shutdown, this);
 
         //INICIO COSAS PERSONAJE
         //LHITBOX1
@@ -146,7 +148,7 @@ this.load.spritesheet('runH',
         //LHITBOX2
 
         //H HITBOX2
-        this. hHitbox2 = this.add.rectangle(0, 0, 65, 45, 0xffffff, 0)
+        this.hHitbox2 = this.add.rectangle(0, 0, 65, 45, 0xffffff, 0)
         this.physics.add.existing(this.hHitbox2)
         this.hHitbox2.body.allowGravity = false
         this.hHitbox2.body.enable = false
@@ -329,14 +331,43 @@ this.load.spritesheet('runH',
         //this.physics.add.collider(this.player, platforms);
         //this.physics.add.collider(player2, platforms);
 
-        this.physics.add.overlap(this.lHitbox, this.player2, p2LHit, undefined, this)
-        this.physics.add.overlap(this.hHitbox, this.player2, p2HHit, undefined, this)
+        this.physics.add.overlap(this.lHitbox, this.player2, p2LHit, undefined, this);
+        this.physics.add.overlap(this.hHitbox, this.player2, p2HHit, undefined, this);
 
-        this.physics.add.overlap(this.lHitbox2, this.player, p1LHit, undefined, this)
-        this.physics.add.overlap(this.hHitbox2, this.player, p1HHit, undefined, this)
-        
-        
+        this.physics.add.overlap(this.lHitbox2, this.player, p1LHit, undefined, this);
+        this.physics.add.overlap(this.hHitbox2, this.player, p1HHit, undefined, this);
 
+
+        this.suelo1 = this.add.rectangle(0, 512, 800, 100, 0xffffff, 0.0).setOrigin(0)
+        this.physics.add.existing(this.suelo1);
+        this.suelo1.body.setImmovable(true);
+        this.suelo1.body.allowGravity = false;
+
+        this.suelo2 = this.add.rectangle(112, 352, 112, 16, 0xffffff, 0.0).setOrigin(0)
+        this.physics.add.existing(this.suelo2);
+        this.suelo2.body.setImmovable(true);
+        this.suelo2.body.allowGravity = false;
+
+        this.suelo3 = this.add.rectangle((800 - 224), 352, 112, 16, 0xffffff, 0.0).setOrigin(0)
+        this.physics.add.existing(this.suelo3);
+        this.suelo3.body.setImmovable(true);
+        this.suelo3.body.allowGravity = false;
+
+        this.suelo4 = this.add.rectangle(400, 424, 160, 16, 0xffffff, 0.0)
+        this.physics.add.existing(this.suelo4);
+        this.suelo4.body.setImmovable(true);
+        this.suelo4.body.allowGravity = false;
+
+        this.physics.add.collider(this.player, this.suelo1);
+        this.physics.add.collider(this.player2, this.suelo1);
+        this.physics.add.collider(this.player, this.suelo2);
+        this.physics.add.collider(this.player2, this.suelo2);
+        this.physics.add.collider(this.player, this.suelo3);
+        this.physics.add.collider(this.player2, this.suelo3);
+        this.physics.add.collider(this.player, this.suelo4);
+        this.physics.add.collider(this.player2, this.suelo4);
+        this.physics.add.collider(this.player, this.suelo5);
+        this.physics.add.collider(this.player2, this.suelo5);
         //COLLIDERS
 
 
@@ -371,20 +402,6 @@ this.load.spritesheet('runH',
 
         }, [this, this.player2])
         //FIN COSAS PERSONAJE
-        this.events.on('shutdown', this.shutdown, this);
-        this.suelo1 = this.add.rectangle(0, 512, 640, 100, 0xffffff, 0).setOrigin(0);
-        this.suelo2 = this.add.rectangle(800-16*5, 512, 16*5, 100, 0xffffff, 0).setOrigin(0);
-        this.physics.add.existing(this.suelo1);
-        this.physics.add.existing(this.suelo2);
-        this.suelo1.body.setImmovable(true);
-        this.suelo2.body.setImmovable(true);
-        this.suelo1.body.allowGravity = false;
-        this.suelo2.body.allowGravity = false;
-        
-        this.physics.add.collider(this.player, this.suelo1)
-        this.physics.add.collider(this.player2, this.suelo1)
-        this.physics.add.collider(this.player, this.suelo2)
-        this.physics.add.collider(this.player2, this.suelo2)
     }
 
     shutdown() {
@@ -393,14 +410,9 @@ this.load.spritesheet('runH',
     }
 
     update() {
-        if(this.player.y ==586){
-            this.stateMachine.transition('dead')
-        }
-        if(this.player2.y ==586){
-            this.stateMachine2.transition('dead')
-        }
-        //console.log(this.telon.body.x);
         this.gestionarTelon();
+
+        //Cosas personaje
         if (this.player.x < this.player2.x) {
             this.player.flipX = false
             this.player2.flipX = true
@@ -418,6 +430,7 @@ this.load.spritesheet('runH',
         }
         this.stateMachine.step();
         this.stateMachine2.step();
+        //fin cosas personaje
     }
 
     gestionarTelon() {
@@ -441,13 +454,13 @@ this.load.spritesheet('runH',
 
     telonComprobarAbierto(Derecha) {
         if (Derecha) {
-            if (this.telon.body.x > 800) {
+            if (this.telon.body.x > this.game.renderer.width) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
             }
         }
         else {
-            if (this.telon.body.x < -800) {
+            if (this.telon.body.x < -this.game.renderer.width) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
             }
@@ -455,31 +468,39 @@ this.load.spritesheet('runH',
     }
 
     cerrarTelonDcha() {
-        this.telon.setX(-800);
-        this.telon.body.setVelocityX(4000);
-        this.telon.setData('derecha', false);
+        if (this.telon.body.velocity.x == 0) {
+            this.telon.setX(-this.game.renderer.width);
+            this.telon.body.setVelocityX(4000);
+            this.telon.setData('derecha', true);
+        }
     }
-
     cerrarTelonIzq() {
-        this.telon.setX(800);
-        this.telon.body.setVelocityX(-4000);
-        this.telon.setData('derecha', true);
+        if (this.telon.body.velocity.x == 0) {
+            this.telon.setX(this.game.renderer.width);
+            this.telon.body.setVelocityX(-4000);
+            this.telon.setData('derecha', false);
+        }
     }
 
     telonComprobarCerrado(Derecha) {
         if (Derecha) {
             if (this.telon.body.x > 0) {
                 this.telon.body.setVelocityX(0);
-                this.scene.start("Revancha", { derecha: true });
+                this.telon.toggleData('abierto');
+                this.scene.start(this.leftScene, { derecha: true });
             }
         }
         else {
             if (this.telon.body.x < 0) {
                 this.telon.body.setVelocityX(0);
-                this.scene.start("Escenario2", { derecha: false });
+                this.telon.toggleData('abierto');
+                this.scene.start(this.rightScene, { derecha: false });
             }
         }
     }
+
+
+
 }
 //CLASES PERSONAJE
 class IdleState extends State {
@@ -645,7 +666,7 @@ class MoveState extends State {
 }
 class LightState extends State {
     enter(scene, player) {
-        def1=false;
+        def1 = false;
         if (stance1 == 0) {
             player.anims.play('lightL');
         } else if (stance1 == 1) {
@@ -669,10 +690,10 @@ class LightState extends State {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
-                if(player.anims.currentAnim.key == "light" || player.anims.currentAnim.key == "lightL" || player.anims.currentAnim.key == "lightH"){
-                this.stateMachine.transition('idle');
-                scene.lHitbox.body.enable = false
-                def1=true;
+                def1 = true;
+                if (player.anims.currentAnim.key == "light" || player.anims.currentAnim.key == "lightL" || player.anims.currentAnim.key == "lightH") {
+                    this.stateMachine.transition('idle');
+                    scene.lHitbox.body.enable = false
                 }
             });
         }
@@ -681,7 +702,7 @@ class LightState extends State {
 }
 class HeavyState extends State {
     enter(scene, player) {
-        def1=false;
+        def1 = false;
         if (stance1 == 0) {
             player.anims.play('heavyL');
         } else if (stance1 == 1) {
@@ -706,10 +727,10 @@ class HeavyState extends State {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
-                if(player.anims.currentAnim.key == "heavy" || player.anims.currentAnim.key == "heavyM" || player.anims.currentAnim.key == "heavyL" ){
-                this.stateMachine.transition('idle');
-                scene.hHitbox.body.enable = false
-                def1=true;
+                def1 = true
+                if (player.anims.currentAnim.key == "heavy" || player.anims.currentAnim.key == "heavyM" || player.anims.currentAnim.key == "heavyL") {
+                    this.stateMachine.transition('idle');
+                    scene.hHitbox.body.enable = false
                 }
             });
         }
@@ -719,7 +740,7 @@ class HeavyState extends State {
 }
 class RDashState extends State {
     execute(scene, player) {
-        def1=false;
+        def1 = false
         player.setVelocityX(700);
         if (p1Stop == false) {
             if (scene.kKey.isDown) {
@@ -737,24 +758,26 @@ class RDashState extends State {
             player.anims.play(`bDash`, true);
         }
         if (scene.sKey.isDown) {
+            def1 = true
             this.stateMachine.transition('crouch')
             return;
         }
         player.once('animationcomplete', () => {
+            def1 = true
             this.stateMachine.transition('idle');
         });
     }
 }
 class LDashState extends State {
     execute(scene, player) {
-        def1=false;
+        def1 = false
         player.setVelocityX(-700);
         if (p1Stop == false) {
             if (scene.kKey.isDown) {
                 this.stateMachine.transition('light');
                 return;
             }
-            if (jKey.isDown) {
+            if (scene.jKey.isDown) {
                 this.stateMachine.transition('heavy');
                 return;
             }
@@ -765,10 +788,12 @@ class LDashState extends State {
             player.anims.play(`fDash`, true);
         }
         if (scene.sKey.isDown) {
+            def1 = true
             this.stateMachine.transition('crouch')
             return;
         }
         player.once('animationcomplete', () => {
+            def1 = true
             this.stateMachine.transition('idle');
         });
     }
@@ -825,7 +850,7 @@ class CrouchState extends State {
 }
 class JumpState extends State {
     execute(scene, player) {
-        def1=false
+        def1 = false
         jumping1 = true
         //changeStance1(2)
         if (p1Stop == false) {
@@ -848,7 +873,7 @@ class JumpState extends State {
     }
 }
 class WaitState extends State {
-    enter(scene, player){
+    enter(scene, player) {
         player.anims.play('parried');
         scene.time.delayedCall(wait, () => {
             p1Stop = false;
@@ -867,14 +892,14 @@ class WaitState extends State {
     }
 }
 class DeadState extends State {
-    enter(scene, player){
+    enter(scene, player) {
         player.anims.play('dead')
         scene.time.delayedCall(500, () => {
-            scene.cerrarTelonIzq();
+            scene.cerrarTelonDcha();
         })
-}
-    execute(scene, player){
-        
+    }
+    execute(scene, player) {
+
     }
 }
 function p2LHit(box, player) {
@@ -896,8 +921,8 @@ function p2LHit(box, player) {
         console.log("2 LHIT")
         this.stateMachine2.transition('dead');
         return;
-    }else if (stance1 == stance2) {
-        def1=true
+    } else if (stance1 == stance2) {
+        def1 = true
         this.ping.play();
         this.lHitbox.body.enable = false
         p1Stop = true
@@ -930,7 +955,7 @@ function p2HHit(box, player) {
         return;
     }
     if (stance1 == stance2) {
-        def1=true
+        def1 = true
         this.ping.play();
         p1Stop = true
         this.hHitbox.body.enable = false
@@ -978,7 +1003,7 @@ class IdleState2 extends State {
         }
     }
     execute(scene, player) {
-        
+
         def2 = true
         //const { left, right, up, down, space } = scene.keys;
         const n1JustDown = Phaser.Input.Keyboard.JustDown(scene.n1);
@@ -1043,7 +1068,7 @@ class IdleState2 extends State {
 }
 class MoveState2 extends State {
     enter(scene, player) {
-    if (scene.rightKey.isDown) {
+        if (scene.rightKey.isDown) {
             if (stance2 == 0) {
                 player.anims.play('rightL');
             } else if (stance2 == 1) {
@@ -1075,14 +1100,14 @@ class MoveState2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('rightH');
             }
-        // } else if (scene.aKey.isDown) {
-        //     if (stance2 == 0) {
-        //         player.anims.play('leftL');
-        //     } else if (stance2 == 1) {
-        //         player.anims.play('left');
-        //     } else if (stance2 == 2) {
-        //         player.anims.play('leftH');
-        //     }
+            // } else if (scene.aKey.isDown) {
+            //     if (stance2 == 0) {
+            //         player.anims.play('leftL');
+            //     } else if (stance2 == 1) {
+            //         player.anims.play('left');
+            //     } else if (stance2 == 2) {
+            //         player.anims.play('leftH');
+            //     }
         }
         if (n1JustDown) {
             changeStance2(0) //Bajar guardia
@@ -1093,14 +1118,14 @@ class MoveState2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('rightH');
             }
-        // } else if (scene.aKey.isDown) {
-        //     if (stance2 == 0) {
-        //         player.anims.play('leftL');
-        //     } else if (stance2 == 1) {
-        //         player.anims.play('left');
-        //     } else if (stance2 == 2) {
-        //         player.anims.play('leftH');
-        //     }
+            // } else if (scene.aKey.isDown) {
+            //     if (stance2 == 0) {
+            //         player.anims.play('leftL');
+            //     } else if (stance2 == 1) {
+            //         player.anims.play('left');
+            //     } else if (stance2 == 2) {
+            //         player.anims.play('leftH');
+            //     }
         }
         if (n6JustDown) {
             this.stateMachine.transition('parry');
@@ -1147,7 +1172,7 @@ class MoveState2 extends State {
 }
 class LightState2 extends State {
     enter(scene, player) {
-        def2=false
+        def2 = false
         if (stance2 == 0) {
             player.anims.play('lightL');
         } else if (stance2 == 1) {
@@ -1159,34 +1184,33 @@ class LightState2 extends State {
     execute(scene, player) {
         if (player.anims.currentFrame.index < 2) {
             return
-        }else{
-        def2 = false
-        if (position == 1) {
-            scene.lHitbox2.x = player.x - (player.width * 0.06)
         } else {
-            scene.lHitbox2.x = player.x + (player.width * 0.06)
+            def2 = false
+            if (position == 1) {
+                scene.lHitbox2.x = player.x - (player.width * 0.06)
+            } else {
+                scene.lHitbox2.x = player.x + (player.width * 0.06)
+            }
+            scene.lHitbox2.y = player.y - (player.height * 0.04)
+            scene.lHitbox2.body.enable = true
+            if (player.body.touching.down) {
+                player.setVelocityX(0);
+            }
+            player.once('animationcomplete', () => {
+                def2 = true
+                if (player.anims.currentAnim.key == "light" || player.anims.currentAnim.key == "lightL" || player.anims.currentAnim.key == "lightH") {
+                    this.stateMachine.transition('idle');
+                    scene.lHitbox2.body.enable = false
+                }
+            });
         }
-        scene.lHitbox2.y = player.y - (player.height * 0.04)
-        scene.lHitbox2.body.enable = true
-        if (player.body.touching.down) {
-            player.setVelocityX(0);
-        }
-        player.once('animationcomplete', () => {
-            
-        def2=true
-            if(player.anims.currentAnim.key == "light" || player.anims.currentAnim.key == "lightL" || player.anims.currentAnim.key == "lightH"){
-            this.stateMachine.transition('idle');
-            scene.lHitbox2.body.enable = false
-        }
-        });
-    }
 
     }
 }
 class HeavyState2 extends State {
     enter(scene, player) {
-        def2=false
-        if (stance2== 0) {
+        def2 = false
+        if (stance2 == 0) {
             player.anims.play('heavyL');
         } else if (stance2 == 1) {
             player.anims.play('heavyM');
@@ -1210,10 +1234,10 @@ class HeavyState2 extends State {
                 player.setVelocityX(0);
             }
             player.once('animationcomplete', () => {
-                def2=true
-                if(player.anims.currentAnim.key == "heavy" || player.anims.currentAnim.key == "heavyM" || player.anims.currentAnim.key == "heavyL" ){
-                this.stateMachine.transition('idle');
-                scene.hHitbox2.body.enable = false
+                def2 = true
+                if (player.anims.currentAnim.key == "heavy" || player.anims.currentAnim.key == "heavyM" || player.anims.currentAnim.key == "heavyL") {
+                    this.stateMachine.transition('idle');
+                    scene.hHitbox2.body.enable = false
                 }
             });
         }
@@ -1241,10 +1265,12 @@ class RDashState2 extends State {
             player.anims.play(`bDash`, true);
         }
         if (scene.downKey.isDown) {
+            def2 = true
             this.stateMachine.transition('crouch')
             return;
         }
         player.once('animationcomplete', () => {
+            def2 = true
             this.stateMachine.transition('idle');
         });
     }
@@ -1269,10 +1295,12 @@ class LDashState2 extends State {
             player.anims.play(`fDash`, true);
         }
         if (scene.downKey.isDown) {
+            def2 = true
             this.stateMachine.transition('crouch')
             return;
         }
         player.once('animationcomplete', () => {
+            def2 = true
             this.stateMachine.transition('idle');
         });
     }
@@ -1351,12 +1379,12 @@ class JumpState2 extends State {
     }
 }
 class WaitState2 extends State {
-    enter(scene, player){
+    enter(scene, player) {
         player.anims.play('parried');
         scene.time.delayedCall(wait, () => {
             p2Stop = false;
             this.stateMachine.transition('idle');
-            def2 =true ;
+            def2 = true;
             return;
         })
     }
@@ -1369,15 +1397,15 @@ class WaitState2 extends State {
     }
 }
 class DeadState2 extends State {
-    enter(scene, player){
+    enter(scene, player) {
         player.anims.play('dead');
         scene.time.delayedCall(500, () => {
             console.log("CAMBIO DE ESCENA")
-            scene.cerrarTelonDcha();
+            scene.cerrarTelonIzq();
         })
     }
     execute(scene, player) {
-        
+
     }
 }
 function p1LHit(box, player) {
