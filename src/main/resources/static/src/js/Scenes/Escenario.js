@@ -47,58 +47,58 @@ export class Escenario extends Phaser.Scene {
         this.load.tilemapTiledJSON(this.platJson, this.platJson);
         //INICIO COSAS PERSONAJE
         this.load.spritesheet('run',
-            'js/Scenes/pj/RunMid.png',
+            'src/js/Scenes/pj/RunMid.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('idle',
-            'js/Scenes/pj/IdleMid.png',
+            'src/js/Scenes/pj/IdleMid.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('heavy',
-            'js/Scenes/pj/HeavyHigh.png',
+            'src/js/Scenes/pj/HeavyHigh.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('jump',
-            'js/Scenes/pj/Jump1.png',
+            'src/js/Scenes/pj/Jump1.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('light',
-            'js/Scenes/pj/LightMid.png',
+            'src/js/Scenes/pj/LightMid.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('bDash',
-            'js/Scenes/pj/BackDash1.png',
+            'src/js/Scenes/pj/BackDash1.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('fDash',
-            'js/Scenes/pj/ForwardDash1.png',
+            'src/js/Scenes/pj/ForwardDash1.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('crouch',
-            'js/Scenes/pj/Agachado1.png',
+            'src/js/Scenes/pj/Agachado1.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('parry',
-            'js/Scenes/pj/Parry.png',
+            'src/js/Scenes/pj/Parry.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('dead',
-            'js/Scenes/pj/Dead.png',
+            'src/js/Scenes/pj/Dead.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('heavyL',
-            'js/Scenes/pj/HeavyLow.png',
+            'src/js/Scenes/pj/HeavyLow.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('heavyM',
-            'js/Scenes/pj/HeavyMid.png',
+            'src/js/Scenes/pj/HeavyMid.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('idleH',
-            'js/Scenes/pj/IdleHigh.png',
+            'src/js/Scenes/pj/IdleHigh.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('idleL',
-            'js/Scenes/pj/IdleLow.png',
+            'src/js/Scenes/pj/IdleLow.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('lightH',
-            'js/Scenes/pj/LightHigh.png',
+            'src/js/Scenes/pj/LightHigh.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('lightL',
-            'js/Scenes/pj/LightLow.png',
+            'src/js/Scenes/pj/LightLow.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('runL',
-            'js/Scenes/pj/RunLow.png',
+            'src/js/Scenes/pj/RunLow.png',
             { frameWidth: 500, frameHeight: 600 })
         this.load.spritesheet('runH',
-            'js/Scenes/pj/RunHigh.png',
+            'src/js/Scenes/pj/RunHigh.png',
             { frameWidth: 500, frameHeight: 600 })
         //FIN COSAS PERSONAJE
     }
