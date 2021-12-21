@@ -10,53 +10,9 @@
 </head>
 
 <body>
+
     <script src="/src/js/phaser.js"></script>   
     <script src="/src/js/main.js" type="module"></script>
-	<script>
-	
-	function crearUser(Data){
-	$.ajax({
-		method: "POST",
-		url:"http://localhost:8080/usuarios",
-		data: JSON.stringify({nickname:"John",password:"Boston"}),
-		processData: false,
-		headers: {
-		"Content-type":"application/json"
-		}
-		}).done(function(data, textStatus, jqXHR) {
-		console.log("repiola")
-		//console.log(textStatus+" "+jqXHR.statusCode());
-		}).fail(function(data, textStatus, jqXHR){
-		//console.log(textStatus+" "+jqXHR.statusCode());
-		console.log("cagaste")
-		});
-	}
-	
-	
-	
-
-		
-	
-	crearUser(1)
-	
-	
-	
-	function leerUser(){
-		$.ajax({
-			url:"http://localhost:8080/usuarios"
-			}).done(function(data) {
-			console.log(data);
-			console.log(data[0].nickname)
-			console.log(data[0].password)
-			//for(var i=0; i<data.items.length; i++){
-			//	$("body").append(
-			//			"<p>"+data.items[i].volumeInfo.title+"</p>");
-			//}
-		});
-	}
-	leerUser()
-	</script>
-
 
 </body>
 
