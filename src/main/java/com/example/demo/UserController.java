@@ -22,7 +22,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Boolean> addUsuario(@RequestBody Usuario u) {
 		usuarios.add(u);
-		writetxt();
+		writeUsuario();
 		return new ResponseEntity<>(true, HttpStatus.CREATED);
 	}
 
@@ -31,19 +31,20 @@ public class UserController {
 		return usuarios;
 	}
 
-	@PostConstruct
-	public void user1() {
-		// Leer txt
-		readtxt();
-		/*
-		 * Usuario a = new Usuario(null, null); a.setNickname("Paco");
-		 * a.setPassword("Contraseña"); usuarios.add(a);
-		 */
-	}
+	// @PostConstruct
+	// public void user1() {
+	// 	// Leer txt
+	// 	readUsuario();
+	// 	/*
+	// 	 * Usuario a = new Usuario(null, null); a.setNickname("Paco");
+	// 	 * a.setPassword("Contraseña"); usuarios.add(a);
+	// 	 */
+	// }
 
-	public void readtxt() {
+    @PostConstruct
+	public void readUsuario() {
 		try {
-			FileInputStream fi = new FileInputStream(new File("myObjects.txt"));
+			FileInputStream fi = new FileInputStream(new File("Usuarios.txt"));
 			ObjectInputStream oi = new ObjectInputStream(fi);
 
 			while (true) {
@@ -52,7 +53,6 @@ public class UserController {
 				} catch (EOFException e) {
 					break;
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					break;
 				}
@@ -66,9 +66,9 @@ public class UserController {
 		}
 	}
 
-	public void writetxt() {
+	public void writeUsuario() {
 		try {
-			FileOutputStream f = new FileOutputStream(new File("myObjects.txt"));
+			FileOutputStream f = new FileOutputStream(new File("Usuarios.txt"));
 			ObjectOutputStream o = new ObjectOutputStream(f);
 
 			// Write objects to file

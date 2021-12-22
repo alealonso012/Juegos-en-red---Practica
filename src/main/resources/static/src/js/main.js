@@ -6,6 +6,9 @@ import { Revancha } from './Scenes/Revancha.js';
 import { Seleccion } from './Scenes/Seleccion.js';
 import { Escenario } from './Scenes/Escenario.js';
 import { Creditos } from './Scenes/Creditos.js';
+import { Logear } from './Scenes/Logear.js';
+import { Registear } from './Scenes/Registear.js';
+import { Leaderboard } from './Scenes/Leaderboard.js';
 
 var inicio = new Inicio();
 var opciones = new Opciones();
@@ -14,6 +17,9 @@ var menu = new Menu();
 var revancha = new Revancha();
 var seleccion = new Seleccion();
 var creditos = new Creditos();
+var logear = new Logear();
+var registear = new Registear();
+var leaderboard = new Leaderboard();
 
 var Esc1 = new Escenario('Esc1', 'Revancha', 'Esc2', '/resources/img/Escenario5.json');
 var Esc2 = new Escenario('Esc2', 'Esc1', 'Esc3', '/resources/img/Escenario3.json');
@@ -31,10 +37,10 @@ var config = {
         arcade: {
             gravity: { y: 3500 },
             debug: true,
-            debugShowBody: true 
+            debugShowBody: true
         }
     },
-    scene: [inicio, opciones, creditos, controles, menu, revancha, seleccion, Esc1, Esc2, Esc3, Esc4, Esc5],
+    scene: [inicio, opciones, logear, registear, leaderboard, creditos,  controles, menu, revancha, seleccion, Esc1, Esc2, Esc3, Esc4, Esc5],
     render: {
         pixelArt: true
     }
