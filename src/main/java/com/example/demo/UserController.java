@@ -14,10 +14,12 @@ import javax.annotation.PostConstruct;
 @RestController
 public class UserController {
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
-
-	// Función iniciar{ <- Como se llama
-	// Leer TXT -> meterlo a usuario
-	// }
+	boolean correctLog;
+	boolean correctReg;
+	
+	
+	
+	
 	@PostMapping(value = "/usuarios")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Boolean> addUsuario(@RequestBody Usuario u) {
@@ -30,7 +32,63 @@ public class UserController {
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
-
+	
+	@RequestMapping(value = "/leaderboard", method = RequestMethod.GET)
+	public List<UsuarioReducido> getLeaderboard() {
+		List<UsuarioReducido> leaderboard = new ArrayList<UsuarioReducido>();
+		for(int i=0;i<usuarios.size();i++) {
+			UsuarioReducido user= new UsuarioReducido(usuarios.get(i).getNickname(), usuarios.get(i).getPartidas(), usuarios.get(i).getGanadas());
+			leaderboard.add(user);
+		}
+		return leaderboard;
+	}
+	
+	@PostMapping(value = "/login")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Boolean> checkLogin(@RequestBody Usuario u) {
+		for(int i = 0; i < usuarios.size(); i++ ) {
+			if((u.getNickname()==usuarios.get(i).getNickname()) && (u.getPassword()==usuarios.get(i).getPassword())){
+				correctLog=true;
+			}else {
+				correctLog=false;
+			}
+		}
+		return new ResponseEntity<>(true, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public boolean getCorrectLog() {
+		return correctLog;
+	}
+	
+	
+	
+	@PostMapping(value = "/register")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Boolean> checkReg(@RequestBody Usuario u) {
+		int i = 0;
+		boolean keep=true;
+		while(i<usuarios.size() && keep == true) {
+			if(u.getNickname()==usuarios.get(i).getNickname()) {
+				keep =false;
+			}
+		}
+		if(keep==true) {
+			correctReg=true;
+			usuarios.add(u);
+			writetxt();
+		}else {
+			correctReg=false;
+		}
+		return new ResponseEntity<>(true, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public boolean getCorrectReg() {
+		return correctReg;
+	}
+	
+	
 	@PostConstruct
 	public void user1() {
 		// Leer txt
