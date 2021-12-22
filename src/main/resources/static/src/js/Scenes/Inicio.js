@@ -30,11 +30,25 @@ export class Inicio extends Phaser.Scene {
         var playButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.525, "jugar").setScale(0.24);
         var optionButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.62, "opciones").setScale(0.24);
 
-        var creditosButton = this.add.text(this.game.renderer.width * 0.89, this.game.renderer.height * 0.95, "Créditos", {
+        this.add.rectangle(0, this.game.renderer.height-70, this.game.renderer.width, 70, 0x30212c).setOrigin(0);
+
+        var creditosButton = this.add.text(this.game.renderer.width * 0.92, this.game.renderer.height * 0.9656, "Créditos", {
             fontStyle: 'bold',
-            fontSize: "60px",
-            fill: "#30212c"
-        }).setOrigin(0.5);
+            fontSize: "50px",
+            fill: "#c49c5f"
+        }).setOrigin(0.5).setInteractive();
+
+        var loginButton = this.add.text(this.game.renderer.width * 0.78, this.game.renderer.height * 0.9656, "Login", {
+            fontStyle: 'bold',
+            fontSize: "50px",
+            fill: "#c49c5f"
+        }).setOrigin(0.5).setInteractive();
+
+        var leaderButton = this.add.text(this.game.renderer.width * 0.62, this.game.renderer.height * 0.9656, "Leaderboard", {
+            fontStyle: 'bold',
+            fontSize: "50px",
+            fill: "#c49c5f"
+        }).setOrigin(0.5).setInteractive();
 
         var hoverSprite = this.add.sprite(100, 100, "flecha");
         hoverSprite.setScale(0.85);
@@ -51,7 +65,6 @@ export class Inicio extends Phaser.Scene {
 
         playButton.setInteractive();
         optionButton.setInteractive();
-        creditosButton.setInteractive();
 
         playButton.on("pointerover", () => {
             hoverSprite.setVisible(true);
@@ -88,6 +101,40 @@ export class Inicio extends Phaser.Scene {
         creditosButton.on("pointerdown", () => {
             console.log("Creditos");
             this.scene.start("Creditos");
+        })
+
+        creditosButton.on("pointerover", () => {
+            creditosButton.setTint(0x888888);
+        })
+
+        creditosButton.on("pointerout", () => {
+            creditosButton.clearTint();
+        })
+
+        loginButton.on("pointerdown", () => {
+            console.log("Login");
+            this.scene.start("Logear");
+        })
+
+        loginButton.on("pointerover", () => {
+            loginButton.setTint(0x888888);
+        })
+
+        loginButton.on("pointerout", () => {
+            loginButton.clearTint();
+        })
+
+        leaderButton.on("pointerdown", () => {
+            console.log("Leaderboard");
+            this.scene.start("Leaderboard");
+        })
+
+        leaderButton.on("pointerover", () => {
+            leaderButton.setTint(0x888888);
+        })
+
+        leaderButton.on("pointerout", () => {
+            leaderButton.clearTint();
         })
     }
 

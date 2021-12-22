@@ -39,7 +39,6 @@ export class Escenario extends Phaser.Scene {
     }
 
     preload() {
-
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
         this.load.image('Fondo', "/resources/img/FondoIngame.png");
