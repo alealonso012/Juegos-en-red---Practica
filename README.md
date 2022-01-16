@@ -128,6 +128,9 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 
 # Fase 3
 
+## Diagrama de clases
+<img src=".\ImagenesReadme\DiagramaClases.png">
+
 ### Pantalla de créditos
 ##### En esta pantalla se ven todos los reconocimientos a los participantes en el desarrollo del juego
 <img src=".\ImagenesReadme\Creditos.png">
