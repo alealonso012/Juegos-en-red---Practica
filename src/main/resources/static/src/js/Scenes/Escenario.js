@@ -109,7 +109,7 @@ export class Escenario extends Phaser.Scene {
         this.add.image(0, 0, "Fondo").setOrigin(0).setScale(8);
         const map = this.make.tilemap({ key: this.platJson, tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("Plataformas", "tiles");
-        const layer = map.createLayer("toplayout", tileset, 0, 0).setScale(1);
+        const layer = map.createLayer("toplayout", tileset, this.game.renderer.width*0.27, this.game.renderer.height*0.15).setScale(1);
 
         this.telon = this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000).setOrigin(0);
 
@@ -119,8 +119,6 @@ export class Escenario extends Phaser.Scene {
         this.telon.setData('derecha', this.Derecha);
         this.telon.setData('abierto', false);
         this.telon.depth = 10;
-
-
 
         this.events.on('shutdown', this.shutdown, this);
 
@@ -154,7 +152,7 @@ export class Escenario extends Phaser.Scene {
         //H HITBOX2
 
         //PLAYER1
-        this.player = this.physics.add.sprite(75, 300, 'idle');
+        this.player = this.physics.add.sprite(this.game.renderer.width*0.3, 450, 'idle');
         this.player.setTint(0xd11dc5);
         this.player.setScale(0.4);
         this.player.flipX = false;
@@ -165,8 +163,8 @@ export class Escenario extends Phaser.Scene {
         //PLAYER1
 
         //PLAYER2
-        this.player2 = this.physics.add.sprite(725, 300, 'idle');
-        this.player2.setTint(0xd00a8f0);
+        this.player2 = this.physics.add.sprite(this.game.renderer.width*0.66, 450, 'idle');
+        this.player2.setTint(0x000000);
         this.player2.setScale(0.4);
         this.player2.flipX = true;
         this.player2.setBodySize(100, 160);
