@@ -120,7 +120,7 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 ##### Estas son un conjunto de 5 escenas entre las que los jugadores iran cambiando según vayan gananado rondas hasta que uno de los jugadores acumule 3 victorias seguidas. Los diseño de estas escenas no son propios debido a que el fondo del escenario y los tiles utilizados son sacados de internet de páginas de assets de uso gratutito. Las cuales son:
 ##### Fondo del escenario: https://oisougabo.itch.io/free-platformer-16x16?download
 ##### Mapa de tiles: https://szadiart.itch.io/pixel-dark-forest
-(ALGUNA FOTO)
+<img src=".\ImagenesReadme\InGame.png">
 
 ### Pantalla de revancha
 ##### Una vez uno de los dos jugadores haya ganado te llevará a esta pantalla en la cual se anunciará el jugador ganador y le dará la opción de una revancha a la cual si se le da a que si llevará a la pantalla de selección de personaje y si se le da a que no, llevará a la pantalla de menú principal.
