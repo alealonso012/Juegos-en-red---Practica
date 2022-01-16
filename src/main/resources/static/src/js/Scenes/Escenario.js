@@ -110,8 +110,6 @@ export class Escenario extends Phaser.Scene {
         const map = this.make.tilemap({ key: this.platJson, tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("Plataformas", "tiles");
         const layer = map.createLayer("toplayout", tileset, 0, 0).setScale(1);
-        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         this.telon = this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000).setOrigin(0);
 
@@ -124,7 +122,7 @@ export class Escenario extends Phaser.Scene {
 
 
 
-        //this.events.on('shutdown', this.shutdown, this);
+        this.events.on('shutdown', this.shutdown, this);
 
         //INICIO COSAS PERSONAJE
         //LHITBOX1
@@ -303,29 +301,29 @@ export class Escenario extends Phaser.Scene {
 
 
         //Declaración de teclas J1
-        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-        this.sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-        this.mKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
-        this.nKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
-        this.kKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
-        this.jKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
-        this.vKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE, false);
+        this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W, false);
+        this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A, false);
+        this.sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S, false);
+        this.dKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D, false);
+        this.mKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M, false);
+        this.nKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N, false);
+        this.kKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K, false);
+        this.jKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J, false);
+        this.vKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V, false);
         //Declaración de teclas J1
 
         //Declaración de teclas J2
-        this.n0 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ZERO);
-        this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-        this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        this.n6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX);
-        this.n1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
-        this.n2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO);
-        this.n4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR);
-        this.n5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE);
+        this.n0 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ZERO, false);
+        this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP, false);
+        this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN, false);
+        this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT, false);
+        this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT, false);
+        this.n6 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX, false);
+        this.n1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE, false);
+        this.n2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_TWO, false);
+        this.n4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR, false);
+        this.n5 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE, false);
         //Declaración de teclas J2
 
         //COLLIDERS
@@ -379,17 +377,29 @@ export class Escenario extends Phaser.Scene {
 
         layer.setCollisionBetween(340, 664);
 
-        this.textP1 = this.add.text(this.player.x, this.player.y, "P1", {
-            fontStyle: 'bold',
-            fontSize: "35px",
-            fill: "#ffffff"
-        }).setOrigin(0.5);
+        if(this.scene.get('Inicio').data.get('logeado')){
+            this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
+                fontStyle: 'bold',
+                fontSize: "35px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+        }else{
+            this.textP1 = this.add.text(this.player.x, this.player.y, "P1", {
+                fontStyle: 'bold',
+                fontSize: "35px",
+                fill: "#ffffff"
+            }).setOrigin(0.5);
+        }
 
         this.textP2 = this.add.text(this.player2.x, this.player2.y, "P2", {
             fontStyle: 'bold',
             fontSize: "35px",
             fill: "#ffffff"
         }).setOrigin(0.5);
+    }
+
+    shutdown() {
+        this.input.keyboard.shutdown();
     }
 
     update() {

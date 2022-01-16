@@ -14,7 +14,12 @@ var config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    parent: 'phaser-example',
+    dom: {
+        createContainer: true
+    },
     backgroundColor: '#140f0f',
+    
     physics: {
         default: 'arcade',
         arcade: {
@@ -23,6 +28,7 @@ var config = {
             debugShowBody : false
         }
     },
+    
     scene: [Inicio, Opciones, Controles, Menu, Revancha, Seleccion, Escenario1, Escenario2, Escenario3, Escenario4, Escenario5],
     render:{
         pixelArt: true

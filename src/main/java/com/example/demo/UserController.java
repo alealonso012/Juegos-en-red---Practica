@@ -14,12 +14,7 @@ import javax.annotation.PostConstruct;
 @RestController
 public class UserController {
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
-	boolean correctLog;
-	boolean correctReg;
-	
-	
-	
-	
+
 	@PostMapping(value = "/usuarios")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Boolean> addUsuario(@RequestBody Usuario u) {
@@ -32,75 +27,81 @@ public class UserController {
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
-	
+
 	@RequestMapping(value = "/leaderboard", method = RequestMethod.GET)
 	public List<UsuarioReducido> getLeaderboard() {
 		List<UsuarioReducido> leaderboard = new ArrayList<UsuarioReducido>();
-		for(int i=0;i<usuarios.size();i++) {
-			UsuarioReducido user= new UsuarioReducido(usuarios.get(i).getNickname(), usuarios.get(i).getPartidas(), usuarios.get(i).getGanadas());
+		for (int i = 0; i < usuarios.size(); i++) {
+			UsuarioReducido user = new UsuarioReducido(usuarios.get(i).getNickname(), usuarios.get(i).getPartidas(),
+					usuarios.get(i).getGanadas());
 			leaderboard.add(user);
 		}
 		return leaderboard;
 	}
-	
+
 	@PostMapping(value = "/login")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Boolean> checkLogin(@RequestBody Usuario u) {
-		for(int i = 0; i < usuarios.size(); i++ ) {
-			if((u.getNickname()==usuarios.get(i).getNickname()) && (u.getPassword()==usuarios.get(i).getPassword())){
-				correctLog=true;
-			}else {
-				correctLog=false;
+		boolean correctLog = false;
+		for (int i = 0; i < usuarios.size() && !correctLog; i++) {
+			if (u.getNickname().equals(usuarios.get(i).getNickname())
+					&& u.getPassword().equals(usuarios.get(i).getPassword())) {
+				correctLog = true;
+			} else {
+				correctLog = false;
 			}
 		}
-		return new ResponseEntity<>(true, HttpStatus.CREATED);
+		if (correctLog == true) {
+			return new ResponseEntity<>(true, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
+		}
 	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public boolean getCorrectLog() {
-		return correctLog;
-	}
-	
-	
-	
+
 	@PostMapping(value = "/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Boolean> checkReg(@RequestBody Usuario u) {
+		boolean correctReg = false;
 		int i = 0;
-		boolean keep=true;
-		while(i<usuarios.size() && keep == true) {
-			if(u.getNickname()==usuarios.get(i).getNickname()) {
-				keep =false;
+		boolean keep = true;
+		while (i < usuarios.size() && keep) {
+			if (u.getNickname().equals(usuarios.get(i).getNickname())) {
+				keep = false;
+			}
+			i++;
+		}
+		if (keep) {
+			correctReg = true;
+			usuarios.add(u);
+			writeUsuario();
+		} else {
+			correctReg = false;
+		}
+		if (correctReg == true) {
+			return new ResponseEntity<>(true, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
+		}
+	}
+
+	@PutMapping(value = "/victoria")
+	public ResponseEntity<String> actuVictoria(@RequestBody String usuario) {
+		boolean correctName = false;
+		for (int i = 0; i < usuarios.size() && !correctName; i++) {
+			if (usuario.equals(usuarios.get(i).getNickname())) {
+				correctName = true;
+				usuarios.get(i).setGanadas(usuarios.get(i).getGanadas() + 1);
+				usuarios.get(i).setPartidas(usuarios.get(i).getPartidas() + 1);
 			}
 		}
-		if(keep==true) {
-			correctReg=true;
-			usuarios.add(u);
-			writetxt();
-		}else {
-			correctReg=false;
+		if (correctName) {
+			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(true, HttpStatus.CREATED);
 	}
-	
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public boolean getCorrectReg() {
-		return correctReg;
-	}
-	
-	
+
 	@PostConstruct
-	public void user1() {
-		readtxt();
-		/*
-		 * Usuario a = new Usuario(null, null); a.setNickname("Paco");
-		 * a.setPassword("Contraseña"); usuarios.add(a);
-		 */
-	}
-
-	
-
-    @PostConstruct
 	public void readUsuario() {
 		try {
 			FileInputStream fi = new FileInputStream(new File("Usuarios.txt"));
@@ -142,6 +143,5 @@ public class UserController {
 			System.out.println("Error initializing stream WRITE");
 			e.printStackTrace();
 		}
-
 	}
 }

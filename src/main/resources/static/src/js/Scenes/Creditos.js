@@ -40,7 +40,7 @@ export class Creditos extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         texto5.on("pointerdown", () => {
-            this.scene.start("Inicio");
+            this.scene.start("Inicio", {});
         });
 
         logoi.on('pointerup', openLink);

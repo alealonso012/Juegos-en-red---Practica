@@ -31,6 +31,10 @@ var config = {
     type: Phaser.AUTO,
     width: 1920,
     height: 1080,
+    parent: 'da',
+    dom: {
+        createContainer: true
+    },
     backgroundColor: '#140f0f',
     physics: {
         default: 'arcade',
