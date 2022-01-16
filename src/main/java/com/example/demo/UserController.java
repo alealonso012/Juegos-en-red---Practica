@@ -52,7 +52,7 @@ public class UserController {
 			}
 		}
 		if (correctLog == true) {
-			println("El usuario " + u.getNickname + " ha iniciado sesión correctamente.")
+			println("El usuario " + u.getNickname() + " ha iniciado sesión correctamente.");
 			return new ResponseEntity<>(true, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
@@ -80,7 +80,7 @@ public class UserController {
 		}
 		if (correctReg == true) {
 			return new ResponseEntity<>(true, HttpStatus.CREATED);
-			println("El usuario " + u.getNickname + " se ha creado correctamente.")
+			println("El usuario " + u.getNickname() + " se ha creado correctamente.");
 		} else {
 			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
 		}
