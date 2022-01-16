@@ -40,8 +40,8 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 3500 },
-            debug: true,
-            debugShowBody: true
+            debug: false,
+            debugShowBody: false
         }
     },
     scene: [inicio, opciones, logear, registear, leaderboard, creditos,  controles, menu, revancha, seleccion, Esc1, Esc2, Esc3, Esc4, Esc5],

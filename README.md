@@ -126,6 +126,20 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 ##### Una vez uno de los dos jugadores haya ganado te llevará a esta pantalla en la cual se anunciará el jugador ganador y le dará la opción de una revancha a la cual si se le da a que si llevará a la pantalla de selección de personaje y si se le da a que no, llevará a la pantalla de menú principal.
 <img src=".\ImagenesReadme\Revancha.png">
 
+# Fase 3
+
+### Pantalla de créditos
+##### En esta pantalla se ven todos los reconocimientos a los participantes en el desarrollo del juego
+<img src=".\ImagenesReadme\Creditos.png">
+
+### Pantalla de Log In / Register
+##### En esta pantalla los usuarios podrán crearse una cuenta con nombre de usuario y contraseña para que se les registre su puntuación en el juego
+<img src=".\ImagenesReadme\Login.png">
+
+### Pantalla de Ranking de puntuaciones
+##### En esta pantalla se ven todos los records de partidas ganadas de los usuarios registrados en el juego
+<img src=".\ImagenesReadme\LeaderBoard.png">
+
 ##### La música que se escuchará a lo largo del juego serán canciones sacados de internet de libre uso.
 ##### Menus: {Stopping by the Inn} by Twin Musicom (twinmusicom.org)
 ##### In-game: {Epic Battle} by Twin Musicom (twinmusicom.org)
