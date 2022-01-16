@@ -2,12 +2,14 @@ package com.example.demo;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.PostConstruct;
 
@@ -52,7 +54,7 @@ public class UserController {
 			}
 		}
 		if (correctLog == true) {
-			println("El usuario " + u.getNickname() + " ha iniciado sesión correctamente.");
+			System.out.println("El usuario " + u.getNickname() + " ha iniciado sesión correctamente.");
 			return new ResponseEntity<>(true, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
@@ -79,8 +81,8 @@ public class UserController {
 			correctReg = false;
 		}
 		if (correctReg == true) {
+			System.out.println("El usuario " + u.getNickname() + " se ha creado correctamente.");
 			return new ResponseEntity<>(true, HttpStatus.CREATED);
-			println("El usuario " + u.getNickname() + " se ha creado correctamente.");
 		} else {
 			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
 		}
