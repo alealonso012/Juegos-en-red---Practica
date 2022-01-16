@@ -30,7 +30,6 @@ export class Logear extends Phaser.Scene {
         this.formulario = this.add.dom(this.game.renderer.width * 0.25, this.game.renderer.height * 0.5).createFromCache('nameform').setAlpha(0.0);
         this.formulario.setData('loged', false);
 
-
         var text = this.add.text(this.game.renderer.width * 0.25, this.game.renderer.height * 0.69,
             'Introduzca usuario y contraseña', { color: 'white', fontFamily: 'Arial', fontSize: '32px ' }).setOrigin(0.5);
 

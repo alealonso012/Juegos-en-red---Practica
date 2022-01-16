@@ -63,18 +63,18 @@ export class Inicio extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         if(this.data.get('logeado')){
-            var loginButton = this.add.text(this.game.renderer.width * 0.87, this.game.renderer.height * 0.9656, "Cerrar sesión", {
+            var loginButton = this.add.text(this.game.renderer.width * 0.98, this.game.renderer.height * 0.9656, this.data.get("user"), {
                 fontStyle: 'bold',
                 fontSize: "50px",
                 fill: "#c49c5f"
-            }).setOrigin(0.5).setInteractive();
+            }).setOrigin(1, 0.5).setInteractive();
         }
         else{
-            var loginButton = this.add.text(this.game.renderer.width * 0.87, this.game.renderer.height * 0.9656, "Iniciar sesión", {
+            var loginButton = this.add.text(this.game.renderer.width * 0.98, this.game.renderer.height * 0.9656, "Iniciar sesión", {
                 fontStyle: 'bold',
                 fontSize: "50px",
                 fill: "#c49c5f"
-            }).setOrigin(0.5).setInteractive();
+            }).setOrigin(1, 0.5).setInteractive();
         }
 
         var leaderButton = this.add.text(this.game.renderer.width * 0.5, this.game.renderer.height * 0.9656, "Leaderboard", {
@@ -159,10 +159,12 @@ export class Inicio extends Phaser.Scene {
 
         loginButton.on("pointerover", () => {
             loginButton.setTint(0x888888);
+            if(this.data.get("logeado"))loginButton.setText("Cerrar sesión");
         })
 
         loginButton.on("pointerout", () => {
             loginButton.clearTint();
+            if(this.data.get("logeado"))loginButton.setText(this.data.get("user"));
         })
 
         leaderButton.on("pointerdown", () => {
