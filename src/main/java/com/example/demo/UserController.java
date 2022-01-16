@@ -52,6 +52,7 @@ public class UserController {
 			}
 		}
 		if (correctLog == true) {
+			println("El usuario " + u.getNickname + " ha iniciado sesión correctamente.")
 			return new ResponseEntity<>(true, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
@@ -79,6 +80,7 @@ public class UserController {
 		}
 		if (correctReg == true) {
 			return new ResponseEntity<>(true, HttpStatus.CREATED);
+			println("El usuario " + u.getNickname + " se ha creado correctamente.")
 		} else {
 			return new ResponseEntity<>(true, HttpStatus.FORBIDDEN);
 		}
@@ -120,9 +122,9 @@ public class UserController {
 			oi.close();
 			fi.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			System.out.println("Archivo no encontrado");
 		} catch (IOException e) {
-			System.out.println("Error initializing stream READ");
+			System.out.println("Error inicializando stream READ");
 		}
 	}
 
@@ -138,9 +140,9 @@ public class UserController {
 			o.close();
 			f.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			System.out.println("Archivo no encontrado");
 		} catch (IOException e) {
-			System.out.println("Error initializing stream WRITE");
+			System.out.println("Error inicializando stream WRITE");
 			e.printStackTrace();
 		}
 	}
