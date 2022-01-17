@@ -45,8 +45,8 @@ public class OnlineManager extends TextWebSocketHandler {
 				busquedas.remove(conexion.getId());
 			}
 		}else if(tipo.equals("Ingame")){
-			String posX = node.get("posicionX").asText(); //Equivale a X, se manda al otro jugador para sobreescribir
-			String posY = node.get("posicionY").asText(); //Equivale a Y, se manda al otro jugador para sobreescribir
+			int posX = node.get("posicionX").asInt(); //Equivale a X, se manda al otro jugador para sobreescribir
+			int posY = node.get("posicionY").asInt(); //Equivale a Y, se manda al otro jugador para sobreescribir
 			//Mensaje equivale a la nueva posición de la stateMachine. 
 			//Se envia "mensaje" al otro jugador para que cambie la stateMachine de su otro jugador
 			
