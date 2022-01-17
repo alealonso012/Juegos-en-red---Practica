@@ -16,12 +16,12 @@ public class JerFase3v2Application implements  WebSocketConfigurer {
 
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(echoHandler(), "/online").setAllowedOrigins("*");
+		registry.addHandler(onlineHandler(), "/online").setAllowedOrigins("*");
 		
 	}
 	
 	@Bean
-	public OnlineManager echoHandler() {
+	public OnlineManager onlineHandler() {
 	return new OnlineManager();
 	}
 
