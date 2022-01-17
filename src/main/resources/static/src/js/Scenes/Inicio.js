@@ -169,7 +169,7 @@ export class Inicio extends Phaser.Scene {
 
         leaderButton.on("pointerdown", () => {
             console.log("Leaderboard");
-            this.scene.start("Leaderboard");
+            this.scene.start("EscO3");
         })
 
         leaderButton.on("pointerover", () => {
