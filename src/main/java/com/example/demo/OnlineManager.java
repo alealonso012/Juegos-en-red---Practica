@@ -24,6 +24,10 @@ public class OnlineManager extends TextWebSocketHandler {
 	public void afterConnectionEstablished(WebSocketSession conexion) throws Exception {
 		System.out.println("Se ha conectado el usuario de ID: " + conexion.getId());
 		sessions.put(conexion.getId(), conexion);
+		ObjectNode newNode = mapper.createObjectNode();
+		newNode.put("tipo", "Conexion");
+		newNode.put("mensaje", "Establecida");
+		conexion.sendMessage(new TextMessage(newNode.toString()));
 	}
 
 	@Override
@@ -34,7 +38,7 @@ public class OnlineManager extends TextWebSocketHandler {
 
 	@Override
 	protected void handleTextMessage(WebSocketSession conexion, TextMessage message) throws Exception {
-		
+
 		JsonNode node = mapper.readTree(message.getPayload());
 		String tipo = node.get("tipo").asText();
 		if (tipo.equals("Busqueda")) {
@@ -53,32 +57,40 @@ public class OnlineManager extends TextWebSocketHandler {
 					newNode.put("tipo", node.get("tipo").asText());
 					newNode.put("mensaje", "Terminada");
 
+					ObjectNode newNode2 = newNode.deepCopy();
+
+					newNode.put("jugador", 1);
+					newNode2.put("jugador", 2);
+
 					sessions.get(s1).sendMessage(new TextMessage(newNode.toString()));
-					sessions.get(s2).sendMessage(new TextMessage(newNode.toString()));
+					sessions.get(s2).sendMessage(new TextMessage(newNode2.toString()));
 				}
 			} else if (mensaje.equals("Cerrar")) {
 				busquedas.remove(conexion.getId());
 			}
 
 		} else if (tipo.equals("Seleccion")) {
-			sessions.get(parejas.get(conexion.getId())).sendMessage(message);			//ESTO QUIZA DA PROBLEMAS SOLUCION: new TextMessage(messsage.getPayload())
-				// ObjectNode newNode = mapper.createObjectNode();
-				// newNode.put("tipo", node.get("tipo").asText());
-				// newNode.put("mensaje", node.get("mensaje").asText());
+			sessions.get(parejas.get(conexion.getId())).sendMessage(message); // ESTO QUIZA DA PROBLEMAS SOLUCION: new
+																				// TextMessage(messsage.getPayload())
+			// ObjectNode newNode = mapper.createObjectNode();
+			// newNode.put("tipo", node.get("tipo").asText());
+			// newNode.put("mensaje", node.get("mensaje").asText());
 
-				// sessions.get(parejas.get(conexion.getId())).sendMessage(new TextMessage(newNode.toString()));
+			// sessions.get(parejas.get(conexion.getId())).sendMessage(new
+			// TextMessage(newNode.toString()));
 
 		} else if (tipo.equals("Ingame")) {
-			sessions.get(parejas.get(conexion.getId())).sendMessage(message);			//
+			sessions.get(parejas.get(conexion.getId())).sendMessage(message); //
 
 		} else if (tipo.equals("Revancha")) {
-			sessions.get(parejas.get(conexion.getId())).sendMessage(message);			//
-			
+			sessions.get(parejas.get(conexion.getId())).sendMessage(message); //
+
 			// if (mensaje.equals("Aceptar")) {
-			// 	// Comprobar si la otra persona ha aceptado la revancha o no. Si se ha aceptado,
-			// 	// empezar otra partida.
+			// // Comprobar si la otra persona ha aceptado la revancha o no. Si se ha
+			// aceptado,
+			// // empezar otra partida.
 			// } else if (mensaje.equals("Rechazar")) {
-			// 	// Mandar de vuelta a ambas personas sobre partida rechazada.
+			// // Mandar de vuelta a ambas personas sobre partida rechazada.
 
 			// }
 		}

@@ -1,9 +1,12 @@
-var volumen;
-
 export class SeleccionO extends Phaser.Scene {
 
     constructor() {
         super({ key: 'SeleccionO' });
+    }
+
+    init(data){
+        this.data.set("jugador", data.jugador);
+        console.log(this.data.get("jugador"));
     }
 
     preload() {

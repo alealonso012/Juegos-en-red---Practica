@@ -1,10 +1,14 @@
-export class Matchmaking extends Phaser.Scene {
+var terminado = false;
+var jugador;
 
+export class Matchmaking extends Phaser.Scene {
+    
     constructor() {
         super({ key: 'Matchmaking' });
     }
 
     preload() {
+        //this.data.set("Terminado", false)
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('online', "/resources/img/Online.png");
     }
@@ -26,6 +30,16 @@ export class Matchmaking extends Phaser.Scene {
         }
         ws.onmessage = function (msg) {
             console.log("WS message: " + msg.data);
+            var msj = JSON.parse(msg.data)
+            var tipo = msj.tipo;
+            if(tipo == "Busqueda"){
+                var mensaje = msj.mensaje;
+                if(mensaje == "Terminada"){
+                    jugador = msj.jugador;
+                    terminado = true;
+                    //this.scene.start("SeleccionO", {jugador: jugador});
+                }
+            }
         }
 
         var onlineButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.53, "online").setScale(0.24);
@@ -52,6 +66,12 @@ export class Matchmaking extends Phaser.Scene {
         atras.on("pointerdown", () => {
             this.scene.start("Menu", {});
         })
+    }
+
+    update(){
+        if(terminado){
+            this.scene.start("SeleccionO", {jugador: jugador})
+        }
     }
 
 }
