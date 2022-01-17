@@ -13,7 +13,7 @@ var crouch2 = false; //Jugador 2 agachado
 var p1Stop = false; //No permite al jugador1 atacar.
 var p2Stop = false; //No permite al jugador2 atacar.
 var wait = 0;
-var esJ1 = false;
+var esJ1 = true;
 
 import { StateMachine } from './statemachine/StateMachine.js'
 
@@ -24,14 +24,16 @@ export class EscenarioOnline extends Phaser.Scene {
     Derecha;
     leftScene;
     rightScene;
+    esc;
     platJson;
 
-    constructor(key, lScene, rScene, pJson) {
+    constructor(key, lScene, rScene, esc, pJson) {
         super(key);
         this.leftScene = lScene;
         this.rightScene = rScene;
+        this.esc = esc;
         this.platJson = pJson;
-        this.scene = this.scene;
+        //this.scene = this.scene;
     }
 
     init(data) {
@@ -107,7 +109,7 @@ export class EscenarioOnline extends Phaser.Scene {
         this.ping = this.sound.add('ping', { volume: 1 });
         console.log(this.scene.key);
 
-        this.add.image(0, 0, "Fondo").setOrigin(0).setScale(8);
+        this.add.image(0, 0, "Fondo").setOrigin(0);
         const map = this.make.tilemap({ key: this.platJson, tileWidth: 16, tileHeight: 16 });
         const tileset = map.addTilesetImage("Plataformas", "tiles");
         const layer = map.createLayer("toplayout", tileset, this.game.renderer.width * 0.27, this.game.renderer.height * 0.15).setScale(1);

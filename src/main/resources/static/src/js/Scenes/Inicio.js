@@ -29,6 +29,7 @@ export class Inicio extends Phaser.Scene {
     }
 
     preload() {
+        this.scene.get("Esc2").add.rectangle(0,this.game.renderer.height * 0.75,this.game.renderer.width,50, 0xff0000).setOrigin(0);
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('opciones', "/resources/img/Opciones.png");
         this.load.image('jugar', "/resources/img/Jugar.png");

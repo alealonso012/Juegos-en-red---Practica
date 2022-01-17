@@ -9,9 +9,9 @@ export class RevanchaO extends Phaser.Scene {
     init(data){
         this.Derecha = data.derecha;
         console.log(this.Derecha);
-        if(this.scene.get('Inicio').logeado){
+        // if(this.scene.get('Inicio').logeado){
 
-        }
+        // }
     }
 
     preload(){

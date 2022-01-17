@@ -23,14 +23,16 @@ export class Escenario extends Phaser.Scene {
     Derecha;
     leftScene;
     rightScene;
+    esc;
     platJson;
 
-    constructor(key, lScene, rScene, pJson) {
+    constructor(key, lScene, rScene, esc, pJson) {
         super(key);
         this.leftScene = lScene;
         this.rightScene = rScene;
+        this.esc = esc;
         this.platJson = pJson;
-        this.scene = this.scene;
+        //this.scene = this.scene;
     }
 
     init(data) {
@@ -41,8 +43,8 @@ export class Escenario extends Phaser.Scene {
     preload() {
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
-        this.load.image('Fondo', "/resources/img/FondoIngame.png");
-        this.load.image("tiles", "/resources/img/Plataformas.png");
+        this.load.image(this.esc, this.esc);
+        //this.load.image("tiles", "/resources/img/Plataformas.png");
         this.load.tilemapTiledJSON(this.platJson, this.platJson);
         //INICIO COSAS PERSONAJE
         this.load.spritesheet('run',
@@ -106,10 +108,10 @@ export class Escenario extends Phaser.Scene {
         this.ping = this.sound.add('ping', { volume: 1 });
         console.log(this.scene.key);
 
-        this.add.image(0, 0, "Fondo").setOrigin(0).setScale(8);
-        const map = this.make.tilemap({ key: this.platJson, tileWidth: 16, tileHeight: 16 });
-        const tileset = map.addTilesetImage("Plataformas", "tiles");
-        const layer = map.createLayer("toplayout", tileset, this.game.renderer.width*0.27, this.game.renderer.height*0.15).setScale(1);
+        this.add.image(0, 0, this.esc).setOrigin(0);
+        const map = this.make.tilemap({ key: this.platJson, tileWidth: 10, tileHeight: 10 });
+        const tileset = map.addTilesetImage(this.esc, this.esc);
+        const layer = map.createLayer("toplayout", tileset, 0, 0).setScale(1);
 
         this.telon = this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000).setOrigin(0);
 
@@ -154,7 +156,7 @@ export class Escenario extends Phaser.Scene {
         //PLAYER1
         this.player = this.physics.add.sprite(this.game.renderer.width*0.3, 450, 'idle');
         this.player.setTint(0xd11dc5);
-        this.player.setScale(0.4);
+        this.player.setScale(0.75);
         this.player.flipX = false;
         this.player.setBodySize(100, 160);
         this.player.setOffset(175, 175);
@@ -165,7 +167,7 @@ export class Escenario extends Phaser.Scene {
         //PLAYER2
         this.player2 = this.physics.add.sprite(this.game.renderer.width*0.66, 450, 'idle');
         this.player2.setTint(0x000000);
-        this.player2.setScale(0.4);
+        this.player2.setScale(0.75);
         this.player2.flipX = true;
         this.player2.setBodySize(100, 160);
         this.player2.setOffset(225, 175);
@@ -370,10 +372,10 @@ export class Escenario extends Phaser.Scene {
         this.physics.add.collider(this.player2, layer);
         this.physics.add.collider(this.player, layer);
 
-        this.player.body.setMaxVelocityY(1100);
-        this.player2.body.setMaxVelocityY(1100);
+        this.player.body.setMaxVelocityY(1500);
+        this.player2.body.setMaxVelocityY(1500);
 
-        layer.setCollisionBetween(340, 664);
+        layer.setCollisionBetween(7488, 16511);
 
         if(this.scene.get('Inicio').data.get('logeado')){
             this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
@@ -867,7 +869,7 @@ class JumpState extends State {
             }
         }
         if (scene.wKey.isDown && player.body.blocked.down) {
-            player.setVelocityY(-1200);
+            player.setVelocityY(-1500);
         }
         player.anims.play(`jump`, true);
         player.once('animationcomplete', () => {
@@ -1373,7 +1375,7 @@ class JumpState2 extends State {
             }
         }
         if (scene.upKey.isDown && player.body.blocked.down) {
-            player.setVelocityY(-1200);
+            player.setVelocityY(-1500);
         }
         player.anims.play(`jump`, true);
         player.once('animationcomplete', () => {
