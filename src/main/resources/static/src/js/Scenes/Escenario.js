@@ -154,7 +154,7 @@ export class Escenario extends Phaser.Scene {
         //H HITBOX2
 
         //PLAYER1
-        this.player = this.physics.add.sprite(this.game.renderer.width*0.3, 450, 'idle');
+        this.player = this.physics.add.sprite(this.game.renderer.width * 0.3, 450, 'idle');
         this.player.setTint(0xd11dc5);
         this.player.setScale(0.75);
         this.player.flipX = false;
@@ -165,7 +165,7 @@ export class Escenario extends Phaser.Scene {
         //PLAYER1
 
         //PLAYER2
-        this.player2 = this.physics.add.sprite(this.game.renderer.width*0.66, 450, 'idle');
+        this.player2 = this.physics.add.sprite(this.game.renderer.width * 0.66, 450, 'idle');
         this.player2.setTint(0x000000);
         this.player2.setScale(0.75);
         this.player2.flipX = true;
@@ -335,6 +335,123 @@ export class Escenario extends Phaser.Scene {
 
         this.physics.add.overlap(this.lHitbox2, this.player, p1LHit, undefined, this);
         this.physics.add.overlap(this.hHitbox2, this.player, p1HHit, undefined, this);
+
+        if (this.scene.key == 'Esc1' || this.scene.key == 'EscO1') {
+            var c1 = this.add.rectangle(0, 800, 1310, 280).setOrigin(0);
+            var c2 = this.add.rectangle(1550, 800, 370, 280).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+        }
+        else if (this.scene.key == 'Esc2' || this.scene.key == 'EscO2') {
+            var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
+            var c2 = this.add.rectangle(230, 590, 320, 50).setOrigin(0);
+            var c3 = this.add.rectangle(1180, 590, 70, 340).setOrigin(0);
+            var c4 = this.add.rectangle(1450, 590, 70, 210).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            this.physics.add.existing(c3);
+            this.physics.add.existing(c4);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c3.body.setImmovable(true);
+            c4.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+            c3.body.allowGravity = false;
+            c4.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player, c3);
+            this.physics.add.collider(this.player, c4);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+            this.physics.add.collider(this.player2, c3);
+            this.physics.add.collider(this.player2, c4);
+        }
+        else if (this.scene.key == 'Esc3' || this.scene.key == 'EscO3') {
+            var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
+            var c2 = this.add.rectangle(160, 430, 320, 50).setOrigin(0);
+            var c3 = this.add.rectangle(720, 590, 490, 50).setOrigin(0);
+            var c4 = this.add.rectangle(1450, 430, 320, 50).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            this.physics.add.existing(c3);
+            this.physics.add.existing(c4);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c3.body.setImmovable(true);
+            c4.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+            c3.body.allowGravity = false;
+            c4.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player, c3);
+            this.physics.add.collider(this.player, c4);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+            this.physics.add.collider(this.player2, c3);
+            this.physics.add.collider(this.player2, c4);
+        }
+        else if (this.scene.key == 'Esc4' || this.scene.key == 'EscO4') {
+            var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
+            var c2 = this.add.rectangle(410, 590, 340, 50).setOrigin(0);
+            var c3 = this.add.rectangle(410, 590, 70, 210).setOrigin(0);
+            var c4 = this.add.rectangle(1370, 590, 320, 50).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            this.physics.add.existing(c3);
+            this.physics.add.existing(c4);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c3.body.setImmovable(true);
+            c4.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+            c3.body.allowGravity = false;
+            c4.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player, c3);
+            this.physics.add.collider(this.player, c4);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+            this.physics.add.collider(this.player2, c3);
+            this.physics.add.collider(this.player2, c4);
+        }
+        else if (this.scene.key == 'Esc5' || this.scene.key == 'EscO5') {
+            var c1 = this.add.rectangle(0, 800, 380, 280).setOrigin(0);
+            var c2 = this.add.rectangle(610, 800, 1310, 280).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+        }
         //COLLIDERS
 
 
@@ -369,21 +486,21 @@ export class Escenario extends Phaser.Scene {
 
         }, [this, this.player2])
         //FIN COSAS PERSONAJE
-        this.physics.add.collider(this.player2, layer);
-        this.physics.add.collider(this.player, layer);
+        // this.physics.add.collider(this.player2, layer);
+        // this.physics.add.collider(this.player, layer);
 
-        this.player.body.setMaxVelocityY(1500);
-        this.player2.body.setMaxVelocityY(1500);
+        // this.player.body.setMaxVelocityY(1500);
+        // this.player2.body.setMaxVelocityY(1500);
 
         layer.setCollisionBetween(7488, 16511);
 
-        if(this.scene.get('Inicio').data.get('logeado')){
+        if (this.scene.get('Inicio').data.get('logeado')) {
             this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
                 fontStyle: 'bold',
                 fontSize: "35px",
                 fill: "#ffffff"
             }).setOrigin(0.5);
-        }else{
+        } else {
             this.textP1 = this.add.text(this.player.x, this.player.y, "P1", {
                 fontStyle: 'bold',
                 fontSize: "35px",
@@ -412,8 +529,8 @@ export class Escenario extends Phaser.Scene {
             position = 1
             this.player.setOffset(175, 175);
             this.player2.setOffset(225, 175);
-            this.textP1.setPosition(this.player.x-9, this.player.y - 70);
-            this.textP2.setPosition(this.player2.x+9, this.player2.y - 70);
+            this.textP1.setPosition(this.player.x - 9, this.player.y - 70);
+            this.textP2.setPosition(this.player2.x + 9, this.player2.y - 70);
 
         } else {
             this.player.flipX = true
@@ -421,15 +538,15 @@ export class Escenario extends Phaser.Scene {
             position = 2
             this.player.setOffset(225, 175);
             this.player2.setOffset(175, 175);
-            this.textP1.setPosition(this.player.x+9, this.player.y - 70);
-            this.textP2.setPosition(this.player2.x-9, this.player2.y - 70);
+            this.textP1.setPosition(this.player.x + 9, this.player.y - 70);
+            this.textP2.setPosition(this.player2.x - 9, this.player2.y - 70);
         }
 
-            //Muerte por caida
-        if (this.player.y > this.game.renderer.height*0.95) {
+        //Muerte por caida
+        if (this.player.y > this.game.renderer.height * 0.95) {
             this.stateMachine.transition('dead')
         }
-        if (this.player2.y > this.game.renderer.height*0.95) {
+        if (this.player2.y > this.game.renderer.height * 0.95) {
             this.stateMachine2.transition('dead')
         }
 
