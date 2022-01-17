@@ -1,6 +1,6 @@
 var terminado = false;
 var jugador;
-
+var ws;
 export class Matchmaking extends Phaser.Scene {
     
     constructor() {
@@ -20,7 +20,7 @@ export class Matchmaking extends Phaser.Scene {
         //     fill: "#ffffff"
         // }).setOrigin(0.5);
 
-        var ws = new WebSocket('ws://localhost:8080/online');
+        ws = new WebSocket('ws://localhost:8080/online');
         ws.onopen = function () {
             var msg = {tipo: "Busqueda", mensaje: "Abrir"}
             ws.send(JSON.stringify(msg));
@@ -70,7 +70,7 @@ export class Matchmaking extends Phaser.Scene {
 
     update(){
         if(terminado){
-            this.scene.start("SeleccionO", {jugador: jugador})
+            this.scene.start("SeleccionO", {jugador: jugador, socket:ws})
         }
     }
 

@@ -68,21 +68,6 @@ public class OnlineManager extends TextWebSocketHandler {
 			} else if (mensaje.equals("Cerrar")) {
 				busquedas.remove(conexion.getId());
 			}
-<<<<<<< HEAD
-		}else if(tipo.equals("Ingame")){
-			int posX = node.get("posicionX").asInt(); //Equivale a X, se manda al otro jugador para sobreescribir
-			int posY = node.get("posicionY").asInt(); //Equivale a Y, se manda al otro jugador para sobreescribir
-			//Mensaje equivale a la nueva posición de la stateMachine. 
-			//Se envia "mensaje" al otro jugador para que cambie la stateMachine de su otro jugador
-			
-		}else if(tipo.equals("Revancha")) {
-			if(mensaje.equals("Aceptar")) {
-				//Comprobar si la otra persona ha aceptado la revancha o no. Si se ha aceptado, empezar otra partida.
-			}else if (mensaje.equals("Rechazar")) {
-				//Mandar de vuelta a ambas personas sobre partida rechazada.
-				
-			}
-=======
 
 		} else if (tipo.equals("Seleccion")) {
 			sessions.get(parejas.get(conexion.getId())).sendMessage(message); // ESTO QUIZA DA PROBLEMAS SOLUCION: new
@@ -108,7 +93,6 @@ public class OnlineManager extends TextWebSocketHandler {
 			// // Mandar de vuelta a ambas personas sobre partida rechazada.
 
 			// }
->>>>>>> 5fd709d10ac404d07f458cf9ec56e2361b360792
 		}
 		// If según el tipo
 		// Campo 2: Información extra?????
