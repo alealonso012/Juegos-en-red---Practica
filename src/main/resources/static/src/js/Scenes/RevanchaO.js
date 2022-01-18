@@ -204,7 +204,7 @@ export class RevanchaO extends Phaser.Scene {
                 this.textoRevancha.setText("Esperando al oponente...");
 
 
-            } else if ((listo1 && jugador == 2) || (listo2 && jugador == 2)) {
+            } else if ((listo1 && jugador == 2) || (listo2 && jugador == 1)) {
                 console.log("El otro esta listo");
                 this.textoSi.setText("Aceptar");
                 this.textoNo.setText("Rechazar");

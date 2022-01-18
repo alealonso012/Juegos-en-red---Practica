@@ -252,7 +252,6 @@ export class SeleccionO extends Phaser.Scene {
         }
         if(desconectado)
         this.scene.start("RevanchaO", {jugador: jugador, socket: ws, rechazar: true});
-
     }
 
 }
