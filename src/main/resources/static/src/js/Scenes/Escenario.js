@@ -14,6 +14,9 @@ var p1Stop = false; //No permite al jugador1 atacar.
 var p2Stop = false; //No permite al jugador2 atacar.
 var wait = 0;
 
+var moveVel = 469;
+var saltoVel =1600; 
+var dashVel=1313;
 import { StateMachine } from './statemachine/StateMachine.js'
 
 import { State } from './statemachine/StateMachine.js'
@@ -147,8 +150,8 @@ export class Escenario extends Phaser.Scene {
         //H HITBOX2
 
         //PLAYER1
-        this.player = this.physics.add.sprite(this.game.renderer.width * 0.3, 450, 'idle');
-        this.player.setTint(0xd11dc5);
+        this.player = this.physics.add.sprite(this.game.renderer.width * 0.1, 450, 'idle');
+        this.player.setTint(0xaf0080);
         this.player.setScale(0.75);
         this.player.flipX = false;
         this.player.setBodySize(100, 160);
@@ -158,8 +161,8 @@ export class Escenario extends Phaser.Scene {
         //PLAYER1
 
         //PLAYER2
-        this.player2 = this.physics.add.sprite(this.game.renderer.width * 0.66, 450, 'idle');
-        this.player2.setTint(0x000000);
+        this.player2 = this.physics.add.sprite(this.game.renderer.width * 0.9, 450, 'idle');
+        this.player2.setTint(0x00ff00);
         this.player2.setScale(0.75);
         this.player2.flipX = true;
         this.player2.setBodySize(100, 160);
@@ -762,10 +765,10 @@ class MoveState extends State {
             return;
         }
         if (scene.dKey.isDown) {
-            player.setVelocityX(250);
+            player.setVelocityX(moveVel);
             return;
         } else if (scene.aKey.isDown) {
-            player.setVelocityX(-250);
+            player.setVelocityX(-moveVel);
             return;
         }
     }
@@ -786,9 +789,9 @@ class LightState extends State {
             return
         } else {
             if (position == 1) {
-                scene.lHitbox.x = player.x + (player.width * 0.06)
+                scene.lHitbox.x = player.x + (player.width * 0.10)
             } else {
-                scene.lHitbox.x = player.x - (player.width * 0.06)
+                scene.lHitbox.x = player.x - (player.width * 0.10)
             }
             scene.lHitbox.y = player.y - (player.height * 0.04)
             scene.lHitbox.body.enable = true
@@ -823,9 +826,9 @@ class HeavyState extends State {
             return
         } else {
             if (position == 1) {
-                scene.hHitbox.x = player.x + (player.width * 0.06)
+                scene.hHitbox.x = player.x + (player.width * 0.10)
             } else {
-                scene.hHitbox.x = player.x - (player.width * 0.06)
+                scene.hHitbox.x = player.x - (player.width * 0.10)
             }
             scene.hHitbox.y = player.y - (player.height * 0.08)
             scene.hHitbox.body.enable = true
@@ -847,7 +850,7 @@ class HeavyState extends State {
 class RDashState extends State {
     execute(scene, player) {
         def1 = false
-        player.setVelocityX(700);
+        player.setVelocityX(dashVel);
         if (p1Stop == false) {
             if (scene.kKey.isDown) {
                 this.stateMachine.transition('light');
@@ -877,7 +880,7 @@ class RDashState extends State {
 class LDashState extends State {
     execute(scene, player) {
         def1 = false
-        player.setVelocityX(-700);
+        player.setVelocityX(-dashVel);
         if (p1Stop == false) {
             if (scene.kKey.isDown) {
                 this.stateMachine.transition('light');
@@ -970,7 +973,7 @@ class JumpState extends State {
             }
         }
         if (scene.wKey.isDown && player.body.blocked.down) {
-            player.setVelocityY(-1500);
+            player.setVelocityY(-saltoVel);
         }
         player.anims.play(`jump`, true);
         player.once('animationcomplete', () => {
@@ -1268,10 +1271,10 @@ class MoveState2 extends State {
             return;
         }
         if (scene.rightKey.isDown) {
-            player.setVelocityX(250);
+            player.setVelocityX(moveVel);
             return;
         } else if (scene.leftKey.isDown) {
-            player.setVelocityX(-250);
+            player.setVelocityX(-moveVel);
             return;
         }
     }
@@ -1293,9 +1296,9 @@ class LightState2 extends State {
         } else {
             def2 = false
             if (position == 1) {
-                scene.lHitbox2.x = player.x - (player.width * 0.06)
+                scene.lHitbox2.x = player.x - (player.width * 0.10)
             } else {
-                scene.lHitbox2.x = player.x + (player.width * 0.06)
+                scene.lHitbox2.x = player.x + (player.width * 0.10)
             }
             scene.lHitbox2.y = player.y - (player.height * 0.04)
             scene.lHitbox2.body.enable = true
@@ -1330,9 +1333,9 @@ class HeavyState2 extends State {
             return
         } else {
             if (position == 1) {
-                scene.hHitbox2.x = player.x - (player.width * 0.06)
+                scene.hHitbox2.x = player.x - (player.width * 0.10)
             } else {
-                scene.hHitbox2.x = player.x + (player.width * 0.06)
+                scene.hHitbox2.x = player.x + (player.width * 0.10)
             }
             scene.hHitbox2.y = player.y - (player.height * 0.08)
             scene.hHitbox2.body.enable = true
@@ -1354,7 +1357,7 @@ class HeavyState2 extends State {
 class RDashState2 extends State {
     execute(scene, player) {
         def2 = false
-        player.setVelocityX(700);
+        player.setVelocityX(dashVel);
         if (p2Stop == false) {
             if (scene.n4.isDown) {
                 this.stateMachine.transition('light');
@@ -1384,7 +1387,7 @@ class RDashState2 extends State {
 class LDashState2 extends State {
     execute(scene, player) {
         def2 = false
-        player.setVelocityX(-700);
+        player.setVelocityX(-dashVel);
         if (p2Stop == false) {
             if (scene.n4.isDown) {
                 this.stateMachine.transition('light');
@@ -1476,7 +1479,7 @@ class JumpState2 extends State {
             }
         }
         if (scene.upKey.isDown && player.body.blocked.down) {
-            player.setVelocityY(-1500);
+            player.setVelocityY(-saltoVel);
         }
         player.anims.play(`jump`, true);
         player.once('animationcomplete', () => {

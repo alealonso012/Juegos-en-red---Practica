@@ -54,12 +54,13 @@ export class Seleccion extends Phaser.Scene {
         var CharacterDown = this.add.sprite(100,100,"character");
         CharacterDown.setScale(1.2);
         CharacterDown.setVisible(false);
-        CharacterDown.setTint("0xff0080");
+        CharacterDown.setTint("0xaf0080");
 
         var CharacterDown2 = this.add.sprite(100,100,"character");
         CharacterDown2.setScale(1.2);
         CharacterDown2.setVisible(false);
-        CharacterDown2.setTint("0x000000");
+        CharacterDown2.setTint("0x00ff00");
+        CharacterDown2.flipX=true;
 
         this.anims.create({
             key: "idleSelec",

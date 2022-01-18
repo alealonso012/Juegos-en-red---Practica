@@ -66,12 +66,12 @@ export class SeleccionO extends Phaser.Scene {
         this.CharacterDown = this.add.sprite(100, 100, "character");
         this.CharacterDown.setScale(1.2);
         this.CharacterDown.setVisible(false);
-        this.CharacterDown.setTint("0xff0080");
+        this.CharacterDown.setTint("0xaf0080");
 
         this.CharacterDown2 = this.add.sprite(100, 100, "character");
         this.CharacterDown2.setScale(1.2);
         this.CharacterDown2.setVisible(false);
-        this.CharacterDown2.setTint("0x000000");
+        this.CharacterDown2.setTint("0x00ff00");
         this.CharacterDown2.flipX=true;
 
         this.anims.create({
