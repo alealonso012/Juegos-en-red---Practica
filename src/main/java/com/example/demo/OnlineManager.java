@@ -45,7 +45,10 @@ public class OnlineManager extends TextWebSocketHandler {
 			String mensaje = node.get("mensaje").asText();
 			// Introducir al usuario a la lista de usuarios buscando
 			if (mensaje.equals("Abrir")) {
-				System.out.println("Recibido mensaje de abrir busqueda");
+				ObjectNode abierto = mapper.createObjectNode();
+				abierto.put("tipo", "Busqueda");
+				abierto.put("tipo", "Abierta");
+				conexion.sendMessage(new TextMessage(abierto.toString()));
 				busquedas.add(conexion.getId());
 				if (busquedas.size() > 1) {
 					String s1 = busquedas.remove();

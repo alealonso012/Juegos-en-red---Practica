@@ -1,5 +1,7 @@
 var terminado = false;
+var abierto = false;
 var jugador;
+var cambio = false;
 var ws;
 export class Matchmaking extends Phaser.Scene {
     
@@ -19,6 +21,11 @@ export class Matchmaking extends Phaser.Scene {
         //     fontSize: "40px",
         //     fill: "#ffffff"
         // }).setOrigin(0.5);
+        this.texto = this.add.text(this.game.renderer.width * 0.5, this.game.renderer.height * 0.4, "Conectando con el servidor...", {
+            fontStyle: 'bold',
+            fontSize: "55px",
+            fill: "#e8d59e"
+        }).setOrigin(0.5);
 
         ws = new WebSocket('ws://localhost:8080/online');
         ws.onopen = function () {
@@ -37,12 +44,14 @@ export class Matchmaking extends Phaser.Scene {
                 if(mensaje == "Terminada"){
                     jugador = msj.jugador;
                     terminado = true;
-                    //this.scene.start("SeleccionO", {jugador: jugador});
+                }else if(mensaje == "Abierta"){
+                    abierto = true;
                 }
             }
+            cambio = true;
         }
 
-        var onlineButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.53, "online").setScale(0.24);
+        var onlineButton = this.add.image(this.game.renderer.width * 0.5, this.game.renderer.height * 0.25, "online").setScale(0.24);
 
         this.anims.create({
             key: "mover",
@@ -69,8 +78,14 @@ export class Matchmaking extends Phaser.Scene {
     }
 
     update(){
-        if(terminado){
-            this.scene.start("SeleccionO", {jugador: jugador, socket:ws})
+        if(cambio){
+            if(terminado){
+                this.scene.start("SeleccionO", {jugador: jugador, socket:ws})
+            }
+            else if(abierto){
+                this.texto.setText("Buscando partida...");
+            }
+            cambio = false;
         }
     }
 
