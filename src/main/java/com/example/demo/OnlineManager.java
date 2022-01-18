@@ -32,8 +32,15 @@ public class OnlineManager extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession conexion, CloseStatus status) throws Exception {
+		
+		ObjectNode newNode = mapper.createObjectNode();
+					newNode.put("tipo", "Desconectado");
+
+		sessions.get(parejas.get(conexion.getId())).sendMessage(new TextMessage(newNode.toString()));
+		// parejas.remove(conexion.getId());
+		// sessions.remove(conexion.getId());
+
 		System.out.println("El usuario de ID: " + conexion.getId() + " ha cerrado la conexión con el estado " + status);
-		sessions.remove(conexion.getId());
 	}
 
 	@Override

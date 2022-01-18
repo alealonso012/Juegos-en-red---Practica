@@ -15,8 +15,8 @@ var p2Stop = false; //No permite al jugador2 atacar.
 var wait = 0;
 var leido = true;
 var moveVel = 469;
-var saltoVel =1600; 
-var dashVel=1313;
+var saltoVel = 1600;
+var dashVel = 1313;
 
 //WebSocket
 var esJ1 = true;
@@ -27,6 +27,7 @@ var posY;
 var espada;
 var jugador;
 var onlyStance = false;
+var desconectado = false;
 
 import { StateMachine } from './statemachine/StateMachine.js'
 
@@ -54,6 +55,7 @@ export class EscenarioOnline extends Phaser.Scene {
     }
 
     preload() {
+        desconectado = false;
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
         this.load.image(this.esc, this.esc);
@@ -522,16 +524,18 @@ export class EscenarioOnline extends Phaser.Scene {
             var msj = JSON.parse(msg.data)
             var tipo = msj.tipo;
             if (tipo == "Ingame") {
-                onlyStance=false;
+                onlyStance = false;
                 state = msj.estado;
                 console.log(state);
                 posX = msj.posX;
                 posY = msj.posY;
                 espada = msj.espada;
             }
-            if(tipo == "IngameStance"){
+            if (tipo == "IngameStance") {
                 onlyStance = true;
                 espada = msj.espada;
+            } else if (tipo == "Desconectado") {
+                desconectado = true;
             }
         }
     }
@@ -565,20 +569,20 @@ export class EscenarioOnline extends Phaser.Scene {
         if (!leido) {
             console.log(onlyStance);
             if (!esJ1) {
-                if(!onlyStance){
-                this.stateMachine.transition(state);
-                this.player.setPosition(posX,posY);
+                if (!onlyStance) {
+                    this.stateMachine.transition(state);
+                    this.player.setPosition(posX, posY);
                 }
                 stance1 = espada;
             }
             else {
-                if(!onlyStance){
-                this.stateMachine2.transition(state);
-                this.player2.setPosition(posX,posY);
+                if (!onlyStance) {
+                    this.stateMachine2.transition(state);
+                    this.player2.setPosition(posX, posY);
                 }
                 stance2 = espada;
             }
-            leido=true;
+            leido = true;
         }
         //Muerte por caida
         if (this.player.y > this.game.renderer.height * 0.95) {
@@ -586,6 +590,10 @@ export class EscenarioOnline extends Phaser.Scene {
         }
         if (this.player2.y > this.game.renderer.height * 0.95) {
             this.stateMachine2.transition('dead')
+        }
+
+        if(desconectado){
+            this.scene.start("RevanchaO", {jugador: jugador, socket:ws, rechazar: true});
         }
 
         this.stateMachine.step();
@@ -750,19 +758,19 @@ class IdleState extends State {
                     }
                 }
             }
-        }else {
+        } else {
             console.log(onlyStance);
-            if (onlyStance){
-            if (stance1 == 0) {
-                player.anims.play('idleL');
-            } else if (stance1 == 1) {
-                player.anims.play('idle');
-            } else if (stance1 == 2) {
-                player.anims.play('idleH');
+            if (onlyStance) {
+                if (stance1 == 0) {
+                    player.anims.play('idleL');
+                } else if (stance1 == 1) {
+                    player.anims.play('idle');
+                } else if (stance1 == 2) {
+                    player.anims.play('idleH');
+                }
+                onlyStance = false;
             }
-            onlyStance=false;
         }
-    }
     }
 }
 class MoveStateL extends State {
@@ -835,7 +843,7 @@ class MoveStateL extends State {
                 this.stateMachine.transition('idle');
                 return;
             }
-        }else if (onlyStance){
+        } else if (onlyStance) {
             if (stance1 == 0) {
                 player.anims.play('leftL');
             } else if (stance1 == 1) {
@@ -843,7 +851,7 @@ class MoveStateL extends State {
             } else if (stance1 == 2) {
                 player.anims.play('leftH');
             }
-            onlyStance=false;
+            onlyStance = false;
         }
     }
 }
@@ -851,14 +859,14 @@ class MoveStateR extends State {
     enter(scene, player) {
         if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "moveR", posX: player.x, posY: player.y, espada: stance1 }));
 
-            if (stance1 == 0) {
-                player.anims.play('rightL');
-            } else if (stance1 == 1) {
-                player.anims.play('right');
-            } else if (stance1 == 2) {
-                player.anims.play('rightH');
-            }
-        
+        if (stance1 == 0) {
+            player.anims.play('rightL');
+        } else if (stance1 == 1) {
+            player.anims.play('right');
+        } else if (stance1 == 2) {
+            player.anims.play('rightH');
+        }
+
     }
     execute(scene, player) {
         player.setVelocityX(moveVel);
@@ -917,7 +925,7 @@ class MoveStateR extends State {
                 this.stateMachine.transition('idle');
                 return;
             }
-        }else if (onlyStance){
+        } else if (onlyStance) {
             if (stance1 == 0) {
                 player.anims.play('rightL');
             } else if (stance1 == 1) {
@@ -925,7 +933,7 @@ class MoveStateR extends State {
             } else if (stance1 == 2) {
                 player.anims.play('rightH');
             }
-            onlyStance=false;
+            onlyStance = false;
         }
     }
 }
@@ -1140,7 +1148,7 @@ class CrouchState extends State {
 class JumpState extends State {
     enter(scene, player) {
         if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "jump", posX: player.x, posY: player.y, espada: stance1 }));
-        
+
         player.setVelocityY(-saltoVel);
     }
     execute(scene, player) {
@@ -1148,7 +1156,7 @@ class JumpState extends State {
         def1 = false
         jumping1 = true
         //changeStance1(2)
-        
+
         if (esJ1) {
             // if (scene.wKey.isDown && player.body.blocked.down) {
             //     player.setVelocityY(-1200);
@@ -1164,7 +1172,7 @@ class JumpState extends State {
                 }
             }
 
-        }else{
+        } else {
             // if(player.body.blocked.down){
             //     player.setVelocityY(-1200);
             // }
@@ -1389,7 +1397,7 @@ class IdleState2 extends State {
                     }
                 }
             }
-        }else if(onlyStance){
+        } else if (onlyStance) {
             if (stance2 == 0) {
                 player.anims.play('idleL');
             } else if (stance2 == 1) {
@@ -1397,7 +1405,7 @@ class IdleState2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('idleH');
             }
-            onlyStance=false;
+            onlyStance = false;
         }
     }
 }
@@ -1472,7 +1480,7 @@ class MoveStateL2 extends State {
                 this.stateMachine.transition('idle');
                 return;
             }
-        }else if(onlyStance){
+        } else if (onlyStance) {
             if (stance2 == 0) {
                 player.anims.play('leftL');
             } else if (stance2 == 1) {
@@ -1480,7 +1488,7 @@ class MoveStateL2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('leftH');
             }
-            onlyStance=false;
+            onlyStance = false;
         }
     }
 }
@@ -1488,14 +1496,14 @@ class MoveStateR2 extends State {
     enter(scene, player) {
         if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "moveR", posX: player.x, posY: player.y, espada: stance2 }));
 
-            if (stance2 == 0) {
-                player.anims.play('rightL');
-            } else if (stance2 == 1) {
-                player.anims.play('right');
-            } else if (stance2 == 2) {
-                player.anims.play('rightH');
-            }
-        
+        if (stance2 == 0) {
+            player.anims.play('rightL');
+        } else if (stance2 == 1) {
+            player.anims.play('right');
+        } else if (stance2 == 2) {
+            player.anims.play('rightH');
+        }
+
 
         def2 = true
     }
@@ -1556,7 +1564,7 @@ class MoveStateR2 extends State {
                 this.stateMachine.transition('idle');
                 return;
             }
-        }else if (onlyStance){
+        } else if (onlyStance) {
             if (stance2 == 0) {
                 player.anims.play('rightL');
             } else if (stance2 == 1) {
@@ -1564,7 +1572,7 @@ class MoveStateR2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('rightH');
             }
-            onlyStance=false;
+            onlyStance = false;
         }
     }
 }
@@ -1783,7 +1791,7 @@ class JumpState2 extends State {
         def2 = false
         jumping2 = true
         //changeStance1(2)
-        
+
         if (!esJ1) {
             // if (scene.wKey.isDown && player.body.blocked.down) {
             //     player.setVelocityY(-1200);
@@ -1798,10 +1806,10 @@ class JumpState2 extends State {
                     return;
                 }
             }
-        
-        }else{
-        //     if(player.body.blocked.down)
-        //     player.setVelocityY(-1200);
+
+        } else {
+            //     if(player.body.blocked.down)
+            //     player.setVelocityY(-1200);
         }
         // console.log(player.body.velocity.y);
         // console.log(player.body.blocked.down);

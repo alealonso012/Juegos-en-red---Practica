@@ -1,12 +1,14 @@
 import { victoria } from '../client.js';
 
-jugador;
-ws;
+var jugador;
+var ws;
 
-listo1;
-listo2;
-rechazada = true;
-
+var listo1 = false;
+var listo2 = false;
+var rechazada1 = false;
+var rechazada2 = false;
+var cambio;
+var desconectado;
 export class RevanchaO extends Phaser.Scene {
 
     constructor() {
@@ -18,10 +20,31 @@ export class RevanchaO extends Phaser.Scene {
         console.log(this.Derecha);
         jugador = data.jugador;
         ws = data.socket;
+        if (data.rechazar != undefined && data.rechazar == true)
+            desconectado = true;
 
     }
 
     preload() {
+        listo1 = false;
+        listo2 = false;
+        rechazada1 = false;
+        rechazada2 = false;
+
+        cambio = false;
+        if (desconectado) {
+            if (jugador == 1) {
+                rechazada2 = true;
+                this.Derecha = false;
+            } else {
+                rechazada1 = true;
+                this.Derecha = true;
+
+            }
+            cambio = true;
+        }
+
+
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('player1', "/resources/img/Player1.png");
         this.load.image('player2', "/resources/img/Player2.png");
@@ -77,56 +100,117 @@ export class RevanchaO extends Phaser.Scene {
 
         this.textoSi.on("pointerdown", () => {
             //this.scene.start("Seleccion");
+            var msg = { tipo: "Revancha", mensaje: "Si" }
+            ws.send(JSON.stringify(msg));
+            if (jugador == 1) {
+                listo1 = true;
 
-                var msg = { tipo: "Revancha", mensaje: "Si" }
-                ws.send(JSON.stringify(msg));
+            } else {
+                listo2 = true;
+            }
+            cambio = true;
         })
 
         this.textoNo.on("pointerdown", () => {
-            rechazada = false;
-            this.scene.start("Inicio", {});
+            if (jugador == 1) {
+                rechazada1 = true;
+            }
+            else {
+                rechazada2 = true;
+            }
+            var msg = { tipo: "Revancha", mensaje: "No" }
+            ws.send(JSON.stringify(msg));
+            cambio = true;
         })
 
         ws.onmessage = function (msg) {
-            cambio = true;
             console.log("WS message: " + msg.data);
             var msj = JSON.parse(msg.data)
             var tipo = msj.tipo;
-            if(tipo == "Revancha"){
+            if (tipo == "Revancha") {
                 var mensaje = msj.mensaje;
-                if(mensaje == "Si"){
-                    if(jugador==1){
+                if (mensaje == "Si") {
+                    if (jugador == 1) {
                         listo2 = true;
-                    }else{
-                        listo1 == true;
+                        console.log("Jugador 2 listo");
+                    } else {
+                        listo1 = true;
+                        console.log("Jugador 1 listo");
                     }
-                }else if(mensaje == "No"){
-                    rechazada = true;
+                } else if (mensaje == "No") {
+                    if (jugador == 1) {
+                        rechazada2 = true;
+                    } else {
+                        rechazada1 = true;
+                    }
+                } else if (tipo == "Desconectado") {
+                    if (jugador == 1) rechazada2 = true;
+                    if (jugador == 2) rechazada1 = true;
                 }
             }
+            console.log("A");
             cambio = true;
         }
     }
 
-    update(){
+    update() {
         //Gestor
-        if(cambio){
-            if(rechazada){
+        if (cambio) {
+            console.log(listo1);
+            console.log(listo2);
+
+            console.log("Cambio")
+
+            if (rechazada1 || rechazada2) {
+                this.textoSi.setVisible(false).removeInteractive();
+                this.textoNo.setVisible(false).removeInteractive();
                 ws.close();
-                this.textoRevancha.setText("El oponente se ha desconectado");
+                if (rechazada1) {
+                    if (jugador == 1) {
+                        this.scene.start("Inicio", {});
+                    } else if (jugador == 2) {
+                        this.textoRevancha.setText("El oponente se ha desconectado");
+                        this.textoSalir.setVisible(true).setInteractive();
+                    }
+                } else if (rechazada2) {
+                    if (jugador == 1) {
+                        this.textoRevancha.setText("El oponente se ha desconectado");
+                        this.textoSalir.setVisible(true).setInteractive();
+
+                    } else if (jugador == 2) {
+
+                        this.scene.start("Inicio", {});
+                    }
+                }
+                this.textoSalir.on("pointerdown", () => {
+                    this.scene.start("Inicio", {});
+                })
+
+
+            } else if (listo1 && listo2) {
+                console.log("Ambos listos");
+                this.scene.start("SeleccionO", { jugador: jugador, socket: ws });
+
+            } else if ((listo1 && jugador == 1) || (listo2 && jugador == 2)) {
                 this.textoSi.setVisible(false).removeInteractive();
                 this.textoNo.setVisible(false).removeInteractive();
                 this.textoSalir.setVisible(true).setInteractive();
                 this.textoSalir.on("pointerdown", () => {
                     this.scene.start("Inicio", {});
                 })
-            }else if(listo1&&listo2){
-                this.scene.start("SeleccionO", {jugador: jugador, socket: ws});
-            }else if(listo1&&jugador==1||listo2&&jugador==2){
+
+                console.log("Estoy listo");
+
                 this.textoRevancha.setText("Esperando al oponente...");
-            }else if(listo1&&jugador==2||listo2&&jugador==2){
+
+
+            } else if ((listo1 && jugador == 2) || (listo2 && jugador == 2)) {
+                console.log("El otro esta listo");
+                this.textoSi.setText("Aceptar");
+                this.textoNo.setText("Rechazar");
                 this.textoRevancha.setText("¡El oponente quiere revancha!");
             }
+            cambio = false;
         }
     }
 }

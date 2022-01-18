@@ -11,6 +11,10 @@ export class Matchmaking extends Phaser.Scene {
 
     preload() {
         //this.data.set("Terminado", false)
+        var ws = null;
+        var terminado = false;
+        var abierto = false;
+        var cambio = false;
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('online', "/resources/img/Online.png");
     }
@@ -80,7 +84,7 @@ export class Matchmaking extends Phaser.Scene {
     update(){
         if(cambio){
             if(terminado){
-                this.scene.start("SeleccionO", {jugador: jugador, socket:ws})
+                this.scene.start("SeleccionO", {jugador: jugador, socket:ws, rechazar: undefined})
             }
             else if(abierto){
                 this.texto.setText("Buscando partida...");

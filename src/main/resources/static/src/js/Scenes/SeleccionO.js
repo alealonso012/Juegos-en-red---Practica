@@ -4,6 +4,7 @@ var bListo1 = false;
 var bListo2 = false;
 var bSelec1 = false;
 var bSelec2 = false;
+var desconectado = false;
 export class SeleccionO extends Phaser.Scene {
 
     constructor() {
@@ -19,6 +20,12 @@ export class SeleccionO extends Phaser.Scene {
     }
 
     preload() {
+        bListo1 = false;
+        bListo2 = false;
+        bSelec1 = false;
+        bSelec2 = false;
+        desconectado = false;
+
         this.load.image('selectscreen', "/resources/img/SelectScreen.png");
         this.load.image('borde', "/resources/img/Characterborder.png");
         this.load.image('borde2', "/resources/img/Readyborder.png");
@@ -199,6 +206,8 @@ export class SeleccionO extends Phaser.Scene {
                         bListo2 = true;
                     }
                 }
+            }else if(tipo == "Desconectado"){
+                desconectado = true;
             }
         }
     }
@@ -241,6 +250,9 @@ export class SeleccionO extends Phaser.Scene {
             this.bSelec2 = false;
             console.log("bSelec2 = true");
         }
+        if(desconectado)
+        this.scene.start("RevanchaO", {jugador: jugador, socket: ws, rechazar: true});
+
     }
 
 }
