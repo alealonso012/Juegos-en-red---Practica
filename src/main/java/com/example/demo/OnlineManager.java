@@ -54,7 +54,7 @@ public class OnlineManager extends TextWebSocketHandler {
 			if (mensaje.equals("Abrir")) {
 				ObjectNode abierto = mapper.createObjectNode();
 				abierto.put("tipo", "Busqueda");
-				abierto.put("tipo", "Abierta");
+				abierto.put("mensaje", "Abierta");
 				conexion.sendMessage(new TextMessage(abierto.toString()));
 				busquedas.add(conexion.getId());
 				if (busquedas.size() > 1) {

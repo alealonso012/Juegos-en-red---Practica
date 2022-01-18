@@ -11,16 +11,17 @@ export class Matchmaking extends Phaser.Scene {
 
     preload() {
         //this.data.set("Terminado", false)
-        var ws = null;
-        var terminado = false;
-        var abierto = false;
-        var cambio = false;
+        ws = null;
+        terminado = false;
+        abierto = false;
+        cambio = false;
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('online', "/resources/img/Online.png");
     }
 
     create() {
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
+        this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000, 0.6).setOrigin(0);
         // this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "Selección de modo", {
         //     fontSize: "40px",
         //     fill: "#ffffff"
@@ -77,6 +78,7 @@ export class Matchmaking extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         atras.on("pointerdown", () => {
+            ws.close();
             this.scene.start("Menu", {});
         })
     }

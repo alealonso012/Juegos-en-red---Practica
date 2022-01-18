@@ -759,7 +759,7 @@ class IdleState extends State {
                 }
             }
         } else {
-            console.log(onlyStance);
+            // console.log(onlyStance);
             if (onlyStance) {
                 if (stance1 == 0) {
                     player.anims.play('idleL');

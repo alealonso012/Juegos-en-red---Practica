@@ -22,10 +22,11 @@ export class RevanchaO extends Phaser.Scene {
         ws = data.socket;
         if (data.rechazar != undefined && data.rechazar == true)
             desconectado = true;
-
+        else desconectado = false;
     }
 
     preload() {
+        //desconectado = false;
         listo1 = false;
         listo2 = false;
         rechazada1 = false;
@@ -104,7 +105,6 @@ export class RevanchaO extends Phaser.Scene {
             ws.send(JSON.stringify(msg));
             if (jugador == 1) {
                 listo1 = true;
-
             } else {
                 listo2 = true;
             }
