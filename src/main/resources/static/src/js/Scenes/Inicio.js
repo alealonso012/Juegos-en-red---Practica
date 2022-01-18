@@ -9,22 +9,22 @@ export class Inicio extends Phaser.Scene {
 
     init(data) {
         console.log(this);
-        if(this.data.get('logeado') == undefined){
+        if (this.data.get('logeado') == undefined) {
             this.data.set('logeado', false);
             this.data.set('user', undefined);
         }
         console.log(this.data);
         console.log(data);
-        if (data.logeado != undefined){
+        if (data.logeado != undefined) {
             this.data.set('logeado', data.logeado);
-        console.log("Logeado: " + this.data.get('logeado'));
-        }   
+            console.log("Logeado: " + this.data.get('logeado'));
+        }
 
-        if (data.nickname != undefined){
+        if (data.nickname != undefined) {
             this.data.set('user', data.nickname);
             console.log("User definido en inicio");
-        }    
-        
+        }
+
         console.log("Usuario: " + this.data.get('user'));
     }
 
@@ -62,14 +62,14 @@ export class Inicio extends Phaser.Scene {
             fill: "#c49c5f"
         }).setOrigin(0.5).setInteractive();
 
-        if(this.data.get('logeado')){
+        if (this.data.get('logeado')) {
             var loginButton = this.add.text(this.game.renderer.width * 0.98, this.game.renderer.height * 0.9656, this.data.get("user"), {
                 fontStyle: 'bold',
                 fontSize: "50px",
                 fill: "#c49c5f"
             }).setOrigin(1, 0.5).setInteractive();
         }
-        else{
+        else {
             var loginButton = this.add.text(this.game.renderer.width * 0.98, this.game.renderer.height * 0.9656, "Iniciar sesión", {
                 fontStyle: 'bold',
                 fontSize: "50px",
@@ -159,17 +159,17 @@ export class Inicio extends Phaser.Scene {
 
         loginButton.on("pointerover", () => {
             loginButton.setTint(0x888888);
-            if(this.data.get("logeado"))loginButton.setText("Cerrar sesión");
+            if (this.data.get("logeado")) loginButton.setText("Cerrar sesión");
         })
 
         loginButton.on("pointerout", () => {
             loginButton.clearTint();
-            if(this.data.get("logeado"))loginButton.setText(this.data.get("user"));
+            if (this.data.get("logeado")) loginButton.setText(this.data.get("user"));
         })
 
         leaderButton.on("pointerdown", () => {
             console.log("Leaderboard");
-            this.scene.start("Leaderboard");
+            this.scene.start("EscO3");
         })
 
         leaderButton.on("pointerover", () => {

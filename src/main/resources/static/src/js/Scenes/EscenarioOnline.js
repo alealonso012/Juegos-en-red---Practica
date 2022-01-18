@@ -13,16 +13,28 @@ var crouch2 = false; //Jugador 2 agachado
 var p1Stop = false; //No permite al jugador1 atacar.
 var p2Stop = false; //No permite al jugador2 atacar.
 var wait = 0;
-
+var leido = true;
 var moveVel = 469;
-var saltoVel =1600; 
-var dashVel=1313;
+var saltoVel = 1600;
+var dashVel = 1313;
+
+//WebSocket
+var esJ1 = true;
+var state = "idle";
+var ws;
+var posX;
+var posY;
+var espada;
+var jugador;
+var onlyStance = false;
+var desconectado = false;
+
 import { StateMachine } from './statemachine/StateMachine.js'
 
 import { State } from './statemachine/StateMachine.js'
 
 //FIN GLOBALES PJ
-export class Escenario extends Phaser.Scene {
+export class EscenarioOnline extends Phaser.Scene {
     Derecha;
     leftScene;
     rightScene;
@@ -37,14 +49,17 @@ export class Escenario extends Phaser.Scene {
 
     init(data) {
         this.Derecha = data.derecha;
-
-        console.log(this.Derecha);
+        jugador = data.jugador;
+        esJ1 = (data.jugador == 1) ? true : false;
+        ws = data.socket;
     }
 
     preload() {
+        desconectado = false;
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
         this.load.image(this.esc, this.esc);
+
         //INICIO COSAS PERSONAJE
         this.load.spritesheet('run',
             'src/js/Scenes/pj/RunMid.png',
@@ -122,28 +137,28 @@ export class Escenario extends Phaser.Scene {
 
         //INICIO COSAS PERSONAJE
         //LHITBOX1
-        this.lHitbox = this.add.rectangle(0, 0, 45, 16, 0xffffff, 0)
+        this.lHitbox = this.add.rectangle(0, 0, 130, 20, 0xffffff, 0)
         this.physics.add.existing(this.lHitbox)
         this.lHitbox.body.allowGravity = false
         this.lHitbox.body.enable = false
         //LHITBOX1
 
         //H HITBOX1
-        this.hHitbox = this.add.rectangle(0, 0, 65, 45, 0xffffff, 0)
+        this.hHitbox = this.add.rectangle(0, 0, 190, 55, 0xffffff, 0)
         this.physics.add.existing(this.hHitbox)
         this.hHitbox.body.allowGravity = false
         this.hHitbox.body.enable = false
         //H HITBOX1
 
         //LHITBOX2
-        this.lHitbox2 = this.add.rectangle(0, 0, 45, 16, 0xffffff, 0)
+        this.lHitbox2 = this.add.rectangle(0, 0, 130, 20, 0xffffff, 0)
         this.physics.add.existing(this.lHitbox2)
         this.lHitbox2.body.allowGravity = false
         this.lHitbox2.body.enable = false
         //LHITBOX2
 
         //H HITBOX2
-        this.hHitbox2 = this.add.rectangle(0, 0, 65, 45, 0xffffff, 0)
+        this.hHitbox2 = this.add.rectangle(0, 0, 190, 55, 0xffffff, 0)
         this.physics.add.existing(this.hHitbox2)
         this.hHitbox2.body.allowGravity = false
         this.hHitbox2.body.enable = false
@@ -231,6 +246,7 @@ export class Escenario extends Phaser.Scene {
             key: 'jump',
             frames: this.anims.generateFrameNumbers('jump', { start: 0, end: 0 }),
             frameRate: 5,
+            repeat: -1
         });
         this.anims.create({
             key: 'light',
@@ -323,7 +339,6 @@ export class Escenario extends Phaser.Scene {
         //Declaración de teclas J2
 
         //COLLIDERS
-
         this.physics.add.overlap(this.lHitbox, this.player2, p2LHit, undefined, this);
         this.physics.add.overlap(this.hHitbox, this.player2, p2HHit, undefined, this);
 
@@ -349,7 +364,7 @@ export class Escenario extends Phaser.Scene {
         else if (this.scene.key == 'Esc2' || this.scene.key == 'EscO2') {
             var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
             var c2 = this.add.rectangle(230, 590, 320, 50).setOrigin(0);
-            var c3 = this.add.rectangle(1180, 590, 70, 340).setOrigin(0);
+            var c3 = this.add.rectangle(1180, 590, 340, 50).setOrigin(0);
             var c4 = this.add.rectangle(1450, 590, 70, 210).setOrigin(0);
 
             this.physics.add.existing(c1);
@@ -452,7 +467,8 @@ export class Escenario extends Phaser.Scene {
         ///////////////////////STATE MACHINE////////////////////////
         this.stateMachine = new StateMachine('idle', {
             idle: new IdleState(),
-            move: new MoveState(),
+            moveL: new MoveStateL(),
+            moveR: new MoveStateR(),
             light: new LightState(),
             heavy: new HeavyState(),
             rDash: new RDashState(),
@@ -467,7 +483,8 @@ export class Escenario extends Phaser.Scene {
 
         this.stateMachine2 = new StateMachine('idle', {
             idle: new IdleState2(),
-            move: new MoveState2(),
+            moveL: new MoveStateL2(),
+            moveR: new MoveStateR2(),
             light: new LightState2(),
             heavy: new HeavyState2(),
             rDash: new RDashState2(),
@@ -500,6 +517,27 @@ export class Escenario extends Phaser.Scene {
             fontSize: "35px",
             fill: "#ffffff"
         }).setOrigin(0.5);
+
+        ws.onmessage = function (msg) {
+            leido = false;
+            console.log("WS message: " + msg.data);
+            var msj = JSON.parse(msg.data)
+            var tipo = msj.tipo;
+            if (tipo == "Ingame") {
+                onlyStance = false;
+                state = msj.estado;
+                console.log(state);
+                posX = msj.posX;
+                posY = msj.posY;
+                espada = msj.espada;
+            }
+            if (tipo == "IngameStance") {
+                onlyStance = true;
+                espada = msj.espada;
+            } else if (tipo == "Desconectado") {
+                desconectado = true;
+            }
+        }
     }
 
     shutdown() {
@@ -511,30 +549,51 @@ export class Escenario extends Phaser.Scene {
 
         //Cosas personaje
         if (this.player.x < this.player2.x) {
-            this.player.flipX = false
-            this.player2.flipX = true
-            position = 1
+            this.player.flipX = false;
+            this.player2.flipX = true;
+            position = 1;
             this.player.setOffset(175, 175);
             this.player2.setOffset(225, 175);
             this.textP1.setPosition(this.player.x - 9, this.player.y - 70);
             this.textP2.setPosition(this.player2.x + 9, this.player2.y - 70);
 
         } else {
-            this.player.flipX = true
-            this.player2.flipX = false
-            position = 2
+            this.player.flipX = true;
+            this.player2.flipX = false;
+            position = 2;
             this.player.setOffset(225, 175);
             this.player2.setOffset(175, 175);
             this.textP1.setPosition(this.player.x + 9, this.player.y - 70);
             this.textP2.setPosition(this.player2.x - 9, this.player2.y - 70);
         }
-
+        if (!leido) {
+            console.log(onlyStance);
+            if (!esJ1) {
+                if (!onlyStance) {
+                    this.stateMachine.transition(state);
+                    this.player.setPosition(posX, posY);
+                }
+                stance1 = espada;
+            }
+            else {
+                if (!onlyStance) {
+                    this.stateMachine2.transition(state);
+                    this.player2.setPosition(posX, posY);
+                }
+                stance2 = espada;
+            }
+            leido = true;
+        }
         //Muerte por caida
         if (this.player.y > this.game.renderer.height * 0.95) {
             this.stateMachine.transition('dead')
         }
         if (this.player2.y > this.game.renderer.height * 0.95) {
             this.stateMachine2.transition('dead')
+        }
+
+        if(desconectado){
+            this.scene.start("RevanchaO", {jugador: jugador, socket:ws, rechazar: true});
         }
 
         this.stateMachine.step();
@@ -596,14 +655,14 @@ export class Escenario extends Phaser.Scene {
             if (this.telon.body.x > 0) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
-                this.scene.start(this.leftScene, { derecha: true });
+                this.scene.start(this.leftScene, { derecha: true, jugador: jugador, socket: ws });
             }
         }
         else {
             if (this.telon.body.x < 0) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
-                this.scene.start(this.rightScene, { derecha: false });
+                this.scene.start(this.rightScene, { derecha: false, jugador: jugador, socket: ws });
             }
         }
     }
@@ -614,6 +673,8 @@ export class Escenario extends Phaser.Scene {
 //CLASES PERSONAJE
 class IdleState extends State {
     enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "idle", posX: player.x, posY: player.y, espada: stance1 }));
+        def1 = true;
         if (stance1 == 0) {
             player.anims.play('idleL');
         } else if (stance1 == 1) {
@@ -623,71 +684,248 @@ class IdleState extends State {
         }
     }
     execute(scene, player) {
-        //const { left, right, up, down, space } = scene.keys;
-        const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
-        const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
-        const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
-        if (mJustDown) {
-            changeStance1(1) //Subir guardia
-            if (stance1 == 0) {
-                player.anims.play('idleL');
-            } else if (stance1 == 1) {
-                player.anims.play('idle');
-            } else if (stance1 == 2) {
-                player.anims.play('idleH');
-            }
-        }
-        if (nJustDown) {
-            changeStance1(0) //Bajar guardia
-            if (stance1 == 0) {
-                player.anims.play('idleL');
-            } else if (stance1 == 1) {
-                player.anims.play('idle');
-            } else if (stance1 == 2) {
-                player.anims.play('idleH');
-            }
-        }
-
-        if (vJustDown) {
-            this.stateMachine.transition('parry');
-            return;
-        }
-        if (p1Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
         if (player.body.blocked.down) {
             player.setVelocityX(0);
-            jumping1 = false;
-            if (scene.sKey.isDown) {
-                this.stateMachine.transition('crouch')
+        }
+        if (esJ1) {
+            //const { left, right, up, down, space } = scene.keys;
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+
+            if (mJustDown) {
+                changeStance1(1) //Subir guardia
+                if (stance1 == 0) {
+                    player.anims.play('idleL');
+                } else if (stance1 == 1) {
+                    player.anims.play('idle');
+                } else if (stance1 == 2) {
+                    player.anims.play('idleH');
+                }
+            }
+            if (nJustDown) {
+                changeStance1(0) //Bajar guardia
+                if (stance1 == 0) {
+                    player.anims.play('idleL');
+                } else if (stance1 == 1) {
+                    player.anims.play('idle');
+                } else if (stance1 == 2) {
+                    player.anims.play('idleH');
+                }
+            }
+
+            if (vJustDown) {
+                this.stateMachine.transition('parry');
                 return;
             }
-            if (scene.aKey.isDown || scene.dKey.isDown || scene.wKey.isDown) {
-                if (scene.aKey.isDown && scene.space.isDown) {
-                    this.stateMachine.transition('lDash')
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
                     return;
                 }
-                if (scene.dKey.isDown && scene.space.isDown) {
-                    this.stateMachine.transition('rDash')
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
                     return;
                 }
-                this.stateMachine.transition('move');
-                return;
+            }
+            if (player.body.blocked.down) {
+                player.setVelocityX(0);
+                jumping1 = false;
+                if (scene.wKey.isDown) {
+                    this.stateMachine.transition('jump');
+                    return;
+                }
+                if (scene.sKey.isDown) {
+                    this.stateMachine.transition('crouch')
+                    return;
+                }
+                if (scene.aKey.isDown || scene.dKey.isDown || scene.wKey.isDown) {
+                    if (scene.aKey.isDown && scene.space.isDown) {
+                        this.stateMachine.transition('lDash')
+                        return;
+                    }
+                    if (scene.dKey.isDown && scene.space.isDown) {
+                        this.stateMachine.transition('rDash')
+                        return;
+                    }
+                    if (scene.aKey.isDown) {
+                        this.stateMachine.transition('moveL');
+                        return;
+                    }
+                    if (scene.dKey.isDown) {
+                        this.stateMachine.transition('moveR');
+                        return;
+                    }
+                }
+            }
+        } else {
+            // console.log(onlyStance);
+            if (onlyStance) {
+                if (stance1 == 0) {
+                    player.anims.play('idleL');
+                } else if (stance1 == 1) {
+                    player.anims.play('idle');
+                } else if (stance1 == 2) {
+                    player.anims.play('idleH');
+                }
+                onlyStance = false;
             }
         }
     }
 }
-class MoveState extends State {
+class MoveStateL extends State {
     enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "moveL", posX: player.x, posY: player.y, espada: stance1 }));
 
-        if (scene.dKey.isDown) {
+        if (stance1 == 0) {
+            player.anims.play('leftL');
+        } else if (stance1 == 1) {
+            player.anims.play('left');
+        } else if (stance1 == 2) {
+            player.anims.play('leftH');
+        }
+    }
+    execute(scene, player) {
+        player.setVelocityX(-moveVel);
+        if (esJ1 == true) {
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+            if (mJustDown) {
+                changeStance1(1) //Subir guardia
+                if (stance1 == 0) {
+                    player.anims.play('leftL');
+                } else if (stance1 == 1) {
+                    player.anims.play('left');
+                } else if (stance1 == 2) {
+                    player.anims.play('leftH');
+                }
+            }
+            if (nJustDown) {
+                changeStance1(0) //Bajar guardia
+                if (stance1 == 0) {
+                    player.anims.play('leftL');
+                } else if (stance1 == 1) {
+                    player.anims.play('left');
+                } else if (stance1 == 2) {
+                    player.anims.play('leftH');
+                }
+            }
+
+            if (vJustDown) {
+                this.stateMachine.transition('parry');
+                return;
+            }
+            if (scene.aKey.isDown && scene.space.isDown) {
+                this.stateMachine.transition('lDash')
+                return;
+            }
+
+            if (scene.sKey.isDown) {
+                this.stateMachine.transition('crouch')
+                return;
+            }
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (scene.wKey.isDown && player.body.blocked.down) {
+                this.stateMachine.transition('jump');
+                return;
+            }
+            if (!(scene.aKey.isDown || scene.wKey.isDown)) {
+                this.stateMachine.transition('idle');
+                return;
+            }
+        } else if (onlyStance) {
+            if (stance1 == 0) {
+                player.anims.play('leftL');
+            } else if (stance1 == 1) {
+                player.anims.play('left');
+            } else if (stance1 == 2) {
+                player.anims.play('leftH');
+            }
+            onlyStance = false;
+        }
+    }
+}
+class MoveStateR extends State {
+    enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "moveR", posX: player.x, posY: player.y, espada: stance1 }));
+
+        if (stance1 == 0) {
+            player.anims.play('rightL');
+        } else if (stance1 == 1) {
+            player.anims.play('right');
+        } else if (stance1 == 2) {
+            player.anims.play('rightH');
+        }
+
+    }
+    execute(scene, player) {
+        player.setVelocityX(moveVel);
+        if (esJ1 == true) {
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+            if (mJustDown) {
+                changeStance1(1) //Subir guardia
+                if (stance1 == 0) {
+                    player.anims.play('rightL');
+                } else if (stance1 == 1) {
+                    player.anims.play('right');
+                } else if (stance1 == 2) {
+                    player.anims.play('rightH');
+                }
+            }
+            if (nJustDown) {
+                changeStance1(0) //Bajar guardia
+                if (stance1 == 0) {
+                    player.anims.play('rightL');
+                } else if (stance1 == 1) {
+                    player.anims.play('right');
+                } else if (stance1 == 2) {
+                    player.anims.play('rightH');
+                }
+            }
+
+            if (vJustDown) {
+                this.stateMachine.transition('parry');
+                return;
+            }
+            if (scene.dKey.isDown && scene.space.isDown) {
+                this.stateMachine.transition('rDash')
+                return;
+            }
+            if (scene.sKey.isDown) {
+                this.stateMachine.transition('crouch')
+                return;
+            }
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (scene.wKey.isDown && player.body.blocked.down) {
+                this.stateMachine.transition('jump');
+                return;
+            }
+            if (!(scene.dKey.isDown || scene.wKey.isDown)) {
+                this.stateMachine.transition('idle');
+                return;
+            }
+        } else if (onlyStance) {
             if (stance1 == 0) {
                 player.anims.play('rightL');
             } else if (stance1 == 1) {
@@ -695,86 +933,14 @@ class MoveState extends State {
             } else if (stance1 == 2) {
                 player.anims.play('rightH');
             }
-        } else if (scene.aKey.isDown) {
-            if (stance1 == 0) {
-                player.anims.play('leftL');
-            } else if (stance1 == 1) {
-                player.anims.play('left');
-            } else if (stance1 == 2) {
-                player.anims.play('leftH');
-            }
-        }
-    }
-    execute(scene, player) {
-        const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
-        const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
-        const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
-        if (mJustDown) {
-            changeStance1(1) //Subir guardia
-            if (stance1 == 0) {
-                player.anims.play('leftL');
-            } else if (stance1 == 1) {
-                player.anims.play('left');
-            } else if (stance1 == 2) {
-                player.anims.play('leftH');
-            }
-        }
-        if (nJustDown) {
-            changeStance1(0) //Bajar guardia
-            if (stance1 == 0) {
-                player.anims.play('leftL');
-            } else if (stance1 == 1) {
-                player.anims.play('left');
-            } else if (stance1 == 2) {
-                player.anims.play('leftH');
-            }
-        }
-
-        if (vJustDown) {
-            this.stateMachine.transition('parry');
-            return;
-        }
-        if (scene.aKey.isDown && scene.space.isDown) {
-            this.stateMachine.transition('lDash')
-            return;
-        }
-        if (scene.dKey.isDown && scene.space.isDown) {
-            this.stateMachine.transition('rDash')
-            return;
-        }
-        if (scene.sKey.isDown) {
-            this.stateMachine.transition('crouch')
-            return;
-        }
-        if (p1Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
-        if (scene.wKey.isDown && player.body.blocked.down) {
-            this.stateMachine.transition('jump');
-            return;
-        }
-        if (!(scene.aKey.isDown || scene.dKey.isDown || scene.wKey.isDown)) {
-            this.stateMachine.transition('idle');
-            return;
-        }
-        if (scene.dKey.isDown) {
-            player.setVelocityX(moveVel);
-            return;
-        } else if (scene.aKey.isDown) {
-            player.setVelocityX(-moveVel);
-            return;
+            onlyStance = false;
         }
     }
 }
 class LightState extends State {
     enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "light", posX: player.x, posY: player.y, espada: stance1 }));
+
         def1 = false;
         if (stance1 == 0) {
             player.anims.play('lightL');
@@ -785,6 +951,10 @@ class LightState extends State {
         }
     }
     execute(scene, player) {
+        if (player.body.blocked.down) {
+            player.setVelocityX(0);
+        }
+
         if (player.anims.currentFrame.index < 2) {
             return
         } else {
@@ -795,14 +965,13 @@ class LightState extends State {
             }
             scene.lHitbox.y = player.y - (player.height * 0.04)
             scene.lHitbox.body.enable = true
-            if (player.body.blocked.down) {
-                player.setVelocityX(0);
-            }
+
             player.once('animationcomplete', () => {
                 def1 = true;
                 if (player.anims.currentAnim.key == "light" || player.anims.currentAnim.key == "lightL" || player.anims.currentAnim.key == "lightH") {
                     this.stateMachine.transition('idle');
                     scene.lHitbox.body.enable = false
+                    return;
                 }
             });
         }
@@ -811,6 +980,8 @@ class LightState extends State {
 }
 class HeavyState extends State {
     enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "heavy", posX: player.x, posY: player.y, espada: stance1 }));
+
         def1 = false;
         if (stance1 == 0) {
             player.anims.play('heavyL');
@@ -832,14 +1003,13 @@ class HeavyState extends State {
             }
             scene.hHitbox.y = player.y - (player.height * 0.08)
             scene.hHitbox.body.enable = true
-            if (player.body.blocked.down) {
-                player.setVelocityX(0);
-            }
+
             player.once('animationcomplete', () => {
                 def1 = true
                 if (player.anims.currentAnim.key == "heavy" || player.anims.currentAnim.key == "heavyM" || player.anims.currentAnim.key == "heavyL") {
                     this.stateMachine.transition('idle');
                     scene.hHitbox.body.enable = false
+                    return;
                 }
             });
         }
@@ -848,28 +1018,34 @@ class HeavyState extends State {
     }
 }
 class RDashState extends State {
+    enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "rDash", posX: player.x, posY: player.y, espada: stance1 }));
+    }
     execute(scene, player) {
         def1 = false
         player.setVelocityX(dashVel);
-        if (p1Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
         if (position > 0) {
             player.anims.play(`fDash`, true);
         } else {
             player.anims.play(`bDash`, true);
         }
-        if (scene.sKey.isDown) {
-            def1 = true
-            this.stateMachine.transition('crouch')
-            return;
+        if (esJ1) {
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+
+            if (scene.sKey.isDown) {
+                def1 = true
+                this.stateMachine.transition('crouch')
+                return;
+            }
         }
         player.once('animationcomplete', () => {
             def1 = true
@@ -878,28 +1054,34 @@ class RDashState extends State {
     }
 }
 class LDashState extends State {
+    enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "lDash", posX: player.x, posY: player.y, espada: stance1 }));
+    }
     execute(scene, player) {
         def1 = false
         player.setVelocityX(-dashVel);
-        if (p1Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
         if (position > 0) {
             player.anims.play(`bDash`, true);
         } else {
             player.anims.play(`fDash`, true);
         }
-        if (scene.sKey.isDown) {
-            def1 = true
-            this.stateMachine.transition('crouch')
-            return;
+        if (esJ1) {
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+
+            if (scene.sKey.isDown) {
+                def1 = true
+                this.stateMachine.transition('crouch')
+                return;
+            }
         }
         player.once('animationcomplete', () => {
             def1 = true
@@ -909,6 +1091,7 @@ class LDashState extends State {
 }
 class ParryState extends State {
     enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "parry", posX: player.x, posY: player.y, espada: stance1 }));
         player.anims.play(`parry`, true);
         parry1 = true
         def1 = true
@@ -926,89 +1109,113 @@ class ParryState extends State {
             scene.time.delayedCall(500, () => {
                 def1 = true;
                 this.stateMachine.transition('idle');
+                return;
             })
         })
     }
 }
 class CrouchState extends State {
+    enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "crouch", posX: player.x, posY: player.y, espada: stance1 }));
+    }
     execute(scene, player) {
         changeStance1(2)
         crouch1 = true;
         player.setVelocityX(0);
-        if (p1Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
-        if (!(scene.sKey.isDown)) {
-            crouch1 = false;
-            this.stateMachine.transition('idle');
-            return;
-        } else {
-            player.setVelocityX(0);
 
-            player.anims.play('crouch', true);
+        player.anims.play('crouch', true);
+        if (esJ1) {
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (!(scene.sKey.isDown)) {
+                crouch1 = false;
+                this.stateMachine.transition('idle');
+                return;
+            }
+
         }
 
     }
 }
 class JumpState extends State {
+    enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "jump", posX: player.x, posY: player.y, espada: stance1 }));
+
+        player.setVelocityY(-saltoVel);
+    }
     execute(scene, player) {
+        player.anims.play(`jump`, true);
         def1 = false
         jumping1 = true
         //changeStance1(2)
-        if (p1Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
+
+        if (esJ1) {
+            // if (scene.wKey.isDown && player.body.blocked.down) {
+            //     player.setVelocityY(-1200);
+            // }
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
             }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
+
+        } else {
+            // if(player.body.blocked.down){
+            //     player.setVelocityY(-1200);
+            // }
         }
-        if (scene.wKey.isDown && player.body.blocked.down) {
-            player.setVelocityY(-saltoVel);
-        }
-        player.anims.play(`jump`, true);
-        player.once('animationcomplete', () => {
+        // console.log(player.body.velocity.y);
+        // console.log(player.body.blocked.down);
+        if (player.body.velocity.y == 0 && player.body.blocked.down) {
             this.stateMachine.transition('idle');
-        });
+            return;
+        }
     }
 }
 class WaitState extends State {
     enter(scene, player) {
+        if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "wait", posX: player.x, posY: player.y, espada: stance1 }));
         player.anims.play('parried');
         scene.time.delayedCall(wait, () => {
             p1Stop = false;
             console.log("PARRY->IDLE")
-            this.stateMachine.transition('move');
+            this.stateMachine.transition('idle');
             def1 = true;
             return;
         })
     }
     execute(scene, player) {
         const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
-        if (vJustDown) {
-            def1 = true;
-            this.stateMachine.transition('parry');
+        if (esJ1) {
+            if (vJustDown) {
+                def1 = true;
+                this.stateMachine.transition('parry');
+                return;
+            }
         }
     }
 }
 class DeadState extends State {
     enter(scene, player) {
+        //if (esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "dead", posX: player.x, posY: player.y, espada: stance1 }));
+
         player.anims.play('dead')
         scene.time.delayedCall(500, () => {
             scene.cerrarTelonDcha();
         })
-    }
-    execute(scene, player) {
-
     }
 }
 function p2LHit(box, player) {
@@ -1094,6 +1301,7 @@ function changeStance1(option) {
     } else if (option == 3) { //saltando
         stance1 = 2;
     }
+    if (esJ1) ws.send(JSON.stringify({ tipo: "IngameStance", espada: stance1 }));
 
 }
 
@@ -1103,6 +1311,8 @@ function changeStance1(option) {
 
 class IdleState2 extends State {
     enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "idle", posX: player.x, posY: player.y, espada: stance2 }));
+
         if (stance2 == 0) {
             player.anims.play('idleL');
         } else if (stance2 == 1) {
@@ -1110,82 +1320,167 @@ class IdleState2 extends State {
         } else if (stance2 == 2) {
             player.anims.play('idleH');
         }
+        def2 = true
     }
     execute(scene, player) {
-
-        def2 = true
-        //const { left, right, up, down, space } = scene.keys;
-        const n1JustDown = Phaser.Input.Keyboard.JustDown(scene.n1);
-        const n2JustDown = Phaser.Input.Keyboard.JustDown(scene.n2);
-        const n6JustDown = Phaser.Input.Keyboard.JustDown(scene.n6);
-        if (n2JustDown) {
-            changeStance2(1) //Subir guardia
-            if (stance2 == 0) {
-                player.anims.play('idleL');
-            } else if (stance2 == 1) {
-                player.anims.play('idle');
-            } else if (stance2 == 2) {
-                player.anims.play('idleH');
-            }
-        }
-        if (n1JustDown) {
-            changeStance2(0) //Bajar guardia
-            if (stance2 == 0) {
-                player.anims.play('idleL');
-            } else if (stance2 == 1) {
-                player.anims.play('idle');
-            } else if (stance2 == 2) {
-                player.anims.play('idleH');
-            }
-        }
-        if (n6JustDown) {
-            this.stateMachine.transition('parry');
-            return;
-        }
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
         if (player.body.blocked.down) {
             player.setVelocityX(0);
-            jumping2 = false;
-            if (scene.downKey.isDown) {
-                this.stateMachine.transition('crouch')
+        }
+        if (!esJ1) {
+            //const { left, right, up, down, space } = scene.keys;
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+
+            if (mJustDown) {
+                changeStance2(1) //Subir guardia
+                if (stance2 == 0) {
+                    player.anims.play('idleL');
+                } else if (stance2 == 1) {
+                    player.anims.play('idle');
+                } else if (stance2 == 2) {
+                    player.anims.play('idleH');
+                }
             }
-            if (scene.leftKey.isDown || scene.rightKey.isDown || scene.upKey.isDown) {
-                if (scene.upKey.isDown) {
+            if (nJustDown) {
+                changeStance2(0) //Bajar guardia
+                if (stance2 == 0) {
+                    player.anims.play('idleL');
+                } else if (stance2 == 1) {
+                    player.anims.play('idle');
+                } else if (stance2 == 2) {
+                    player.anims.play('idleH');
+                }
+            }
+            if (vJustDown) {
+                //console.log("Parry2 desde Idle")
+                this.stateMachine.transition('parry');
+                return;
+            }
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (player.body.blocked.down) {
+                player.setVelocityX(0);
+                jumping2 = false;
+                if (scene.wKey.isDown) {
                     this.stateMachine.transition('jump');
                     return;
                 }
-                if (scene.leftKey.isDown && scene.n0.isDown) {
-                    this.stateMachine.transition('lDash')
+                if (scene.sKey.isDown) {
+                    this.stateMachine.transition('crouch')
+                    return;
                 }
-                if (scene.rightKey.isDown && scene.n0.isDown) {
-                    this.stateMachine.transition('rDash')
+                if (scene.aKey.isDown || scene.dKey.isDown || scene.wKey.isDown) {
+                    if (scene.aKey.isDown && scene.space.isDown) {
+                        this.stateMachine.transition('lDash')
+                        return;
+                    }
+                    if (scene.dKey.isDown && scene.space.isDown) {
+                        this.stateMachine.transition('rDash')
+                        return;
+                    }
+                    if (scene.aKey.isDown) {
+                        this.stateMachine.transition('moveL');
+                        return;
+                    }
+                    if (scene.dKey.isDown) {
+                        this.stateMachine.transition('moveR');
+                        return;
+                    }
                 }
-                this.stateMachine.transition('move');
-                return;
             }
+        } else if (onlyStance) {
+            if (stance2 == 0) {
+                player.anims.play('idleL');
+            } else if (stance2 == 1) {
+                player.anims.play('idle');
+            } else if (stance2 == 2) {
+                player.anims.play('idleH');
+            }
+            onlyStance = false;
         }
     }
 }
-class MoveState2 extends State {
+class MoveStateL2 extends State {
     enter(scene, player) {
-        if (scene.rightKey.isDown) {
-            if (stance2 == 0) {
-                player.anims.play('rightL');
-            } else if (stance2 == 1) {
-                player.anims.play('right');
-            } else if (stance2 == 2) {
-                player.anims.play('rightH');
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "moveL", posX: player.x, posY: player.y, espada: stance2 }));
+
+        if (stance2 == 0) {
+            player.anims.play('leftL');
+        } else if (stance2 == 1) {
+            player.anims.play('left');
+        } else if (stance2 == 2) {
+            player.anims.play('leftH');
+        }
+        def2 = true;
+    }
+    execute(scene, player) {
+        player.setVelocityX(-moveVel);
+        if (!esJ1) {
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+            if (mJustDown) {
+                changeStance2(1) //Subir guardia
+                if (stance2 == 0) {
+                    player.anims.play('leftL');
+                } else if (stance2 == 1) {
+                    player.anims.play('left');
+                } else if (stance2 == 2) {
+                    player.anims.play('leftH');
+                }
             }
-        } else if (scene.leftKey.isDown) {
+            if (nJustDown) {
+                changeStance2(0) //Bajar guardia
+                if (stance2 == 0) {
+                    player.anims.play('leftL');
+                } else if (stance2 == 1) {
+                    player.anims.play('left');
+                } else if (stance2 == 2) {
+                    player.anims.play('leftH');
+                }
+            }
+
+            if (vJustDown) {
+                this.stateMachine.transition('parry');
+                return;
+            }
+            if (scene.aKey.isDown && scene.space.isDown) {
+                this.stateMachine.transition('lDash')
+                return;
+            }
+
+            if (scene.sKey.isDown) {
+                this.stateMachine.transition('crouch')
+                return;
+            }
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (scene.wKey.isDown && player.body.blocked.down) {
+                this.stateMachine.transition('jump');
+                return;
+            }
+            if (!(scene.aKey.isDown || scene.wKey.isDown)) {
+                this.stateMachine.transition('idle');
+                return;
+            }
+        } else if (onlyStance) {
             if (stance2 == 0) {
                 player.anims.play('leftL');
             } else if (stance2 == 1) {
@@ -1193,15 +1488,83 @@ class MoveState2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('leftH');
             }
+            onlyStance = false;
         }
     }
-    execute(scene, player) {
+}
+class MoveStateR2 extends State {
+    enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "moveR", posX: player.x, posY: player.y, espada: stance2 }));
+
+        if (stance2 == 0) {
+            player.anims.play('rightL');
+        } else if (stance2 == 1) {
+            player.anims.play('right');
+        } else if (stance2 == 2) {
+            player.anims.play('rightH');
+        }
+
+
         def2 = true
-        const n1JustDown = Phaser.Input.Keyboard.JustDown(scene.n1);
-        const n2JustDown = Phaser.Input.Keyboard.JustDown(scene.n2);
-        const n6JustDown = Phaser.Input.Keyboard.JustDown(scene.n6);
-        if (n2JustDown) {
-            changeStance2(1) //Subir guardia
+    }
+    execute(scene, player) {
+        player.setVelocityX(moveVel);
+        if (!esJ1) {
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+            if (mJustDown) {
+                changeStance2(1) //Subir guardia
+                if (stance2 == 0) {
+                    player.anims.play('rightL');
+                } else if (stance2 == 1) {
+                    player.anims.play('right');
+                } else if (stance2 == 2) {
+                    player.anims.play('rightH');
+                }
+            }
+            if (nJustDown) {
+                changeStance2(0) //Bajar guardia
+                if (stance2 == 0) {
+                    player.anims.play('rightL');
+                } else if (stance2 == 1) {
+                    player.anims.play('right');
+                } else if (stance2 == 2) {
+                    player.anims.play('rightH');
+                }
+            }
+
+            if (vJustDown) {
+                this.stateMachine.transition('parry');
+                return;
+            }
+            if (scene.dKey.isDown && scene.space.isDown) {
+                this.stateMachine.transition('rDash')
+                return;
+            }
+            if (scene.sKey.isDown) {
+                this.stateMachine.transition('crouch')
+                return;
+            }
+            if (p1Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (scene.wKey.isDown && player.body.blocked.down) {
+                this.stateMachine.transition('jump');
+                return;
+            }
+            if (!(scene.dKey.isDown || scene.wKey.isDown)) {
+                this.stateMachine.transition('idle');
+                return;
+            }
+        } else if (onlyStance) {
             if (stance2 == 0) {
                 player.anims.play('rightL');
             } else if (stance2 == 1) {
@@ -1209,78 +1572,14 @@ class MoveState2 extends State {
             } else if (stance2 == 2) {
                 player.anims.play('rightH');
             }
-            // } else if (scene.aKey.isDown) {
-            //     if (stance2 == 0) {
-            //         player.anims.play('leftL');
-            //     } else if (stance2 == 1) {
-            //         player.anims.play('left');
-            //     } else if (stance2 == 2) {
-            //         player.anims.play('leftH');
-            //     }
-        }
-        if (n1JustDown) {
-            changeStance2(0) //Bajar guardia
-            if (stance2 == 0) {
-                player.anims.play('rightL');
-            } else if (stance2 == 1) {
-                player.anims.play('right');
-            } else if (stance2 == 2) {
-                player.anims.play('rightH');
-            }
-            // } else if (scene.aKey.isDown) {
-            //     if (stance2 == 0) {
-            //         player.anims.play('leftL');
-            //     } else if (stance2 == 1) {
-            //         player.anims.play('left');
-            //     } else if (stance2 == 2) {
-            //         player.anims.play('leftH');
-            //     }
-        }
-        if (n6JustDown) {
-            this.stateMachine.transition('parry');
-            return;
-        }
-        if (scene.leftKey.isDown && scene.n0.isDown) {
-            this.stateMachine.transition('lDash')
-            return;
-        }
-        if (scene.rightKey.isDown && scene.n0.isDown) {
-            this.stateMachine.transition('rDash')
-            return;
-        }
-        if (scene.downKey.isDown) {
-            this.stateMachine.transition('crouch')
-            return;
-        }
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
-        if (scene.upKey.isDown) {
-            this.stateMachine.transition('jump');
-            return;
-        }
-        if (!(scene.leftKey.isDown || scene.rightKey.isDown || scene.upKey.isDown)) {
-            this.stateMachine.transition('idle');
-            return;
-        }
-        if (scene.rightKey.isDown) {
-            player.setVelocityX(moveVel);
-            return;
-        } else if (scene.leftKey.isDown) {
-            player.setVelocityX(-moveVel);
-            return;
+            onlyStance = false;
         }
     }
 }
 class LightState2 extends State {
     enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "light", posX: player.x, posY: player.y, espada: stance2 }));
+
         def2 = false
         if (stance2 == 0) {
             player.anims.play('lightL');
@@ -1318,6 +1617,7 @@ class LightState2 extends State {
 }
 class HeavyState2 extends State {
     enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "heavy", posX: player.x, posY: player.y, espada: stance2 }));
         def2 = false
         if (stance2 == 0) {
             player.anims.play('heavyL');
@@ -1355,58 +1655,71 @@ class HeavyState2 extends State {
     }
 }
 class RDashState2 extends State {
+    enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "rDash", posX: player.x, posY: player.y, espada: stance2 }));
+    }
     execute(scene, player) {
         def2 = false
         player.setVelocityX(dashVel);
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
         if (position = 0) {
             player.anims.play(`fDash`, true);
         } else {
             player.anims.play(`bDash`, true);
         }
-        if (scene.downKey.isDown) {
-            def2 = true
-            this.stateMachine.transition('crouch')
-            return;
+        if (!esJ1) {
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+
+            if (scene.sKey.isDown) {
+                def2 = true
+                this.stateMachine.transition('crouch')
+                return;
+            }
         }
         player.once('animationcomplete', () => {
             def2 = true
             this.stateMachine.transition('idle');
+            return;
         });
     }
 }
 class LDashState2 extends State {
+    enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "lDash", posX: player.x, posY: player.y, espada: stance2 }));
+    }
     execute(scene, player) {
         def2 = false
         player.setVelocityX(-dashVel);
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
         if (position = 0) {
             player.anims.play(`bDash`, true);
         } else {
             player.anims.play(`fDash`, true);
         }
-        if (scene.downKey.isDown) {
-            def2 = true
-            this.stateMachine.transition('crouch')
-            return;
+        if (!esJ1) {
+            if (p2Stop == false) {
+                if (scene.n4.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.n5.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+
+            if (scene.downKey.isDown) {
+                def2 = true
+                this.stateMachine.transition('crouch')
+                return;
+            }
         }
         player.once('animationcomplete', () => {
             def2 = true
@@ -1416,6 +1729,7 @@ class LDashState2 extends State {
 }
 class ParryState2 extends State {
     enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "parry", posX: player.x, posY: player.y, espada: stance2 }));
         parry2 = true
         player.anims.play(`parry`, true);
         def2 = true
@@ -1437,58 +1751,78 @@ class ParryState2 extends State {
     }
 }
 class CrouchState2 extends State {
+    enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "crouch", posX: player.x, posY: player.y, espada: stance2 }));
+    }
     execute(scene, player) {
         changeStance2(2)
         crouch2 = true;
         player.setVelocityX(0);
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
-            }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
-        }
-        if (!(scene.downKey.isDown)) {
-            crouch2 = false;
-            this.stateMachine.transition('idle');
-            return;
-        } else {
-            player.setVelocityX(0);
 
-            player.anims.play('crouch', true);
+        player.anims.play('crouch', true);
+        if (!esJ1) {
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
+            }
+            if (!(scene.sKey.isDown)) {
+                crouch2 = false;
+                this.stateMachine.transition('idle');
+                return;
+            }
         }
 
     }
 }
 class JumpState2 extends State {
+    enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "jump", posX: player.x, posY: player.y, espada: stance2 }));
+        player.setVelocityY(-saltoVel);
+    }
+
     execute(scene, player) {
+        player.anims.play(`jump`, true);
         def2 = false
         jumping2 = true
-        //changeStance2(2)
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
+        //changeStance1(2)
+
+        if (!esJ1) {
+            // if (scene.wKey.isDown && player.body.blocked.down) {
+            //     player.setVelocityY(-1200);
+            // }
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
             }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
-                return;
-            }
+
+        } else {
+            //     if(player.body.blocked.down)
+            //     player.setVelocityY(-1200);
         }
-        if (scene.upKey.isDown && player.body.blocked.down) {
-            player.setVelocityY(-saltoVel);
-        }
-        player.anims.play(`jump`, true);
-        player.once('animationcomplete', () => {
+        // console.log(player.body.velocity.y);
+        // console.log(player.body.blocked.down);
+        if (player.body.velocity.y == 0 && player.body.blocked.down) {
             this.stateMachine.transition('idle');
-        });
+            return;
+        }
     }
 }
 class WaitState2 extends State {
     enter(scene, player) {
+        if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "wait", posX: this.player.x, posY: this.player.y, espada: stance2 }));
+
         player.anims.play('parried');
         scene.time.delayedCall(wait, () => {
             p2Stop = false;
@@ -1498,8 +1832,8 @@ class WaitState2 extends State {
         })
     }
     execute(scene, player) {
-        const n6JustDown = Phaser.Input.Keyboard.JustDown(scene.n6);
-        if (n6JustDown) {
+        const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+        if (vJustDown) {
             def2 = true
             this.stateMachine.transition('parry');
         }
@@ -1507,14 +1841,12 @@ class WaitState2 extends State {
 }
 class DeadState2 extends State {
     enter(scene, player) {
+        //if (!esJ1) ws.send(JSON.stringify({ tipo: "Ingame", estado: "dead", posX: player.x, posY: player.y, espada: stance2 }));
         player.anims.play('dead');
         scene.time.delayedCall(500, () => {
             console.log("CAMBIO DE ESCENA")
             scene.cerrarTelonIzq();
         })
-    }
-    execute(scene, player) {
-
     }
 }
 function p1LHit(box, player) {
@@ -1599,7 +1931,7 @@ function changeStance2(option) {
     } else if (option == 3) { //saltando
         stance2 = 2;
     }
-
+    if (!esJ1) ws.send(JSON.stringify({ tipo: "IngameStance", espada: stance2 }));
 }
 
 //fin clasespersonaje

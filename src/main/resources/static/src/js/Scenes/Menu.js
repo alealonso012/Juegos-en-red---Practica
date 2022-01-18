@@ -1,5 +1,3 @@
-var volumen;
-
 export class Menu extends Phaser.Scene {
 
     constructor() {
@@ -24,7 +22,7 @@ export class Menu extends Phaser.Scene {
         // }).setOrigin(0.5);
 
         var localButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.42, "local").setScale(0.24);
-        var onlineButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.53, "online").setScale(0.24);
+        var onlineButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.53, "online").setScale(0.24).setInteractive();
 
         var hoverSprite = this.add.sprite(100,100,"flecha");
         hoverSprite.setScale(0.8);
@@ -69,6 +67,11 @@ export class Menu extends Phaser.Scene {
             this.scene.start("Seleccion");
         })
 
+        onlineButton.on("pointerdown", () => {
+            console.log("Matchmakeando");
+            this.scene.start("Matchmaking");
+        })
+
         var texto5 = this.add.text(this.game.renderer.width * 0.07, this.game.renderer.height * 0.05, "Atrás", {
             fontStyle: 'bold',
             fontSize: "55px",
@@ -76,7 +79,7 @@ export class Menu extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive();
 
         texto5.on("pointerdown", () => {
-            this.scene.start("Inicio", {volumen: this.volumen});
+            this.scene.start("Inicio", {});
         })
     }   
 
