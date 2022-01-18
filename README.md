@@ -143,6 +143,11 @@ Rendición | Escape (Mantener) | Cuadrado+L2 (Mantener)
 ##### En esta pantalla se ven todos los records de partidas ganadas de los usuarios registrados en el juego
 <img src=".\ImagenesReadme\LeaderBoard.png">
 
+# Fase 4
+## Actualización diagrama de clases
+##### En la siguiente imagen se muestran las diferentes clases de la API REST para establecer conexión entre usuario y servidor, más las utilizadas para manejar todo lo referente al uso de WebSockets
+<img src=".\ImagenesReadme\DiagramaDeClasesActualizado.png">
+
 ##### La música que se escuchará a lo largo del juego serán canciones sacados de internet de libre uso.
 ##### Menus: {Stopping by the Inn} by Twin Musicom (twinmusicom.org)
 ##### In-game: {Epic Battle} by Twin Musicom (twinmusicom.org)
