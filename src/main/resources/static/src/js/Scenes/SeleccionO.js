@@ -204,7 +204,7 @@ export class SeleccionO extends Phaser.Scene {
     }
 
     update() {
-        if (this.ready1 && this.ready2) this.scene.start("EscO3", { derecha: true });
+        if (this.ready1 && this.ready2) this.scene.start("EscO3", { derecha: true, jugador: jugador, socket: ws});
         if (bListo1) {
             this.RecuadroIzq.setVisible(true);
             this.ListoImg.setVisible(true);

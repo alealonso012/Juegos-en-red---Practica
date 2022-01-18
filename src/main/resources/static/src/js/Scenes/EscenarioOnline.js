@@ -13,7 +13,15 @@ var crouch2 = false; //Jugador 2 agachado
 var p1Stop = false; //No permite al jugador1 atacar.
 var p2Stop = false; //No permite al jugador2 atacar.
 var wait = 0;
+
+//WebSocket
 var esJ1 = true;
+var state = "idle";
+var ws;
+var posX;
+var posY;
+var espada;
+var jugador;
 
 import { StateMachine } from './statemachine/StateMachine.js'
 
@@ -25,28 +33,26 @@ export class EscenarioOnline extends Phaser.Scene {
     leftScene;
     rightScene;
     esc;
-    platJson;
 
-    constructor(key, lScene, rScene, esc, pJson) {
+    constructor(key, lScene, rScene, esc) {
         super(key);
         this.leftScene = lScene;
         this.rightScene = rScene;
         this.esc = esc;
-        this.platJson = pJson;
-        //this.scene = this.scene;
     }
 
     init(data) {
         this.Derecha = data.derecha;
-        console.log(this.Derecha);
+        jugador = data.jugador;
+        esJ1 = (data.jugador == 1) ? true : false;
+        ws = data.socket;
     }
 
     preload() {
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
-        this.load.image('Fondo', "/resources/img/FondoIngame.png");
-        this.load.image("tiles", "/resources/img/Plataformas.png");
-        this.load.tilemapTiledJSON(this.platJson, this.platJson);
+        this.load.image(this.esc, this.esc);
+
         //INICIO COSAS PERSONAJE
         this.load.spritesheet('run',
             'src/js/Scenes/pj/RunMid.png',
@@ -109,10 +115,7 @@ export class EscenarioOnline extends Phaser.Scene {
         this.ping = this.sound.add('ping', { volume: 1 });
         console.log(this.scene.key);
 
-        this.add.image(0, 0, "Fondo").setOrigin(0);
-        const map = this.make.tilemap({ key: this.platJson, tileWidth: 16, tileHeight: 16 });
-        const tileset = map.addTilesetImage("Plataformas", "tiles");
-        const layer = map.createLayer("toplayout", tileset, this.game.renderer.width * 0.27, this.game.renderer.height * 0.15).setScale(1);
+        this.add.image(0, 0, this.esc).setOrigin(0);
 
         this.telon = this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000).setOrigin(0);
 
@@ -329,14 +332,128 @@ export class EscenarioOnline extends Phaser.Scene {
         //Declaración de teclas J2
 
         //COLLIDERS
-        //this.physics.add.collider(this.player, platforms);
-        //this.physics.add.collider(player2, platforms);
-
         this.physics.add.overlap(this.lHitbox, this.player2, p2LHit, undefined, this);
         this.physics.add.overlap(this.hHitbox, this.player2, p2HHit, undefined, this);
 
         this.physics.add.overlap(this.lHitbox2, this.player, p1LHit, undefined, this);
         this.physics.add.overlap(this.hHitbox2, this.player, p1HHit, undefined, this);
+
+        if (this.scene.key == 'Esc1' || this.scene.key == 'EscO1') {
+            var c1 = this.add.rectangle(0, 800, 1310, 280).setOrigin(0);
+            var c2 = this.add.rectangle(1550, 800, 370, 280).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+        }
+        else if (this.scene.key == 'Esc2' || this.scene.key == 'EscO2') {
+            var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
+            var c2 = this.add.rectangle(230, 590, 320, 50).setOrigin(0);
+            var c3 = this.add.rectangle(1180, 590, 70, 340).setOrigin(0);
+            var c4 = this.add.rectangle(1450, 590, 70, 210).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            this.physics.add.existing(c3);
+            this.physics.add.existing(c4);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c3.body.setImmovable(true);
+            c4.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+            c3.body.allowGravity = false;
+            c4.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player, c3);
+            this.physics.add.collider(this.player, c4);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+            this.physics.add.collider(this.player2, c3);
+            this.physics.add.collider(this.player2, c4);
+        }
+        else if (this.scene.key == 'Esc3' || this.scene.key == 'EscO3') {
+            var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
+            var c2 = this.add.rectangle(160, 430, 320, 50).setOrigin(0);
+            var c3 = this.add.rectangle(720, 590, 490, 50).setOrigin(0);
+            var c4 = this.add.rectangle(1450, 430, 320, 50).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            this.physics.add.existing(c3);
+            this.physics.add.existing(c4);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c3.body.setImmovable(true);
+            c4.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+            c3.body.allowGravity = false;
+            c4.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player, c3);
+            this.physics.add.collider(this.player, c4);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+            this.physics.add.collider(this.player2, c3);
+            this.physics.add.collider(this.player2, c4);
+        }
+        else if (this.scene.key == 'Esc4' || this.scene.key == 'EscO4') {
+            var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
+            var c2 = this.add.rectangle(410, 590, 340, 50).setOrigin(0);
+            var c3 = this.add.rectangle(410, 590, 70, 210).setOrigin(0);
+            var c4 = this.add.rectangle(1370, 590, 320, 50).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            this.physics.add.existing(c3);
+            this.physics.add.existing(c4);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c3.body.setImmovable(true);
+            c4.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+            c3.body.allowGravity = false;
+            c4.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player, c3);
+            this.physics.add.collider(this.player, c4);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+            this.physics.add.collider(this.player2, c3);
+            this.physics.add.collider(this.player2, c4);
+        }
+        else if (this.scene.key == 'Esc5' || this.scene.key == 'EscO5') {
+            var c1 = this.add.rectangle(0, 800, 380, 280).setOrigin(0);
+            var c2 = this.add.rectangle(610, 800, 1310, 280).setOrigin(0);
+
+            this.physics.add.existing(c1);
+            this.physics.add.existing(c2);
+            c1.body.setImmovable(true);
+            c2.body.setImmovable(true);
+            c1.body.allowGravity = false;
+            c2.body.allowGravity = false;
+
+            this.physics.add.collider(this.player, c1);
+            this.physics.add.collider(this.player, c2);
+            this.physics.add.collider(this.player2, c1);
+            this.physics.add.collider(this.player2, c2);
+        }
         //COLLIDERS
 
 
@@ -373,13 +490,6 @@ export class EscenarioOnline extends Phaser.Scene {
 
         }, [this, this.player2])
         //FIN COSAS PERSONAJE
-        this.physics.add.collider(this.player2, layer);
-        this.physics.add.collider(this.player, layer);
-
-        this.player.body.setMaxVelocityY(1100);
-        this.player2.body.setMaxVelocityY(1100);
-
-        layer.setCollisionBetween(340, 664);
 
         if (this.scene.get('Inicio').data.get('logeado')) {
             this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
@@ -400,6 +510,19 @@ export class EscenarioOnline extends Phaser.Scene {
             fontSize: "35px",
             fill: "#ffffff"
         }).setOrigin(0.5);
+
+        ws.onmessage = function (msg) {
+            console.log("WS message: " + msg.data);
+            var msj = JSON.parse(msg.data)
+            var tipo = msj.tipo;
+            if (tipo == "Ingame") {
+                state = msj.estado;
+                console.log(state);
+                posX = msj.posX;
+                posY = msj.posY;
+                espada = msj.espada;
+            }
+        }
     }
 
     shutdown() {
@@ -411,22 +534,33 @@ export class EscenarioOnline extends Phaser.Scene {
 
         //Cosas personaje
         if (this.player.x < this.player2.x) {
-            this.player.flipX = false
-            this.player2.flipX = true
-            position = 1
+            this.player.flipX = false;
+            this.player2.flipX = true;
+            position = 1;
             this.player.setOffset(175, 175);
             this.player2.setOffset(225, 175);
             this.textP1.setPosition(this.player.x - 9, this.player.y - 70);
             this.textP2.setPosition(this.player2.x + 9, this.player2.y - 70);
 
         } else {
-            this.player.flipX = true
-            this.player2.flipX = false
-            position = 2
+            this.player.flipX = true;
+            this.player2.flipX = false;
+            position = 2;
             this.player.setOffset(225, 175);
             this.player2.setOffset(175, 175);
             this.textP1.setPosition(this.player.x + 9, this.player.y - 70);
             this.textP2.setPosition(this.player2.x - 9, this.player2.y - 70);
+        }
+
+        if(!esJ1){
+            this.stateMachine.transition(state);
+            //this.player.setPosition(posX,posY);
+            stance1 = espada;
+        }
+        else{
+            this.stateMachine2.transition(state);
+            //this.player2.setPosition(posX,posY);
+            stance2 = espada;
         }
 
         //Muerte por caida
@@ -496,14 +630,14 @@ export class EscenarioOnline extends Phaser.Scene {
             if (this.telon.body.x > 0) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
-                this.scene.start(this.leftScene, { derecha: true });
+                this.scene.start(this.leftScene, { derecha: true, jugador: jugador, socket: ws});
             }
         }
         else {
             if (this.telon.body.x < 0) {
                 this.telon.body.setVelocityX(0);
                 this.telon.toggleData('abierto');
-                this.scene.start(this.rightScene, { derecha: false });
+                this.scene.start(this.rightScene, { derecha: false, jugador: jugador, socket: ws});
             }
         }
     }
@@ -514,6 +648,7 @@ export class EscenarioOnline extends Phaser.Scene {
 //CLASES PERSONAJE
 class IdleState extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "idle",posX: player.x, posY: player.y, espada: stance1}));
         def1 = true;
         if (stance1 == 0) {
             player.anims.play('idleL');
@@ -525,11 +660,11 @@ class IdleState extends State {
     }
     execute(scene, player) {
         if (esJ1) {
-        //const { left, right, up, down, space } = scene.keys;
-        const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
-        const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
-        const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
-        
+            //const { left, right, up, down, space } = scene.keys;
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+
             if (mJustDown) {
                 changeStance1(1) //Subir guardia
                 if (stance1 == 0) {
@@ -600,6 +735,8 @@ class IdleState extends State {
 }
 class MoveStateL extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "moveL", posX: player.x, posY: player.y, espada: stance1}));
+
         if (stance1 == 0) {
             player.anims.play('leftL');
         } else if (stance1 == 1) {
@@ -671,6 +808,7 @@ class MoveStateL extends State {
 }
 class MoveStateR extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "moveR", posX: player.x, posY: player.y, espada: stance1}));
 
         if (scene.dKey.isDown) {
             if (stance1 == 0) {
@@ -744,6 +882,8 @@ class MoveStateR extends State {
 }
 class LightState extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "light", posX: player.x, posY: player.y, espada: stance1}));
+
         def1 = false;
         if (stance1 == 0) {
             player.anims.play('lightL');
@@ -783,6 +923,8 @@ class LightState extends State {
 }
 class HeavyState extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "heavy", posX: player.x, posY: player.y, espada: stance1}));
+
         def1 = false;
         if (stance1 == 0) {
             player.anims.play('heavyL');
@@ -819,6 +961,9 @@ class HeavyState extends State {
     }
 }
 class RDashState extends State {
+    enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "rDash", posX: player.x, posY: player.y, espada: stance1}));
+    }
     execute(scene, player) {
         def1 = false
         player.setVelocityX(700);
@@ -852,6 +997,9 @@ class RDashState extends State {
     }
 }
 class LDashState extends State {
+    enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "lDash", posX: player.x, posY: player.y, espada: stance1}));
+    }
     execute(scene, player) {
         def1 = false
         player.setVelocityX(-700);
@@ -886,6 +1034,7 @@ class LDashState extends State {
 }
 class ParryState extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "parry", posX: player.x, posY: player.y, espada: stance1}));
         player.anims.play(`parry`, true);
         parry1 = true
         def1 = true
@@ -909,6 +1058,9 @@ class ParryState extends State {
     }
 }
 class CrouchState extends State {
+    enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "crouch", posX: player.x, posY: player.y, espada: stance1}));
+    }
     execute(scene, player) {
         changeStance1(2)
         crouch1 = true;
@@ -937,6 +1089,9 @@ class CrouchState extends State {
     }
 }
 class JumpState extends State {
+    enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "jump", posX: player.x, posY: player.y, espada: stance1}));
+    }
     execute(scene, player) {
         player.anims.play(`jump`, true);
         def1 = false
@@ -968,6 +1123,7 @@ class JumpState extends State {
 }
 class WaitState extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "wait", posX: player.x, posY: player.y, espada: stance1}));
         player.anims.play('parried');
         scene.time.delayedCall(wait, () => {
             p1Stop = false;
@@ -990,6 +1146,8 @@ class WaitState extends State {
 }
 class DeadState extends State {
     enter(scene, player) {
+        if(esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "dead", posX: player.x, posY: player.y, espada: stance1}));
+
         player.anims.play('dead')
         scene.time.delayedCall(500, () => {
             scene.cerrarTelonDcha();
@@ -1079,6 +1237,7 @@ function changeStance1(option) {
     } else if (option == 3) { //saltando
         stance1 = 2;
     }
+    ws.send(JSON.stringify({tipo: "Ingame", espada: stance1}));
 
 }
 
@@ -1088,6 +1247,8 @@ function changeStance1(option) {
 
 class IdleState2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "idle", posX: player.x, posY: player.y, espada: stance2}));
+
         if (stance2 == 0) {
             player.anims.play('idleL');
         } else if (stance2 == 1) {
@@ -1095,17 +1256,17 @@ class IdleState2 extends State {
         } else if (stance2 == 2) {
             player.anims.play('idleH');
         }
-        
+
         def2 = true
     }
     execute(scene, player) {
 
         if (!esJ1) {
-        //const { left, right, up, down, space } = scene.keys;
-        const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
-        const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
-        const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
-        
+            //const { left, right, up, down, space } = scene.keys;
+            const mJustDown = Phaser.Input.Keyboard.JustDown(scene.mKey);
+            const nJustDown = Phaser.Input.Keyboard.JustDown(scene.nKey);
+            const vJustDown = Phaser.Input.Keyboard.JustDown(scene.vKey);
+
             if (mJustDown) {
                 changeStance2(1) //Subir guardia
                 if (stance2 == 0) {
@@ -1176,6 +1337,8 @@ class IdleState2 extends State {
 }
 class MoveStateL2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "moveL", posX: player.x, posY: player.y, espada: stance2}));
+
         if (stance2 == 0) {
             player.anims.play('leftL');
         } else if (stance2 == 1) {
@@ -1183,7 +1346,7 @@ class MoveStateL2 extends State {
         } else if (stance2 == 2) {
             player.anims.play('leftH');
         }
-        def2=true;
+        def2 = true;
     }
     execute(scene, player) {
         player.setVelocityX(-250);
@@ -1248,6 +1411,8 @@ class MoveStateL2 extends State {
 }
 class MoveStateR2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "moveR", posX: player.x, posY: player.y, espada: stance2}));
+
 
         if (scene.dKey.isDown) {
             if (stance2 == 0) {
@@ -1258,7 +1423,7 @@ class MoveStateR2 extends State {
                 player.anims.play('rightH');
             }
         }
-        
+
         def2 = true
     }
     execute(scene, player) {
@@ -1323,6 +1488,8 @@ class MoveStateR2 extends State {
 }
 class LightState2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "light", posX: player.x, posY: player.y, espada: stance2}));
+
         def2 = false
         if (stance2 == 0) {
             player.anims.play('lightL');
@@ -1360,6 +1527,7 @@ class LightState2 extends State {
 }
 class HeavyState2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "heavy", posX: player.x, posY: player.y, espada: stance2}));
         def2 = false
         if (stance2 == 0) {
             player.anims.play('heavyL');
@@ -1397,6 +1565,9 @@ class HeavyState2 extends State {
     }
 }
 class RDashState2 extends State {
+    enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "rDash", posX: player.x, posY: player.y, espada: stance2}));
+    }
     execute(scene, player) {
         def2 = false
         player.setVelocityX(700);
@@ -1405,24 +1576,24 @@ class RDashState2 extends State {
         } else {
             player.anims.play(`bDash`, true);
         }
-        if(!esJ1){
-        if (p2Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
+        if (!esJ1) {
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
             }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
+
+            if (scene.sKey.isDown) {
+                def2 = true
+                this.stateMachine.transition('crouch')
                 return;
             }
         }
-        
-        if (scene.sKey.isDown) {
-            def2 = true
-            this.stateMachine.transition('crouch')
-            return;
-        }
-    }
         player.once('animationcomplete', () => {
             def2 = true
             this.stateMachine.transition('idle');
@@ -1431,6 +1602,9 @@ class RDashState2 extends State {
     }
 }
 class LDashState2 extends State {
+    enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "lDash", posX: player.x, posY: player.y, espada: stance2}));
+    }
     execute(scene, player) {
         def2 = false
         player.setVelocityX(-700);
@@ -1439,24 +1613,24 @@ class LDashState2 extends State {
         } else {
             player.anims.play(`fDash`, true);
         }
-        if(!esJ1){
-        if (p2Stop == false) {
-            if (scene.n4.isDown) {
-                this.stateMachine.transition('light');
-                return;
+        if (!esJ1) {
+            if (p2Stop == false) {
+                if (scene.n4.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.n5.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
             }
-            if (scene.n5.isDown) {
-                this.stateMachine.transition('heavy');
+
+            if (scene.downKey.isDown) {
+                def2 = true
+                this.stateMachine.transition('crouch')
                 return;
             }
         }
-        
-        if (scene.downKey.isDown) {
-            def2 = true
-            this.stateMachine.transition('crouch')
-            return;
-        }
-    }
         player.once('animationcomplete', () => {
             def2 = true
             this.stateMachine.transition('idle');
@@ -1465,6 +1639,7 @@ class LDashState2 extends State {
 }
 class ParryState2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "parry", posX: player.x, posY: player.y, espada: stance2}));
         parry2 = true
         player.anims.play(`parry`, true);
         def2 = true
@@ -1486,33 +1661,48 @@ class ParryState2 extends State {
     }
 }
 class CrouchState2 extends State {
+    enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "crouch", posX: player.x, posY: player.y, espada: stance2}));
+    }
     execute(scene, player) {
         changeStance2(2)
         crouch2 = true;
         player.setVelocityX(0);
 
         player.anims.play('crouch', true);
-        if(!esJ1){
-        if (p2Stop == false) {
-            if (scene.kKey.isDown) {
-                this.stateMachine.transition('light');
-                return;
+        if (!esJ1) {
+            if (p2Stop == false) {
+                if (scene.kKey.isDown) {
+                    this.stateMachine.transition('light');
+                    return;
+                }
+                if (scene.jKey.isDown) {
+                    this.stateMachine.transition('heavy');
+                    return;
+                }
             }
-            if (scene.jKey.isDown) {
-                this.stateMachine.transition('heavy');
+            if (!(scene.sKey.isDown)) {
+                crouch2 = false;
+                this.stateMachine.transition('idle');
                 return;
             }
         }
-        if (!(scene.sKey.isDown)) {
-            crouch2 = false;
-            this.stateMachine.transition('idle');
-            return;
-        }
-    }
 
     }
 }
 class JumpState2 extends State {
+    enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "jump", posX: player.x, posY: player.y, espada: stance2}));
+
+        player.anims.play('parried');
+        scene.time.delayedCall(wait, () => {
+            p2Stop = false;
+            this.stateMachine.transition('idle');
+            def2 = true;
+            return;
+        })
+    }
+    
     execute(scene, player) {
         player.anims.play(`jump`, true);
         def2 = false
@@ -1544,6 +1734,8 @@ class JumpState2 extends State {
 }
 class WaitState2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "wait", posX: this.player.x, posY: this.player.y, espada: stance2}));
+
         player.anims.play('parried');
         scene.time.delayedCall(wait, () => {
             p2Stop = false;
@@ -1562,6 +1754,7 @@ class WaitState2 extends State {
 }
 class DeadState2 extends State {
     enter(scene, player) {
+        if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", estado: "dead", posX: player.x, posY: player.y, espada: stance2}));
         player.anims.play('dead');
         scene.time.delayedCall(500, () => {
             console.log("CAMBIO DE ESCENA")
@@ -1651,7 +1844,7 @@ function changeStance2(option) {
     } else if (option == 3) { //saltando
         stance2 = 2;
     }
-
+    if(!esJ1)ws.send(JSON.stringify({tipo: "Ingame", espada: stance2}));
 }
 
 //fin clasespersonaje

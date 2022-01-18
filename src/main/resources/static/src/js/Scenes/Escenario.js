@@ -24,19 +24,17 @@ export class Escenario extends Phaser.Scene {
     leftScene;
     rightScene;
     esc;
-    platJson;
 
-    constructor(key, lScene, rScene, esc, pJson) {
+    constructor(key, lScene, rScene, esc) {
         super(key);
         this.leftScene = lScene;
         this.rightScene = rScene;
         this.esc = esc;
-        this.platJson = pJson;
-        //this.scene = this.scene;
     }
 
     init(data) {
         this.Derecha = data.derecha;
+
         console.log(this.Derecha);
     }
 
@@ -44,8 +42,6 @@ export class Escenario extends Phaser.Scene {
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
         this.load.image(this.esc, this.esc);
-        //this.load.image("tiles", "/resources/img/Plataformas.png");
-        this.load.tilemapTiledJSON(this.platJson, this.platJson);
         //INICIO COSAS PERSONAJE
         this.load.spritesheet('run',
             'src/js/Scenes/pj/RunMid.png',
@@ -109,9 +105,6 @@ export class Escenario extends Phaser.Scene {
         console.log(this.scene.key);
 
         this.add.image(0, 0, this.esc).setOrigin(0);
-        const map = this.make.tilemap({ key: this.platJson, tileWidth: 10, tileHeight: 10 });
-        const tileset = map.addTilesetImage(this.esc, this.esc);
-        const layer = map.createLayer("toplayout", tileset, 0, 0).setScale(1);
 
         this.telon = this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000).setOrigin(0);
 
@@ -327,8 +320,6 @@ export class Escenario extends Phaser.Scene {
         //Declaración de teclas J2
 
         //COLLIDERS
-        //this.physics.add.collider(this.player, platforms);
-        //this.physics.add.collider(player2, platforms);
 
         this.physics.add.overlap(this.lHitbox, this.player2, p2LHit, undefined, this);
         this.physics.add.overlap(this.hHitbox, this.player2, p2HHit, undefined, this);
@@ -486,13 +477,6 @@ export class Escenario extends Phaser.Scene {
 
         }, [this, this.player2])
         //FIN COSAS PERSONAJE
-        // this.physics.add.collider(this.player2, layer);
-        // this.physics.add.collider(this.player, layer);
-
-        // this.player.body.setMaxVelocityY(1500);
-        // this.player2.body.setMaxVelocityY(1500);
-
-        layer.setCollisionBetween(7488, 16511);
 
         if (this.scene.get('Inicio').data.get('logeado')) {
             this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
