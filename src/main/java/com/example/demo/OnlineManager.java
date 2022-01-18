@@ -82,7 +82,7 @@ public class OnlineManager extends TextWebSocketHandler {
 			// sessions.get(parejas.get(conexion.getId())).sendMessage(new
 			// TextMessage(newNode.toString()));
 
-		} else if (tipo.equals("Ingame")) {
+		} else if (tipo.equals("Ingame") || tipo.equals("IngameStance")) {
 			sessions.get(parejas.get(conexion.getId())).sendMessage(message); //
 
 		} else if (tipo.equals("Revancha")) {
