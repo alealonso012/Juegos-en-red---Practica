@@ -15,6 +15,7 @@ export class Menu extends Phaser.Scene {
     }
 
     create(){
+        
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
         // this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "Selección de modo", {
         //     fontSize: "40px",
