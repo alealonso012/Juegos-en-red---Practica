@@ -7,6 +7,8 @@ export class Creditos extends Phaser.Scene {
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('logoequipo', "/resources/img/logoequipo.png");
         this.load.image('logoinsta', "/resources/img/logoinsta.png");
+        this.load.image('Atras', "/resources/img/atras.png");
+        this.load.image('Atras2', "/resources/img/atras2.png");
     }
 
     create() {
@@ -33,14 +35,20 @@ export class Creditos extends Phaser.Scene {
             fill: "#e8d59e"
         }).setOrigin(0.5).setInteractive();
 
-        var texto5 = this.add.text(this.game.renderer.width * 0.5, this.game.renderer.height * 0.9, "Atrás", {
-            fontStyle: 'bold',
-            fontSize: "55px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setInteractive();
+        var atras = this.add.image(this.game.renderer.width * 0.05, this.game.renderer.height * 0.075, "Atras2", {
 
-        texto5.on("pointerdown", () => {
+        }).setOrigin(0.5).setScale(0.6).setInteractive();
+
+        atras.on("pointerdown", () => {
             this.scene.start("Inicio", {});
+        });
+
+        atras.on("pointerover", () => {
+            atras.setTexture("Atras");
+        });
+
+        atras.on("pointerout", () => {
+            atras.setTexture("Atras2");
         });
 
         logoi.on('pointerup', openLink);

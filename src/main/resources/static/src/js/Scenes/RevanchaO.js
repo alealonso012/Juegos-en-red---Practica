@@ -196,6 +196,8 @@ export class RevanchaO extends Phaser.Scene {
                 this.textoNo.setVisible(false).removeInteractive();
                 this.textoSalir.setVisible(true).setInteractive();
                 this.textoSalir.on("pointerdown", () => {
+                    var salir = { tipo: "Revancha", mensaje: "No"};
+                    ws.send(JSON.stringify(salir));
                     this.scene.start("Inicio", {});
                 })
 

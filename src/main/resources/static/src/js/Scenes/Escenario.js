@@ -349,7 +349,7 @@ export class Escenario extends Phaser.Scene {
         else if (this.scene.key == 'Esc2' || this.scene.key == 'EscO2') {
             var c1 = this.add.rectangle(0, 800, 1920, 280).setOrigin(0);
             var c2 = this.add.rectangle(230, 590, 320, 50).setOrigin(0);
-            var c3 = this.add.rectangle(1180, 590, 70, 340).setOrigin(0);
+            var c3 = this.add.rectangle(1180, 590, 340, 50).setOrigin(0);
             var c4 = this.add.rectangle(1450, 590, 70, 210).setOrigin(0);
 
             this.physics.add.existing(c1);

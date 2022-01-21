@@ -32,7 +32,7 @@ export class Matchmaking extends Phaser.Scene {
             fill: "#e8d59e"
         }).setOrigin(0.5);
 
-        ws = new WebSocket('ws://localhost:8080/online');
+        ws = new WebSocket('ws://192.168.1.129:8080/online');
         ws.onopen = function () {
             var msg = {tipo: "Busqueda", mensaje: "Abrir"}
             ws.send(JSON.stringify(msg));

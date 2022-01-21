@@ -5,6 +5,8 @@ export class Leaderboard extends Phaser.Scene {
     }
     preload() {
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
+        this.load.image('Atras', "/resources/img/atras.png");
+        this.load.image('Atras2', "/resources/img/atras2.png");
     }
 
     create() {
@@ -24,13 +26,13 @@ export class Leaderboard extends Phaser.Scene {
             var temp;
             $.ajax({
                 url: "./leaderboard",
-                async:false
+                async: false
             }).done(function (data) {
                 data.sort((a, b) => (a.ganadas > b.ganadas) ? -1 : 1)
                 console.log(data.length)
                 console.log(a)
-                for(var i=0; i<data.length;i++){
-                a = a + data[i].nickname +"\n-------------------------------------------\n"
+                for (var i = 0; i < data.length; i++) {
+                    a = a + data[i].nickname + "\n-------------------------------------------\n"
                 }
                 console.log(a);
                 temp = a;
@@ -41,12 +43,12 @@ export class Leaderboard extends Phaser.Scene {
             var temp;
             $.ajax({
                 url: "./leaderboard",
-                async:false
+                async: false
             }).done(function (data) {
-                data.sort((a, b) => (a.ganadas > b.ganadas) ? -1 : 1)
-                console.log(a)
-                for(var i=0; i<data.length;i++){
-                a = a + data[i].ganadas + "\n\n"
+                data.sort((a, b) => (a.ganadas > b.ganadas) ? -1 : 1);
+                console.log(a);
+                for (var i = 0; i < data.length; i++) {
+                    a = a + data[i].ganadas + "\n\n"
                 }
                 console.log(a);
                 temp = a;
@@ -54,7 +56,7 @@ export class Leaderboard extends Phaser.Scene {
             return temp;
         }
         this.user = leerUser(this.user);
-        
+
         this.punt = leerPunt(this.punt);
 
         console.log(this.punt)
@@ -70,15 +72,22 @@ export class Leaderboard extends Phaser.Scene {
             fill: "#e8d59e"
         }).setOrigin(1, 0);
 
-        var atras = this.add.text(this.game.renderer.width * 0.07, this.game.renderer.height * 0.05, "Atrás", {
-            fontStyle: 'bold',
-            fontSize: "55px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setInteractive();
+        var atras = this.add.image(this.game.renderer.width * 0.05, this.game.renderer.height * 0.075, "Atras2", {
+
+        }).setOrigin(0.5).setScale(0.6).setInteractive();
 
         atras.on("pointerdown", () => {
             this.scene.start("Inicio", {});
         });
+
+        atras.on("pointerover", () => {
+            atras.setTexture("Atras");
+        });
+
+        atras.on("pointerout", () => {
+            atras.setTexture("Atras2");
+        });
+
     }
     update() {
         //this.usuarios.setText(this.user);
