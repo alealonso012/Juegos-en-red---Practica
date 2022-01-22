@@ -74,7 +74,8 @@ export class Matchmaking extends Phaser.Scene {
             .setOrigin(0.5).setScale(0.6).setInteractive();
 
         atras.on("pointerdown", () => {
-            this.scene.start("Inicio", {});
+            ws.close();
+            this.scene.start("Menu", {});
         });
 
         atras.on("pointerover", () => {

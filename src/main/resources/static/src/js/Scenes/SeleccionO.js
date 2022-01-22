@@ -31,8 +31,6 @@ export class SeleccionO extends Phaser.Scene {
         this.load.image('borde2', "/resources/img/Readyborder.png");
         this.load.image('listo1', "/resources/img/Listo.png");
         this.load.image('listo2', "/resources/img/Listo2.png");
-        this.load.image('player1', "/resources/img/Player1.png");
-        this.load.image('player2', "/resources/img/Player2.png");
         this.load.audio('battlemusic', '/resources/music/EpicBattle.mp3');
         this.load.spritesheet("character", "/resources/img/CharacterSelect.png", {
             frameHeight: 600,
@@ -46,8 +44,11 @@ export class SeleccionO extends Phaser.Scene {
         this.music1.play({ loop: true });
 
         this.add.image(0, 0, "selectscreen").setScale(1).setOrigin(0);
-        this.add.image(this.game.renderer.width * 0.265, this.game.renderer.height * 0.059, "player1").setScale(0.3);
-        this.add.image(this.game.renderer.width * 0.745, this.game.renderer.height * 0.059, "player2").setScale(0.3);
+        var jugador1 = this.add.bitmapText(this.game.renderer.width * 0.265, this.game.renderer.height * 0.065, "Alagard", "JUGADOR 1")
+            .setScale(1.4).setTint(0xaf0080).setOrigin(0.5);
+
+        var jugador2 = this.add.bitmapText(this.game.renderer.width * 0.745, this.game.renderer.height * 0.065, "Alagard", "JUGADOR 2")
+            .setScale(1.4).setTint(0X00ff00).setOrigin(0.5);
         this.rect1 = this.add.rectangle(this.game.renderer.width * 0.095, this.game.renderer.height * 0.588, 210, 330, 0xffffff, 0).setInteractive();
         var rect2 = this.add.rectangle(this.game.renderer.width * 0.204945, this.game.renderer.height * 0.588, 210, 330, 0xffffff, 0).setInteractive();
         this.rect3 = this.add.rectangle(this.game.renderer.width * 0.575, this.game.renderer.height * 0.588, 210, 330, 0xffffff, 0).setInteractive();
