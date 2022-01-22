@@ -34,6 +34,11 @@ export class Inicio extends Phaser.Scene {
         this.load.image('jugar', "/resources/img/Jugar.png");
         this.load.image('logo', "/resources/img/logo.png");
         this.load.audio('musica', '/resources/music/Menus.mp3');
+        this.load.bitmapFont(
+            'Alagard',
+            './src/fonts/Alagard.png',
+            './src/fonts/Alagard.xml'
+        );
         this.load.spritesheet("flecha", "/resources/img/Flecha.png", {
             frameHeight: 150,
             frameWidth: 150
@@ -56,32 +61,20 @@ export class Inicio extends Phaser.Scene {
 
         this.add.rectangle(0, this.game.renderer.height - 70, this.game.renderer.width, 70, 0x30212c).setOrigin(0);
 
-        var creditosButton = this.add.text(this.game.renderer.width * 0.08, this.game.renderer.height * 0.9656, "Créditos", {
-            fontStyle: 'bold',
-            fontSize: "50px",
-            fill: "#c49c5f"
-        }).setOrigin(0.5).setInteractive();
+        var creditosButton = this.add.bitmapText(this.game.renderer.width * 0.08, this.game.renderer.height * 0.974, "Alagard", "CREDITOS")
+            .setOrigin(0.5).setScale(0.8).setTint(0xc49c5f).setInteractive();
 
         if (this.data.get('logeado')) {
-            var loginButton = this.add.text(this.game.renderer.width * 0.98, this.game.renderer.height * 0.9656, this.data.get("user"), {
-                fontStyle: 'bold',
-                fontSize: "50px",
-                fill: "#c49c5f"
-            }).setOrigin(1, 0.5).setInteractive();
+            var loginButton = this.add.bitmapText(this.game.renderer.width * 0.99, this.game.renderer.height * 0.974, "Alagard", this.data.get("user"))
+                .setRightAlign().setScale(0.8).setTint(0xc49c5f).setInteractive().setOrigin(1, 0.5);
         }
         else {
-            var loginButton = this.add.text(this.game.renderer.width * 0.98, this.game.renderer.height * 0.9656, "Iniciar sesión", {
-                fontStyle: 'bold',
-                fontSize: "50px",
-                fill: "#c49c5f"
-            }).setOrigin(1, 0.5).setInteractive();
+            var loginButton = this.add.bitmapText(this.game.renderer.width * 0.99, this.game.renderer.height * 0.974, "Alagard", "INICIAR SESION")
+                .setRightAlign().setScale(0.8).setTint(0xc49c5f).setInteractive().setOrigin(1, 0.5);
         }
 
-        var leaderButton = this.add.text(this.game.renderer.width * 0.5, this.game.renderer.height * 0.9656, "Leaderboard", {
-            fontStyle: 'bold',
-            fontSize: "50px",
-            fill: "#c49c5f"
-        }).setOrigin(0.5).setInteractive();
+        var leaderButton = this.add.bitmapText(this.game.renderer.width * 0.5, this.game.renderer.height * 0.974, "Alagard", "RANKING")
+            .setOrigin(0.5).setScale(0.8).setTint(0xc49c5f).setInteractive();
 
         var hoverSprite = this.add.sprite(100, 100, "flecha");
         hoverSprite.setScale(0.85);
@@ -137,47 +130,62 @@ export class Inicio extends Phaser.Scene {
         })
 
         creditosButton.on("pointerover", () => {
-            creditosButton.setTint(0x888888);
+            creditosButton.setTint(0x59462b);
         })
 
         creditosButton.on("pointerout", () => {
-            creditosButton.clearTint();
+            creditosButton.setTint(0xc49c5f);
         })
+
+        var cerrarSesion = this.add.bitmapText(this.game.renderer.width * 0.99, this.game.renderer.height * 0.974, "Alagard", "CERRAR SESION")
+            .setRightAlign().setScale(0.8).setTint(0xc49c5f).setOrigin(1, 0.5).setVisible(false);
 
         loginButton.on("pointerdown", () => {
             console.log("Login");
             if (!loginButton.scene.data.get('logeado')) this.scene.start("Logear");
             else {
+                cerrarSesion.setVisible(false);
+                loginButton.setAlpha(1);
                 this.data.set('logeado', false);
                 this.data.set('user', false);
-                loginButton.setText("Iniciar sesión");
+                loginButton.setText("INICIAR SESION");
                 console.log("Logeado: " + this.data.get('logeado'));
                 console.log("Usuario: " + this.data.get('user'));
-                console.log(this.data);
             }
         })
 
         loginButton.on("pointerover", () => {
-            loginButton.setTint(0x888888);
-            if (this.data.get("logeado")) loginButton.setText("Cerrar sesión");
+            if (this.data.get("logeado")){
+                cerrarSesion.setVisible(true);
+                loginButton.setAlpha(0.00001);
+            }
+            else
+                loginButton.setTint(0x59462b);
+
         })
 
         loginButton.on("pointerout", () => {
-            loginButton.clearTint();
-            if (this.data.get("logeado")) loginButton.setText(this.data.get("user"));
+            if (this.data.get("logeado")) {
+                cerrarSesion.setVisible(false);
+                loginButton.setAlpha(1);
+                loginButton.setText(this.data.get("user"));
+            }
+            else
+                loginButton.setTint(0xc49c5f);
+
         })
 
         leaderButton.on("pointerdown", () => {
-            console.log("Leaderboard");
+            console.log("Ranking");
             this.scene.start("Leaderboard");
         })
 
         leaderButton.on("pointerover", () => {
-            leaderButton.setTint(0x888888);
+            leaderButton.setTint(0x59462b);
         })
 
         leaderButton.on("pointerout", () => {
-            leaderButton.clearTint();
+            leaderButton.setTint(0xc49c5f);
         })
     }
 

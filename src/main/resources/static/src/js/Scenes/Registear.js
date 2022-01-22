@@ -12,6 +12,12 @@ export class Registear extends Phaser.Scene {
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('Atras', "/resources/img/atras.png");
         this.load.image('Atras2', "/resources/img/atras2.png");
+
+        this.load.bitmapFont(
+            'Alagard',
+            './src/fonts/Alagard.png',
+            './src/fonts/Alagard.xml'
+        );
     }
 
     create() {
@@ -23,8 +29,17 @@ export class Registear extends Phaser.Scene {
 
         this.formulario.setData('registered', false);
 
-        var text = this.add.text(this.game.renderer.width * 0.25, this.game.renderer.height * 0.69, 'Introduzca usuario y contraseña', { color: 'white', fontFamily: 'Arial', fontSize: '32px ' }).setOrigin(0.5);;
-        var text2 = this.add.text(this.game.renderer.width * 0.25, this.game.renderer.height * 0.73, 'Ese nombre de usuario ya existe', { color: 'red', fontFamily: 'Arial', fontSize: '32px ' }).setOrigin(0.5).setVisible(false);
+        var text = this.add.bitmapText(this.game.renderer.width * 0.25, this.game.renderer.height * 0.72, "Alagard",
+            'Introduzca usuario y contrasena').setOrigin(0.5).setTint(0xe8d59e).setScale(0.65);
+
+        var ese = this.add.bitmapText(text.x + 310, text.y - 20, "Alagard",
+            '2').setOrigin(0.5).setTint(0xe8d59e).setScale(0.24, 0.38).setRotation(Phaser.Math.PI2 / 4);
+
+        var text2 = this.add.bitmapText(this.game.renderer.width * 0.25, this.game.renderer.height * 0.78, "Alagard", 'Ese nombre de usuario ya existe')
+            .setOrigin(0.5).setTint(0xff0000).setScale(0.65).setVisible(false);
+
+        var text3 = this.add.bitmapText(this.game.renderer.width * 0.73, this.game.renderer.height * 0.45, "Alagard",
+            'USUARIO CREADO').setOrigin(0.5).setTint(0xe8d59e).setScale(0.95).setVisible(false);
 
         this.formulario.addListener('click');
 
@@ -39,6 +54,8 @@ export class Registear extends Phaser.Scene {
                     //  Turn off the click events
                     if (registerUser({ nickname: inputUsername.value, password: inputPassword.value })) {
                         this.removeListener('click');
+                        text3.setVisible(true);
+                        this.scene.tweens.add({ targets: text3, alpha: 0.1, duration: 100, ease: 'Power3', yoyo: true });
                         this.setData('registered', true);
                     } else {
                         text2.setVisible(true);
@@ -54,6 +71,7 @@ export class Registear extends Phaser.Scene {
                 else {
                     //  Flash the prompt
                     this.scene.tweens.add({ targets: text, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
+                    this.scene.tweens.add({ targets: ese, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
                 }
             }
 
@@ -68,32 +86,11 @@ export class Registear extends Phaser.Scene {
             ease: 'Power3'
         });
 
-        var registerText = this.add.text(this.game.renderer.width * 0.25, this.game.renderer.height * 0.2, "REGISTRARSE", {
-            fontStyle: 'bold',
-            fontSize: "68px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5);
+        var registerText = this.add.bitmapText(this.game.renderer.width * 0.25, this.game.renderer.height * 0.2, "Alagard", "REGISTRARSE")
+            .setOrigin(0.5).setTint(0xe8d59e);
 
-        // var usuario = this.add.text(this.game.renderer.width * 0.15, this.game.renderer.height * 0.4, "Usuario: ", {
-        //     fontStyle: 'bold',
-        //     fontSize: "55px",
-        //     fill: "#e8d59e"
-        // }).setOrigin(0.5);
-
-        // var passw = this.add.text(this.game.renderer.width * 0.15, this.game.renderer.height * 0.6, "Contraseña: ", {
-        //     fontStyle: 'bold',
-        //     fontSize: "55px",
-        //     fill: "#e8d59e"
-        // }).setOrigin(0.5);
-
-        // var borde1 = this.add.image(this.game.renderer.width * 0.40, usuario.y, "borde").setScale(1.6, 1);
-        // var borde2 = this.add.image(borde1.x, passw.y, "borde").setScale(1.6, 1);
-
-
-
-        var atras = this.add.image(this.game.renderer.width * 0.05, this.game.renderer.height * 0.075, "Atras2", {
-
-        }).setOrigin(0.5).setScale(0.6).setInteractive();
+        var atras = this.add.image(this.game.renderer.width * 0.05, this.game.renderer.height * 0.075, "Atras2")
+            .setOrigin(0.5).setScale(0.6).setInteractive();
 
         atras.on("pointerdown", () => {
             this.scene.start("Logear", {});
@@ -108,10 +105,11 @@ export class Registear extends Phaser.Scene {
         });
     }
 
-    update(){
+    update() {
         if (this.formulario.getData('registered')) {
-            this.scene.start("Inicio", {});
-            console.log("saaik")
+            this.time.delayedCall(2100, () => {
+                this.scene.start("Inicio", {});
+            });
         }
     }
 }

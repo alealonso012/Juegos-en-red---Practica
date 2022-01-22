@@ -12,8 +12,8 @@ export class Controles extends Phaser.Scene {
 
     create() {
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
-        this.add.rectangle(0,0,this.game.renderer.width, this.game.renderer.height,0x000000,0.23).setOrigin(0);
-        this.add.image(this.game.renderer.width / 2, this.game.renderer.height* 0.5, "controles").setScale(1.7);
+        this.add.rectangle(0,0,this.game.renderer.width, this.game.renderer.height,0x000000,0.2).setOrigin(0);
+        this.add.image(this.game.renderer.width * 0.5, this.game.renderer.height* 0.55, "controles").setScale(1.5).setOrigin(0.5);
 
         // var texto4 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "Pantalla completa", {
         //     fontSize: "30px",
