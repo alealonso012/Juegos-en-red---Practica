@@ -49,22 +49,29 @@ export class RevanchaO extends Phaser.Scene {
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('player1', "/resources/img/Player1.png");
         this.load.image('player2', "/resources/img/Player2.png");
+
+        this.load.bitmapFont(
+            'Alagard',
+            './src/fonts/Alagard.png',
+            './src/fonts/Alagard.xml'
+        );
     }
 
 
     create() {
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
         this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000, 0.6).setOrigin(0);
-        var textoGanador = this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.15, "Ha ganado ", {
-            fontStyle: "bold",
-            fontSize: "65px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5);
+        var textoGanador = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.2, "Alagard", "Ha ganado: ")
+            .setOrigin(0.5).setScale(1).setTint(0xe8d59e).setInteractive();
+
         if (!this.Derecha) {
-            this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.4, "player1").setScale(0.5);
-            if (this.scene.get('Inicio').data.get('logeado')) victoria(this.scene.get('Inicio').data.get('user'));
+            this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "Alagard", "JUGADOR 1").
+                setOrigin(0.5).setScale(2.2).setTint(0xaf0080);
+            if (this.scene.get('Inicio').data.get('logeado') && jugador == 1) victoria(this.scene.get('Inicio').data.get('user'));
         } else {
-            this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.4, "player2").setScale(0.5);
+            this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "Alagard", "JUGADOR 2").
+                setOrigin(0.5).setScale(2.2).setTint(0x00ff00);
+            if (this.scene.get('Inicio').data.get('logeado') && jugador == 2) victoria(this.scene.get('Inicio').data.get('user'));
         }
 
         if (this.scene.get('Inicio').data.get('logeado')) {
@@ -76,28 +83,21 @@ export class RevanchaO extends Phaser.Scene {
             console.log("Mensaje ganador")
         }
 
-        this.textoRevancha = this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.6, "¿Revancha?", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5);
+        this.textoRevancha = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.65, "Alagard", " Revancha?")
+            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e).setInteractive();
 
-        this.textoSalir = this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.9, "Volver al menú principal", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setVisible(false);
+        this.inte = this.add.bitmapText(this.game.renderer.width * 0.353, this.game.renderer.height * 0.65, "Alagard", "?") //Abrir interrogacion
+            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e).setRotation(Phaser.Math.PI2 / 2);
 
-        this.textoSi = this.add.text(this.game.renderer.width * 0.4, this.game.renderer.height * 0.7, "Sí", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setInteractive();
-        this.textoNo = this.add.text(this.game.renderer.width * 0.6, this.game.renderer.height * 0.7, "No", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setInteractive();
+        this.textoSalir = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.9, "Alagard", "Volver al menu principal")
+            .setOrigin(0.5).setTint(0xe8d59e).setVisible(false).setScale(0.85);
+
+        this.textoSi = this.add.bitmapText(this.game.renderer.width * 0.3, this.game.renderer.height * 0.8, "Alagard", "Si")
+            .setOrigin(0.5).setScale(1.3).setTint(0xe8d59e).setInteractive();
+
+        this.textoNo = this.add.bitmapText(this.game.renderer.width * 0.7, this.game.renderer.height * 0.8, "Alagard", "No")
+            .setOrigin(0.5).setScale(1.3).setTint(0xe8d59e).setInteractive();
+
 
         this.textoSi.on("pointerdown", () => {
             //this.scene.start("Seleccion");
@@ -148,7 +148,6 @@ export class RevanchaO extends Phaser.Scene {
                     if (jugador == 2) rechazada1 = true;
                 }
             }
-            console.log("A");
             cambio = true;
         }
     }
@@ -170,11 +169,13 @@ export class RevanchaO extends Phaser.Scene {
                         this.scene.start("Inicio", {});
                     } else if (jugador == 2) {
                         this.textoRevancha.setText("El oponente se ha desconectado");
+                        this.inte.setVisible(false);
                         this.textoSalir.setVisible(true).setInteractive();
                     }
                 } else if (rechazada2) {
                     if (jugador == 1) {
                         this.textoRevancha.setText("El oponente se ha desconectado");
+                        this.inte.setVisible(false);
                         this.textoSalir.setVisible(true).setInteractive();
 
                     } else if (jugador == 2) {
@@ -196,7 +197,7 @@ export class RevanchaO extends Phaser.Scene {
                 this.textoNo.setVisible(false).removeInteractive();
                 this.textoSalir.setVisible(true).setInteractive();
                 this.textoSalir.on("pointerdown", () => {
-                    var salir = { tipo: "Revancha", mensaje: "No"};
+                    var salir = { tipo: "Revancha", mensaje: "No" };
                     ws.send(JSON.stringify(salir));
                     this.scene.start("Inicio", {});
                 })
@@ -204,13 +205,16 @@ export class RevanchaO extends Phaser.Scene {
                 console.log("Estoy listo");
 
                 this.textoRevancha.setText("Esperando al oponente...");
+                this.inte.setVisible(false);
+
 
 
             } else if ((listo1 && jugador == 2) || (listo2 && jugador == 1)) {
                 console.log("El otro esta listo");
-                this.textoSi.setText("Aceptar");
+                this.textoSi.setText("Aceptar").update();
                 this.textoNo.setText("Rechazar");
-                this.textoRevancha.setText("¡El oponente quiere revancha!");
+                this.textoRevancha.setText("El oponente quiere revancha!");
+                this.inte.setText("!").setX(201);
             }
             cambio = false;
         }

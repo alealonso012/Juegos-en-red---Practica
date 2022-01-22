@@ -1,10 +1,5 @@
 import { victoria } from '../client.js';
 
-var cambio = false;
-var ingles = false;
-var botonSi = "";
-
-
 export class Revancha extends Phaser.Scene {
 
     constructor() {
@@ -38,15 +33,16 @@ export class Revancha extends Phaser.Scene {
         if (!this.Derecha) {
             this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "Alagard", "JUGADOR 1").
                 setOrigin(0.5).setScale(2.2).setTint(0xaf0080);
+                if (this.scene.get('Inicio').data.get('logeado')) victoria(this.scene.get('Inicio').data.get('user'));
 
         } else {
             this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "Alagard", "JUGADOR 2").
                 setOrigin(0.5).setScale(2.2).setTint(0x00ff00);
         }
 
-        if (this.scene.get('Inicio').data.get('logeado')) {
+        if (this.scene.get('Inicio').data.get('logeado')&& !this.Derecha) {
             var usuarioGanador = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.5, "Alagard", this.scene.get('Inicio').data.get('user')).
-                setOrigin(0.5).setScale(0.8).setTint(0xe8d59e).setInteractive();
+                setOrigin(0.5).setScale(1.2).setTint(0xe8d59e).setInteractive();
         }
 
         var textoRevancha = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.65, "Alagard", " Revancha?")
