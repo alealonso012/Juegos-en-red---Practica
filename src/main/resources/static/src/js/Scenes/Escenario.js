@@ -122,28 +122,28 @@ export class Escenario extends Phaser.Scene {
 
         //INICIO COSAS PERSONAJE
         //LHITBOX1
-        this.lHitbox = this.add.rectangle(0, 0, 45, 16, 0xffffff, 0)
+        this.lHitbox = this.add.rectangle(0, 0, 130, 20, 0xffffff, 0)
         this.physics.add.existing(this.lHitbox)
         this.lHitbox.body.allowGravity = false
         this.lHitbox.body.enable = false
         //LHITBOX1
 
         //H HITBOX1
-        this.hHitbox = this.add.rectangle(0, 0, 65, 45, 0xffffff, 0)
+        this.hHitbox = this.add.rectangle(0, 0, 190, 55, 0xffffff, 0)
         this.physics.add.existing(this.hHitbox)
         this.hHitbox.body.allowGravity = false
         this.hHitbox.body.enable = false
         //H HITBOX1
 
         //LHITBOX2
-        this.lHitbox2 = this.add.rectangle(0, 0, 45, 16, 0xffffff, 0)
+        this.lHitbox2 = this.add.rectangle(0, 0, 130, 20, 0xffffff, 0)
         this.physics.add.existing(this.lHitbox2)
         this.lHitbox2.body.allowGravity = false
         this.lHitbox2.body.enable = false
         //LHITBOX2
 
         //H HITBOX2
-        this.hHitbox2 = this.add.rectangle(0, 0, 65, 45, 0xffffff, 0)
+        this.hHitbox2 = this.add.rectangle(0, 0, 190, 55, 0xffffff, 0)
         this.physics.add.existing(this.hHitbox2)
         this.hHitbox2.body.allowGravity = false
         this.hHitbox2.body.enable = false

@@ -122,7 +122,7 @@ export class Seleccion extends Phaser.Scene {
         })
         rect3.on("pointerdown", () => {
             CharacterDown2.setVisible(true);
-            CharacterDown2.x = this.game.renderer.width * 0.76;
+            CharacterDown2.x = this.game.renderer.width * 0.72;
             CharacterDown2.y = this.game.renderer.height * 0.33;
             CharacterDown2.play("idleSelec");
             hover2Img.setX(rect3.x);
