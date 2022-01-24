@@ -53,14 +53,20 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 3500 },
-            debug: true,
-            debugShowBody: true
+            debug: false,
+            debugShowBody: false
         }
     },
     scene: [inicio, opciones, logear, registear, leaderboard, creditos,  controles, menu, revancha, seleccion, Esc1, Esc2, Esc3, Esc4, Esc5, 
         matchmaking, revanchaO, EscO1, EscO2, EscO3, EscO4, EscO5, seleccionO],
     render: {
         pixelArt: true
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1920,
+        height: 1080
     }
 };
 

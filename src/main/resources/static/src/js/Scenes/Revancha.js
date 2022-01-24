@@ -1,12 +1,20 @@
 import { victoria } from '../client.js';
 
+//TEXTOS
+var tSi = "Si";
+var tNo = "No";
+var tRevancha = "Revancha?";
+var tSalir = "Volver al menu principal";
+var tGanador = "Ha ganado";
+var tJugador = "JUGADOR";
+
 export class Revancha extends Phaser.Scene {
 
     constructor() {
         super({ key: 'Revancha' });
     }
 
-    init(data){
+    init(data) {
         this.Derecha = data.derecha;
         console.log(this.Derecha);
         // if(this.scene.get('Inicio').logeado){
@@ -14,61 +22,76 @@ export class Revancha extends Phaser.Scene {
         // }
     }
 
-    preload(){
+    preload() {
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
-        this.load.image('player1', "/resources/img/Player1.png");
-        this.load.image('player2', "/resources/img/Player2.png");
+        this.load.bitmapFont(
+            'Alagard',
+            './src/fonts/Alagard.png',
+            './src/fonts/Alagard.xml'
+        );
+
+        if (this.scene.get("Inicio").data.get("ingles")) {
+            tSi = "Yes";
+            tNo = "No";
+            tRevancha = "Rematch?";
+            tSalir = "Return to main menu";
+            tGanador = "The winner is";
+            tJugador = "PLAYER";
+        }
+        else {
+            tSi = "Si";
+            tNo = "No";
+            tRevancha = "Revancha?";
+            tSalir = "Volver al menu principal";
+            tGanador = "Ha ganado";
+            tJugador = "JUGADOR";
+        }
     }
 
-    
+
     create() {
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
-        this.add.rectangle(0,0,this.game.renderer.width, this.game.renderer.height,0x000000,0.6).setOrigin(0);
-        var textoGanador = this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.1, "Ha ganado ", {
-                fontStyle: "bold",
-                fontSize: "65px",
-                fill: "#e8d59e"
-            }).setOrigin(0.5);
-        if(!this.Derecha)
-        {
-            this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.4, "player1").setScale(0.5);
-            if(this.scene.get('Inicio').data.get('logeado'))victoria(this.scene.get('Inicio').data.get('user'));
-            
-        }else{
-            this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.4, "player2").setScale(0.5); 
+        this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000, 0.6).setOrigin(0);
+        var textoGanador = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.2, "Alagard", tGanador)
+            .setOrigin(0.5).setScale(1).setTint(0xe8d59e).setInteractive();
+
+        if (!this.Derecha) {
+            this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "Alagard", "JUGADOR 1").
+                setOrigin(0.5).setScale(2.2).setTint(0xaf0080);
+            if (this.scene.get('Inicio').data.get('logeado')) victoria(this.scene.get('Inicio').data.get('user'));
+
+        } else {
+            this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "Alagard", "JUGADOR 2").
+                setOrigin(0.5).setScale(2.2).setTint(0x00ff00);
         }
 
-        if(this.scene.get('Inicio').data.get('logeado')){
-            var usuarioGanador = this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.25, this.scene.get('Inicio').data.get('user'), {
-                fontStyle: "bold",
-                fontSize: "75px",
-                fill: "#e8d59e"
-            }).setOrigin(0.5);
-            console.log("Mensaje ganador")
+        if (this.scene.get('Inicio').data.get('logeado') && !this.Derecha) {
+            var usuarioGanador = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.5, "Alagard", this.scene.get('Inicio').data.get('user')).
+                setOrigin(0.5).setScale(1.2).setTint(0xe8d59e).setInteractive();
         }
-        
-        var textoRevancha = this.add.text(this.game.renderer.width / 2, this.game.renderer.height * 0.6, "¿Revancha?", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5);
 
-        var textoSi = this.add.text(this.game.renderer.width*0.4, this.game.renderer.height * 0.7, "Sí", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setInteractive();
-        var textoNo = this.add.text(this.game.renderer.width *0.6, this.game.renderer.height * 0.7, "No", {
-            fontStyle: "bold",
-            fontSize: "50px",
-            fill: "#e8d59e"
-        }).setOrigin(0.5).setInteractive();
+        this.textoRevancha = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.66, "Alagard", tRevancha)
+            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e);
 
-        textoSi.on("pointerdown", ()=>{
+        if (!this.scene.get("Inicio").data.get("ingles"))
+
+            this.inte = this.add.bitmapText(this.game.renderer.width * 0.353, this.game.renderer.height * 0.65, "Alagard", "?") //Abrir interrogacion
+                .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e).setRotation(Phaser.Math.PI2 / 2);
+
+        this.textoSalir = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.9, "Alagard", tSalir)
+            .setOrigin(0.5).setTint(0xe8d59e).setVisible(false).setScale(0.95);
+
+        this.textoSi = this.add.bitmapText(this.game.renderer.width * 0.3, this.game.renderer.height * 0.8, "Alagard", tSi)
+            .setOrigin(0.5).setScale(1.3).setTint(0xe8d59e).setInteractive();
+
+        this.textoNo = this.add.bitmapText(this.game.renderer.width * 0.7, this.game.renderer.height * 0.8, "Alagard", tNo)
+            .setOrigin(0.5).setScale(1.3).setTint(0xe8d59e).setInteractive();
+
+        this.textoSi.on("pointerdown", () => {
             this.scene.start("Seleccion");
         })
 
-        textoNo.on("pointerdown", ()=>{
+        this.textoNo.on("pointerdown", () => {
             this.scene.start("Inicio", {});
         })
     }
