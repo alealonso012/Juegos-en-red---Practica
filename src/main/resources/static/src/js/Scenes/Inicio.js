@@ -29,6 +29,7 @@ export class Inicio extends Phaser.Scene {
     }
 
     preload() {
+        this.data.set("ingles", true);
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
         this.load.image('opciones', "/resources/img/Opciones.png");
         this.load.image('jugar', "/resources/img/Jugar.png");

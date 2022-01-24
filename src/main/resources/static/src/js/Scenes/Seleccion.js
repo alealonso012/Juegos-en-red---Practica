@@ -1,4 +1,4 @@
-var volumen;
+//var volumen;
 
 export class Seleccion extends Phaser.Scene {
 
