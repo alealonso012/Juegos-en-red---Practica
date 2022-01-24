@@ -63,15 +63,10 @@ export class RevanchaO extends Phaser.Scene {
         if (this.scene.get("Inicio").data.get("ingles")) {
             tSi = "Yes";
             tNo = "No";
-            tAceptar = "Accept";
-            tRechazar = "Refuse";
             tRevancha = "Rematch?";
             tSalir = "Return to main menu";
             tGanador = "The winner is";
             tJugador = "PLAYER";
-            tEsperar = "Waiting for the other player..."
-            tQuiere = "The opponent wants a rematch!"
-            tDesconectado = "The opponent has left the match"
         }
 
 
@@ -112,7 +107,7 @@ export class RevanchaO extends Phaser.Scene {
         }
 
         this.textoRevancha = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.66, "Alagard", tRevancha)
-            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e).setInteractive();
+            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e);
 
         if (!this.scene.get("Inicio").data.get("ingles"))
 
