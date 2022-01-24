@@ -63,10 +63,27 @@ export class RevanchaO extends Phaser.Scene {
         if (this.scene.get("Inicio").data.get("ingles")) {
             tSi = "Yes";
             tNo = "No";
+            tAceptar = "Accept";
+            tRechazar = "Refuse";
             tRevancha = "Rematch?";
             tSalir = "Return to main menu";
             tGanador = "The winner is";
             tJugador = "PLAYER";
+            tEsperar = "Waiting for the other player..."
+            tQuiere = "The opponent wants a rematch!"
+            tDesconectado = "The opponent has left the match"
+        } else {
+            tSi = "Si";
+            tNo = "No";
+            tAceptar = "Aceptar";
+            tRechazar = "Rechazar";
+            tRevancha = "Revancha?";
+            tSalir = "Volver al menu principal";
+            tGanador = "Ha ganado";
+            tJugador = "JUGADOR";
+            tEsperar = "Esperando al oponente...";
+            tQuiere = "El oponente quiere revancha!";
+            tDesconectado = "El oponente se ha desconectado";
         }
 
 
@@ -107,7 +124,7 @@ export class RevanchaO extends Phaser.Scene {
         }
 
         this.textoRevancha = this.add.bitmapText(this.game.renderer.width / 2, this.game.renderer.height * 0.66, "Alagard", tRevancha)
-            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e);
+            .setOrigin(0.5).setScale(1.5).setTint(0xe8d59e).setInteractive();
 
         if (!this.scene.get("Inicio").data.get("ingles"))
 
@@ -224,13 +241,13 @@ export class RevanchaO extends Phaser.Scene {
                         this.scene.start("Inicio", {});
                     } else if (jugador == 2) {
                         this.textoRevancha.setText(tDesconectado);
-                        if(!this.scene.get("Inicio").data.get("ingles"))this.inte.setVisible(false);
+                        if (!this.scene.get("Inicio").data.get("ingles")) this.inte.setVisible(false);
                         this.textoSalir.setVisible(true).setInteractive();
                     }
                 } else if (rechazada2) {
                     if (jugador == 1) {
                         this.textoRevancha.setText(tDesconectado);
-                        if(!this.scene.get("Inicio").data.get("ingles"))this.inte.setVisible(false);
+                        if (!this.scene.get("Inicio").data.get("ingles")) this.inte.setVisible(false);
                         this.textoSalir.setVisible(true).setInteractive();
 
                     } else if (jugador == 2) {
@@ -260,7 +277,7 @@ export class RevanchaO extends Phaser.Scene {
                 console.log("Estoy listo");
 
                 this.textoRevancha.setText(tEsperar);
-                if (!this.scene.get("Inicio").data.get("ingles"))this.inte.setVisible(false);
+                if (!this.scene.get("Inicio").data.get("ingles")) this.inte.setVisible(false);
 
             } else if ((listo1 && jugador == 2) || (listo2 && jugador == 1)) {
                 console.log("El otro esta listo");
@@ -269,7 +286,7 @@ export class RevanchaO extends Phaser.Scene {
                 this.textoNo.setVisible(false);
                 this.textoRechazar.setVisible(true);
                 this.textoRevancha.setText(tQuiere);
-                if(!this.scene.get("Inicio").data.get("ingles"))this.inte.setText("!").setX(201);
+                if (!this.scene.get("Inicio").data.get("ingles")) this.inte.setText("!").setX(201);
             }
             cambio = false;
         }

@@ -31,12 +31,11 @@ export class Inicio extends Phaser.Scene {
             console.log("User definido en inicio");
         }
 
-        if (data.ingles != undefined) {
+        if(data.ingles == undefined){
+            if (this.data.get("ingles") == undefined) this.data.set("ingles", true);
+        console.log("Idioma en ingles: " + this.data.get("ingles"));
+        }else{
             this.data.set("ingles", data.ingles);
-            console.log("Idioma en ingles: " + this.data.get("ingles"));
-        } else {
-            if (!(this.data.get("ingles") != undefined)) this.data.set("ingles", true);
-            console.log("Idioma en ingles por defecto: " + this.data.get("ingles"));
         }
 
         console.log("Logeado: " + this.data.get('logeado'));
@@ -59,8 +58,6 @@ export class Inicio extends Phaser.Scene {
             tCerrar = "CERRAR SESION";
         }
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
-        this.load.image('opciones', "/resources/img/Opciones.png");
-        this.load.image('jugar', "/resources/img/Jugar.png");
         this.load.image('logo', "/resources/img/logo.png");
         this.load.image('spain', "/resources/img/spain.png");
         this.load.image('uk', "/resources/img/uk.png");
@@ -95,11 +92,15 @@ export class Inicio extends Phaser.Scene {
             .setScale(0.25).setInteractive().setOrigin(0.5);
 
         this.spain.on("pointerdown", () => {
-            this.scene.start("Inicio", { ingles: false });
+            this.data.set("Ingles", false);
+            this.scene.start("Inicio", {ingles: false});
+            // this.scene.start("Inicio", { ingles: false });
         })
 
         this.uk.on("pointerdown", () => {
-            this.scene.start("Inicio", { ingles: true });
+            // this.scene.start("Inicio", { ingles: true });
+            this.data.set("Ingles", true);
+            this.scene.start("Inicio", {ingles: true});
         })
 
         // var playButton = this.add.image(this.game.renderer.width * 0.325, this.game.renderer.height * 0.525, "jugar").setScale(0.24);

@@ -10,7 +10,6 @@ export class Opciones extends Phaser.Scene {
 
     preload() {
         this.load.image('titulo_fondo', "/resources/img/Fondo.png");
-        this.load.image('opciones', "/resources/img/opciones.png");
         this.load.image('fIzquierda', "/resources/img/flechaVolumenIzquierda.png");
         this.load.image('fDerecha', "/resources/img/flechaVolumenDerecha.png");
         this.load.image('Atras', "/resources/img/atras.png");
@@ -22,17 +21,24 @@ export class Opciones extends Phaser.Scene {
             './src/fonts/Alagard.xml'
         );
 
+        console.log(this.scene.get("Inicio").data.get("ingles"));
+
         if (this.scene.get("Inicio").data.get("ingles")) {
             Opc = "Options";
             Controles = "Controls";
             Volumen = "Volume";
+        } else {
+            Opc = "Opciones";
+            Controles = "Controles";
+            Volumen = "Volumen";
         }
     }
 
     create() {
         var Inicio = this.scene.get('Inicio');
         this.add.image(0, 0, "titulo_fondo").setOrigin(0);
-        var opc = this.add.image(this.game.renderer.width * 0.35, this.game.renderer.height * 0.2, 'opciones').setScale(0.35);
+        var opc = this.add.bitmapText(this.game.renderer.width * 0.35, this.game.renderer.height * 0.2, "Alagard", Opc)
+            .setOrigin(0.5).setTint(0x332e2e).setScale(1.5);
         // var texto = this.add.text(this.game.renderer.width * 0.35, this.game.renderer.height * 0.2, "Opciones", {
         //     fontStyle: 'bold',
         //     fontSize: "70px",
@@ -62,11 +68,6 @@ export class Opciones extends Phaser.Scene {
         texto3.on("pointerdown", () => {
             this.scene.start("Controles");
         })
-
-        // var texto4 = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "Pantalla completa", {
-        //     fontSize: "30px",
-        //     fill: "#ffffff"
-        // }).setOrigin(0.5);
 
         var atras = this.add.image(this.game.renderer.width * 0.05, this.game.renderer.height * 0.075, "Atras", {
 

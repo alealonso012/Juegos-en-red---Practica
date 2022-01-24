@@ -1,5 +1,6 @@
-var j1="JUGADOR 1"
-var j2="JUGADOR 2"
+var j1 = "JUGADOR 1"
+var j2 = "JUGADOR 2"
+var tListo;
 
 export class Seleccion extends Phaser.Scene {
 
@@ -11,8 +12,8 @@ export class Seleccion extends Phaser.Scene {
         this.load.image('selectscreen', "/resources/img/SelectScreen.png");
         this.load.image('borde', "/resources/img/Characterborder.png");
         this.load.image('borde2', "/resources/img/Readyborder.png");
-        this.load.image('listo1', "/resources/img/Listo.png");
-        this.load.image('listo2', "/resources/img/Listo2.png");
+        // this.load.image('listo1', "/resources/img/Listo.png");
+        // this.load.image('listo2', "/resources/img/Listo2.png");
         this.load.audio('battlemusic', '/resources/music/EpicBattle.mp3');
         this.load.spritesheet("character", "/resources/img/CharacterSelect.png", {
             frameHeight: 600,
@@ -27,8 +28,14 @@ export class Seleccion extends Phaser.Scene {
         if (this.scene.get("Inicio").data.get("ingles")) {
             j1 = "PLAYER 1";
             j2 = "PLAYER 2";
+            tListo = "READY";
         }
-        
+        else {
+            j1 = "JUGADOR 1";
+            j2 = "JUGADOR 2";
+            tListo = "LISTO";
+        }
+
     }
 
     create() {
@@ -61,10 +68,10 @@ export class Seleccion extends Phaser.Scene {
 
         var RecuadroIzq = this.add.image(listo.x, listo.y, "borde2").setVisible(false);
         var RecuadroDcha = this.add.image(listo2.x, listo2.y, "borde2").setVisible(false);
-        this.add.image(this.game.renderer.width * 0.261, this.game.renderer.height * 0.875, "listo1").setScale(0.3);
-        this.add.image(this.game.renderer.width * 0.741, this.game.renderer.height * 0.875, "listo1").setScale(0.3);
-        var ListoImg = this.add.image(this.game.renderer.width * 0.261, this.game.renderer.height * 0.875, "listo2").setScale(0.3).setVisible(false);
-        var Listo2Img = this.add.image(this.game.renderer.width * 0.741, this.game.renderer.height * 0.875, "listo2").setScale(0.3).setVisible(false);
+        this.add.bitmapText(this.game.renderer.width * 0.265, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setTint(0x311b24).setOrigin(0.5);
+        this.add.bitmapText(this.game.renderer.width * 0.74, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setTint(0x311b24).setOrigin(0.5);
+        var ListoImg = this.add.bitmapText(this.game.renderer.width * 0.265, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setVisible(false).setOrigin(0.5);
+        var Listo2Img = this.add.bitmapText(this.game.renderer.width * 0.74, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setVisible(false).setOrigin(0.5);
 
         var CharacterDown = this.add.sprite(100, 100, "character");
         CharacterDown.setScale(1.2);

@@ -5,8 +5,10 @@ var bListo2 = false;
 var bSelec1 = false;
 var bSelec2 = false;
 var desconectado = false;
-var j1="JUGADOR 1"
-var j2="JUGADOR 2"
+var j1 = "JUGADOR 1";
+var j2 = "JUGADOR 2";
+var tListo;
+
 export class SeleccionO extends Phaser.Scene {
 
     constructor() {
@@ -41,6 +43,12 @@ export class SeleccionO extends Phaser.Scene {
         if (this.scene.get("Inicio").data.get("ingles")) {
             j1 = "PLAYER 1";
             j2 = "PLAYER 2";
+            tListo = "READY";
+        }
+        else {
+            j1 = "JUGADOR 1";
+            j2 = "JUGADOR 2";
+            tListo = "LISTO";
         }
     }
 
@@ -72,10 +80,10 @@ export class SeleccionO extends Phaser.Scene {
 
         this.RecuadroIzq = this.add.image(listo.x, listo.y, "borde2").setVisible(false);
         this.RecuadroDcha = this.add.image(listo2.x, listo2.y, "borde2").setVisible(false);
-        this.add.image(this.game.renderer.width * 0.261, this.game.renderer.height * 0.875, "listo1").setScale(0.3);
-        this.add.image(this.game.renderer.width * 0.741, this.game.renderer.height * 0.875, "listo1").setScale(0.3);
-        this.ListoImg = this.add.image(this.game.renderer.width * 0.261, this.game.renderer.height * 0.875, "listo2").setScale(0.3).setVisible(false);
-        this.Listo2Img = this.add.image(this.game.renderer.width * 0.741, this.game.renderer.height * 0.875, "listo2").setScale(0.3).setVisible(false);
+        this.add.bitmapText(this.game.renderer.width * 0.265, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setTint(0x311b24).setOrigin(0.5);
+        this.add.bitmapText(this.game.renderer.width * 0.74, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setTint(0x311b24).setOrigin(0.5);
+        this.ListoImg = this.add.bitmapText(this.game.renderer.width * 0.2, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setVisible(false).setOrigin(0.5);
+        this.Listo2Img = this.add.bitmapText(this.game.renderer.width * 0.74, this.game.renderer.height * 0.88, "Alagard", tListo).setScale(1.1).setVisible(false).setOrigin(0.5);
 
         this.CharacterDown = this.add.sprite(100, 100, "character");
         this.CharacterDown.setScale(1.2);
@@ -86,7 +94,7 @@ export class SeleccionO extends Phaser.Scene {
         this.CharacterDown2.setScale(1.2);
         this.CharacterDown2.setVisible(false);
         this.CharacterDown2.setTint("0x00ff00");
-        this.CharacterDown2.flipX=true;
+        this.CharacterDown2.flipX = true;
 
         this.anims.create({
             key: "idleSelec",
@@ -96,7 +104,7 @@ export class SeleccionO extends Phaser.Scene {
                 frames: [0, 1]
             })
         })
-        
+
         this.CharacterDown.play("idleSelec");
         this.CharacterDown2.play("idleSelec");
         if (jugador == 1) {
@@ -213,14 +221,14 @@ export class SeleccionO extends Phaser.Scene {
                         bListo2 = true;
                     }
                 }
-            }else if(tipo == "Desconectado"){
+            } else if (tipo == "Desconectado") {
                 desconectado = true;
             }
         }
     }
 
     update() {
-        if (this.ready1 && this.ready2) this.scene.start("EscO3", { derecha: true, jugador: jugador, socket: ws});
+        if (this.ready1 && this.ready2) this.scene.start("EscO3", { derecha: true, jugador: jugador, socket: ws });
         if (bListo1) {
             this.RecuadroIzq.setVisible(true);
             this.ListoImg.setVisible(true);
@@ -238,11 +246,11 @@ export class SeleccionO extends Phaser.Scene {
             // if (this.CharacterDown.anims.currentAnim.key != "idleSelec"){
             //     this.CharacterDown.play("idleSelec");
             //     }
-            
+
             this.hover1Img.setX(this.rect1.x);
             this.select1 = true;
             this.bSelec1 = false;
-            
+
             console.log("bSelec1 = true");
         }
         if (bSelec2) {
@@ -257,8 +265,8 @@ export class SeleccionO extends Phaser.Scene {
             this.bSelec2 = false;
             console.log("bSelec2 = true");
         }
-        if(desconectado)
-        this.scene.start("RevanchaO", {jugador: jugador, socket: ws, rechazar: true});
+        if (desconectado)
+            this.scene.start("RevanchaO", { jugador: jugador, socket: ws, rechazar: true });
     }
 
 }

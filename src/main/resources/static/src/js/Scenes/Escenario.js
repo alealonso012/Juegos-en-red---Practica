@@ -14,6 +14,9 @@ var p1Stop = false; //No permite al jugador1 atacar.
 var p2Stop = false; //No permite al jugador2 atacar.
 var wait = 0;
 
+var tP1;
+var tP2;
+
 var moveVel = 469;
 var saltoVel =1600; 
 var dashVel=1313;
@@ -42,6 +45,14 @@ export class Escenario extends Phaser.Scene {
     }
 
     preload() {
+        if (this.scene.get("Inicio").data.get("ingles")) {
+            tP1 = "P1";
+            tP2 = "P2";
+        } else {
+            tP1 = "J1";
+            tP2 = "J2";
+        }
+
         this.load.audio('ping', '/resources/audio/metalping.ogg');
         console.log("En preload");
         this.load.image(this.esc, this.esc);
@@ -484,20 +495,20 @@ export class Escenario extends Phaser.Scene {
         if (this.scene.get('Inicio').data.get('logeado')) {
             this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
                 fontStyle: 'bold',
-                fontSize: "35px",
+                fontSize: "50px",
                 fill: "#ffffff"
             }).setOrigin(0.5);
         } else {
-            this.textP1 = this.add.text(this.player.x, this.player.y, "P1", {
+            this.textP1 = this.add.text(this.player.x, this.player.y, tP1, {
                 fontStyle: 'bold',
-                fontSize: "35px",
+                fontSize: "50px",
                 fill: "#ffffff"
             }).setOrigin(0.5);
         }
 
-        this.textP2 = this.add.text(this.player2.x, this.player2.y, "P2", {
+        this.textP2 = this.add.text(this.player2.x, this.player2.y, tP2, {
             fontStyle: 'bold',
-            fontSize: "35px",
+            fontSize: "50px",
             fill: "#ffffff"
         }).setOrigin(0.5);
     }
@@ -516,8 +527,8 @@ export class Escenario extends Phaser.Scene {
             position = 1
             this.player.setOffset(175, 175);
             this.player2.setOffset(225, 175);
-            this.textP1.setPosition(this.player.x - 9, this.player.y - 70);
-            this.textP2.setPosition(this.player2.x + 9, this.player2.y - 70);
+            this.textP1.setPosition(this.player.x - 9, this.player.y - 115);
+            this.textP2.setPosition(this.player2.x + 17, this.player2.y - 115);
 
         } else {
             this.player.flipX = true
@@ -525,8 +536,8 @@ export class Escenario extends Phaser.Scene {
             position = 2
             this.player.setOffset(225, 175);
             this.player2.setOffset(175, 175);
-            this.textP1.setPosition(this.player.x + 9, this.player.y - 70);
-            this.textP2.setPosition(this.player2.x - 9, this.player2.y - 70);
+            this.textP1.setPosition(this.player.x + 9, this.player.y - 115);
+            this.textP2.setPosition(this.player2.x - 17, this.player2.y - 115);
         }
 
         //Muerte por caida

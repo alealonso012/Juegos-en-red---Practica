@@ -18,6 +18,9 @@ var moveVel = 469;
 var saltoVel = 1600;
 var dashVel = 1313;
 
+var tP1;
+var tP2;
+
 //WebSocket
 var esJ1 = true;
 var state = "idle";
@@ -552,20 +555,20 @@ export class EscenarioOnline extends Phaser.Scene {
         if (this.scene.get('Inicio').data.get('logeado')) {
             this.textP1 = this.add.text(this.player.x, this.player.y, this.scene.get('Inicio').data.get('user'), {
                 fontStyle: 'bold',
-                fontSize: "35px",
+                fontSize: "50px",
                 fill: "#ffffff"
             }).setOrigin(0.5);
         } else {
-            this.textP1 = this.add.text(this.player.x, this.player.y, "P1", {
+            this.textP1 = this.add.text(this.player.x, this.player.y, tP1, {
                 fontStyle: 'bold',
-                fontSize: "35px",
+                fontSize: "50px",
                 fill: "#ffffff"
             }).setOrigin(0.5);
         }
 
-        this.textP2 = this.add.text(this.player2.x, this.player2.y, "P2", {
+        this.textP2 = this.add.text(this.player2.x, this.player2.y, tP2, {
             fontStyle: 'bold',
-            fontSize: "35px",
+            fontSize: "50px",
             fill: "#ffffff"
         }).setOrigin(0.5);
 
@@ -606,7 +609,7 @@ export class EscenarioOnline extends Phaser.Scene {
             this.player.setOffset(175, 175);
             this.player2.setOffset(225, 175);
             this.textP1.setPosition(this.player.x - 9, this.player.y - 70);
-            this.textP2.setPosition(this.player2.x + 9, this.player2.y - 70);
+            this.textP2.setPosition(this.player2.x + 17, this.player2.y - 70);
 
         } else {
             this.player.flipX = true;
@@ -615,7 +618,7 @@ export class EscenarioOnline extends Phaser.Scene {
             this.player.setOffset(225, 175);
             this.player2.setOffset(175, 175);
             this.textP1.setPosition(this.player.x + 9, this.player.y - 70);
-            this.textP2.setPosition(this.player2.x - 9, this.player2.y - 70);
+            this.textP2.setPosition(this.player2.x - 17, this.player2.y - 70);
         }
         if (!leido) {
             console.log(onlyStance);
