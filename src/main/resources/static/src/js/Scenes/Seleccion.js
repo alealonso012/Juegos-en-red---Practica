@@ -1,4 +1,5 @@
-//var volumen;
+var j1="JUGADOR 1"
+var j2="JUGADOR 2"
 
 export class Seleccion extends Phaser.Scene {
 
@@ -23,6 +24,11 @@ export class Seleccion extends Phaser.Scene {
             './src/fonts/Alagard.png',
             './src/fonts/Alagard.xml'
         );
+        if (this.scene.get("Inicio").data.get("ingles")) {
+            j1 = "PLAYER 1";
+            j2 = "PLAYER 2";
+        }
+        
     }
 
     create() {
@@ -32,10 +38,10 @@ export class Seleccion extends Phaser.Scene {
 
         this.add.image(0, 0, "selectscreen").setScale(1).setOrigin(0);
 
-        var jugador1 = this.add.bitmapText(this.game.renderer.width * 0.265, this.game.renderer.height * 0.065, "Alagard", "JUGADOR 1")
+        var jugador1 = this.add.bitmapText(this.game.renderer.width * 0.265, this.game.renderer.height * 0.065, "Alagard", j1)
             .setScale(1.4).setTint(0xaf0080).setOrigin(0.5);
 
-        var jugador2 = this.add.bitmapText(this.game.renderer.width * 0.745, this.game.renderer.height * 0.065, "Alagard", "JUGADOR 2")
+        var jugador2 = this.add.bitmapText(this.game.renderer.width * 0.745, this.game.renderer.height * 0.065, "Alagard", j2)
             .setScale(1.4).setTint(0X00ff00).setOrigin(0.5);
 
         var rect1 = this.add.rectangle(this.game.renderer.width * 0.095, this.game.renderer.height * 0.588, 210, 330, 0xffffff, 0).setInteractive();

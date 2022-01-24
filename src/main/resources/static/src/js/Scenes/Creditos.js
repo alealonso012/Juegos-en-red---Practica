@@ -22,10 +22,13 @@ export class Creditos extends Phaser.Scene {
         this.add.rectangle(0, 0, this.game.renderer.width, this.game.renderer.height, 0x000000, 0.6).setOrigin(0);
         var logoe = this.add.image(this.game.renderer.width * 0.4, this.game.renderer.height * 0.4, 'logoequipo');
         var logoi = this.add.image(this.game.renderer.width * 0.4, this.game.renderer.height * 0.7, 'logoinsta').setScale(0.2).setInteractive();
-
+        if (!this.scene.get("Inicio").data.get("ingles")) {
         var texto = this.add.bitmapText(this.game.renderer.width * 0.5, this.game.renderer.height * 0.15, "Alagard", "Desarrollado por:")
             .setOrigin(0.5).setTint(0xe8d59e).setScale(1.1);
-
+        }else{
+            var texto = this.add.bitmapText(this.game.renderer.width * 0.5, this.game.renderer.height * 0.15, "Alagard", "Developed by:")
+            .setOrigin(0.5).setTint(0xe8d59e).setScale(1.1);
+        }
         var texto2 = this.add.bitmapText(this.game.renderer.width * 0.58, logoe.y, "Alagard", "Moirai")
             .setOrigin(0.5).setTint(0xe8d59e).setScale(1.3);
 

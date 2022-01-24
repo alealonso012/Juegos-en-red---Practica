@@ -1,3 +1,7 @@
+var Opc = "Opciones";
+var Controles = "Controles";
+var Volumen = "Volumen";
+
 export class Opciones extends Phaser.Scene {
 
     constructor() {
@@ -17,6 +21,12 @@ export class Opciones extends Phaser.Scene {
             './src/fonts/Alagard.png',
             './src/fonts/Alagard.xml'
         );
+
+        if (this.scene.get("Inicio").data.get("ingles")) {
+            Opc = "Options";
+            Controles = "Controls";
+            Volumen = "Volume";
+        }
     }
 
     create() {
@@ -29,7 +39,7 @@ export class Opciones extends Phaser.Scene {
         //     fill: "#332e2e"
         // }).setOrigin(0.5);
 
-        var texto2 = this.add.bitmapText(this.game.renderer.width * 0.33, this.game.renderer.height * 0.51, "Alagard", "Volumen")
+        var texto2 = this.add.bitmapText(this.game.renderer.width * 0.33, this.game.renderer.height * 0.51, "Alagard", Volumen)
             .setOrigin(0.5).setTint(0x332e2e).setScale(1.1);
 
         var fvi = this.add.image(texto2.x + 208, texto2.y, 'fIzquierda').setScale(0.12).setInteractive();
@@ -46,8 +56,8 @@ export class Opciones extends Phaser.Scene {
             }
         })
 
-        var texto3 = this.add.bitmapText(this.game.renderer.width * 0.35, this.game.renderer.height * 0.37, "Alagard", "Controles")
-        .setOrigin(0.5).setTint(0x332e2e).setScale(1.1).setInteractive();
+        var texto3 = this.add.bitmapText(this.game.renderer.width * 0.35, this.game.renderer.height * 0.37, "Alagard", Controles)
+            .setOrigin(0.5).setTint(0x332e2e).setScale(1.1).setInteractive();
 
         texto3.on("pointerdown", () => {
             this.scene.start("Controles");
